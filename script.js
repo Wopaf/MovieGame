@@ -1,23 +1,16 @@
 // ============================================================
 //  CONFIGURATION FIREBASE — Remplacer par tes identifiants
 // ============================================================
-const firebaseConfig = {
-
-  apiKey: "AIzaSyBsjr0peOj1jFPhAA080MWuUGlyYapjxn0",
-
-  authDomain: "moviegame-1b838.firebaseapp.com",
-
-  projectId: "moviegame-1b838",
-
-  storageBucket: "moviegame-1b838.firebasestorage.app",
-
-  messagingSenderId: "448540908211",
-
-  appId: "1:448540908211:web:894cb1e8c38d59c4a9eec6",
-
-  measurementId: "G-RG8BRL6THG"
-
+const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyBsjr0peOj1jFPhAA080MWuUGlyYapjxn0",
+    authDomain: "moviegame-1b838.firebaseapp.com",
+    databaseURL: "https://moviegame-1b838-default-rtdb.firebaseio.com",
+    projectId: "moviegame-1b838",
+    storageBucket: "moviegame-1b838.firebasestorage.app",
+    messagingSenderId: "448540908211",
+    appId: "1:448540908211:web:894cb1e8c38d59c4a9eec6"
 };
+
 
 
 // ============================================================
@@ -362,3 +355,12 @@ document.querySelectorAll(".modal-overlay").forEach(o => o.addEventListener("cli
 document.getElementById("sidebar-toggle").addEventListener("click", () => {
     document.getElementById("sidebar").classList.toggle("open");
 });
+
+// Init : afficher la grille immédiatement, Firebase la mettra à jour ensuite
+buildGrid();
+
+// Log erreurs Firebase dans la console
+db.ref(".info/connected").on("value", (snap) => {
+    console.log("Firebase connecté:", snap.val());
+});
+
