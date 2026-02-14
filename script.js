@@ -1,4 +1,26 @@
 // ============================================================
+//  CONFIGURATION FIREBASE — Remplacer par tes identifiants
+// ============================================================
+const firebaseConfig = {
+
+  apiKey: "AIzaSyBsjr0peOj1jFPhAA080MWuUGlyYapjxn0",
+
+  authDomain: "moviegame-1b838.firebaseapp.com",
+
+  projectId: "moviegame-1b838",
+
+  storageBucket: "moviegame-1b838.firebasestorage.app",
+
+  messagingSenderId: "448540908211",
+
+  appId: "1:448540908211:web:894cb1e8c38d59c4a9eec6",
+
+  measurementId: "G-RG8BRL6THG"
+
+};
+
+
+// ============================================================
 //  PALIERS / OBJECTIFS — Modifier ici facilement
 // ============================================================
 const MILESTONES = [
@@ -16,8 +38,7 @@ const MILESTONES = [
 
 // ============================================================
 //  DONNÉES DES SUCCÈS — Modifier ici facilement
-//  mystery : true = le titre et l'image sont cachés tant que
-//            le mot de passe n'a pas été entré
+//  mystery : true = caché tant que le mot de passe n'est pas entré
 // ============================================================
 const ACHIEVEMENTS = [
     { title: "Les Dents de la mer", password: "a1b", question: "Quel film met en scène un requin géant ?", answer: "Les Dents de la mer", mystery: false },
@@ -93,26 +114,40 @@ const ACHIEVEMENTS = [
 ];
 
 // ============================================================
-//  STOCKAGE LOCAL
-//  unlocked = mot de passe entré (déverrouillé)
-//  validated = réponse correcte (validé)
+//  FIREBASE — Initialisation + Realtime Database
 // ============================================================
-const STORAGE_KEY_UNLOCKED = "movie_game_unlocked";
-const STORAGE_KEY_VALIDATED = "movie_game_validated";
+firebase.initializeApp(FIREBASE_CONFIG);
+const db = firebase.database();
+const refUnlocked = db.ref("game/unlocked");
+const refValidated = db.ref("game/validated");
 
-function getUnlocked() {
-    const data = localStorage.getItem(STORAGE_KEY_UNLOCKED);
-    return data ? JSON.parse(data) : [];
+// État local (cache synchronisé avec Firebase)
+let cachedUnlocked = [];
+let cachedValidated = [];
+
+// Écoute temps réel : la grille se met à jour automatiquement
+// pour tous les visiteurs dès qu'un succès change
+refUnlocked.on("value", (snapshot) => {
+    cachedUnlocked = snapshot.val() || [];
+    buildGrid();
+});
+
+refValidated.on("value", (snapshot) => {
+    cachedValidated = snapshot.val() || [];
+    buildGrid();
+});
+
+function getUnlocked() { return [...cachedUnlocked]; }
+function getValidated() { return [...cachedValidated]; }
+
+function saveUnlocked(arr) {
+    cachedUnlocked = arr;
+    refUnlocked.set(arr);
 }
-function setUnlocked(arr) {
-    localStorage.setItem(STORAGE_KEY_UNLOCKED, JSON.stringify(arr));
-}
-function getValidated() {
-    const data = localStorage.getItem(STORAGE_KEY_VALIDATED);
-    return data ? JSON.parse(data) : [];
-}
-function setValidated(arr) {
-    localStorage.setItem(STORAGE_KEY_VALIDATED, JSON.stringify(arr));
+
+function saveValidated(arr) {
+    cachedValidated = arr;
+    refValidated.set(arr);
 }
 
 // ============================================================
@@ -257,15 +292,12 @@ function openModal(index) {
     document.getElementById("answer-error").classList.add("hidden");
 
     if (validated.includes(index)) {
-        // Déjà validé
         openAnimatedModal("modal-done", index);
     } else if (unlocked.includes(index)) {
-        // Déverrouillé mais pas validé → directement la question
         document.getElementById("question-text").textContent = ACHIEVEMENTS[index].question;
         openAnimatedModal("modal-question", index);
         setTimeout(() => document.getElementById("answer-input").focus(), 100);
     } else {
-        // Pas encore déverrouillé → mot de passe
         openAnimatedModal("modal-password", index);
         setTimeout(() => document.getElementById("password-input").focus(), 100);
     }
@@ -280,18 +312,15 @@ function transitionToQuestion() {
     const ach = ACHIEVEMENTS[currentIndex];
     document.getElementById("question-text").textContent = ach.question;
 
-    // Sauvegarder le déverrouillage
     const unlocked = getUnlocked();
     if (!unlocked.includes(currentIndex)) {
         unlocked.push(currentIndex);
-        setUnlocked(unlocked);
+        saveUnlocked(unlocked);
     }
 
     closeAnimatedModal(() => {
-        // forceReveal = true pour révéler le mystère dans la modal question
         openAnimatedModal("modal-question", currentIndex, true);
         setTimeout(() => document.getElementById("answer-input").focus(), 100);
-        buildGrid(); // refresh la grille pour révéler le mystère
     });
 }
 
@@ -319,9 +348,9 @@ function checkAnswer() {
         const validated = getValidated();
         if (!validated.includes(currentIndex)) {
             validated.push(currentIndex);
-            setValidated(validated);
+            saveValidated(validated);
         }
-        closeAnimatedModal(() => { currentIndex = null; activeModal = null; buildGrid(); });
+        closeAnimatedModal(() => { currentIndex = null; activeModal = null; });
     } else {
         document.getElementById("answer-error").classList.remove("hidden");
     }
@@ -333,5 +362,3 @@ document.querySelectorAll(".modal-overlay").forEach(o => o.addEventListener("cli
 document.getElementById("sidebar-toggle").addEventListener("click", () => {
     document.getElementById("sidebar").classList.toggle("open");
 });
-
-buildGrid();
