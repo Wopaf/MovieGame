@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Game - Succès</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="app-header">
+        <h1>Movie Game</h1>
+        <span class="app-subtitle">Succès</span>
+    </div>
+
+    <div class="layout">
+        <main class="main">
+            <div class="global-progress">
+                <div class="global-progress-header">
+                    <span><span id="unlocked-count">0</span> sur <span id="total-count">0</span> succès validés</span>
+                    <span id="progress-pct">0%</span>
+                </div>
+                <div class="global-progress-track">
+                    <div class="global-progress-fill" id="progress-bar"></div>
+                </div>
+            </div>
+
+            <div id="grid" class="grid"></div>
+        </main>
+
+        <aside class="sidebar" id="sidebar">
+            <button class="sidebar-toggle" id="sidebar-toggle">&#127942; Progression</button>
+            <div class="sidebar-inner">
+                <h2>Objectifs</h2>
+                <div class="sidebar-progress">
+                    <div class="sidebar-progress-track">
+                        <div class="sidebar-progress-fill" id="sidebar-bar"></div>
+                    </div>
+                    <p class="sidebar-progress-text"><span id="sidebar-count">0</span> / <span id="sidebar-total">0</span></p>
+                </div>
+                <div id="milestones" class="milestones"></div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modal Mot de passe -->
+    <div id="modal-password" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-password-theme">
+            <button class="modal-close modal-close-btn">&times;</button>
+            <div class="modal-icon-row">
+                <img class="modal-icon" src="" alt="">
+                <div class="modal-info">
+                    <span class="modal-badge">Succès #<span class="modal-number"></span></span>
+                    <h2 class="modal-title"></h2>
+                </div>
+            </div>
+            <div class="modal-separator"></div>
+            <div class="modal-body">
+                <div class="lock-row">&#128274; Entrez le mot de passe pour accéder au défi</div>
+                <div class="input-group">
+                    <input type="text" id="password-input" maxlength="3" autocomplete="off" placeholder="•••">
+                    <button id="password-submit">Déverrouiller</button>
+                </div>
+                <p id="password-error" class="error hidden">Mot de passe incorrect.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Question -->
+    <div id="modal-question" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-question-theme">
+            <button class="modal-close modal-close-btn">&times;</button>
+            <div class="modal-icon-row">
+                <img class="modal-icon" src="" alt="">
+                <div class="modal-info">
+                    <span class="modal-badge badge-question">Défi #<span class="modal-number"></span></span>
+                    <h2 class="modal-title"></h2>
+                </div>
+            </div>
+            <div class="modal-separator sep-gold"></div>
+            <div class="modal-body">
+                <p id="question-text" class="question"></p>
+                <div class="input-group">
+                    <input type="text" id="answer-input" autocomplete="off" placeholder="Votre réponse…">
+                    <button id="answer-submit" class="btn-question">Valider</button>
+                </div>
+                <p id="answer-error" class="error hidden">Mauvaise réponse, réessayez.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Déjà validé -->
+    <div id="modal-done" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-done-theme">
+            <button class="modal-close modal-close-btn">&times;</button>
+            <div class="modal-icon-row">
+                <img class="modal-icon unlocked-icon" src="" alt="">
+                <div class="modal-info">
+                    <span class="modal-badge badge-done">Succès #<span class="modal-number"></span></span>
+                    <h2 class="modal-title"></h2>
+                </div>
+            </div>
+            <div class="modal-separator sep-green"></div>
+            <div class="modal-body" style="text-align:center">
+                <div class="done-icon">&#10003;</div>
+                <p class="success-msg">Succès validé !</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
