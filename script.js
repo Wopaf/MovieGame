@@ -330,23 +330,67 @@ function checkPassword() {
     }
 }
 
+
+
+// Tolérance : accepte une réponse si elle est à 2 caractères près
+function isCloseEnough(input, expected, tolerance) {
+    const a = input.toLowerCase();
+    const b = expected.toLowerCase();
+    if (a === b) return true;
+
+    const len1 = a.length, len2 = b.length;
+    const dp = Array.from({ length: len1 + 1 }, () => Array(len2 + 1).fill(0));
+    for (let i = 0; i <= len1; i++) dp[i][0] = i;
+    for (let j = 0; j <= len2; j++) dp[0][j] = j;
+    for (let i = 1; i <= len1; i++) {
+        for (let j = 1; j <= len2; j++) {
+            dp[i][j] = Math.min(
+                dp[i - 1][j] + 1,
+                dp[i][j - 1] + 1,
+                dp[i - 1][j - 1] + (a[i - 1] !== b[j - 1] ? 1 : 0)
+            );
+        }
+    }
+    return dp[len1][len2] <= tolerance;
+}
+
+
+
+
 // Réponse
 document.getElementById("answer-submit").addEventListener("click", checkAnswer);
 document.getElementById("answer-input").addEventListener("keydown", e => { if (e.key === "Enter") checkAnswer(); });
 
 function checkAnswer() {
     const input = document.getElementById("answer-input").value.trim();
-    if (input.toLowerCase() === ACHIEVEMENTS[currentIndex].answer.toLowerCase()) {
+    const modalEl = document.getElementById("modal-question").querySelector(".modal-content");
+
+    if (isCloseEnough(input, ACHIEVEMENTS[currentIndex].answer, 2)) {
+
         const validated = getValidated();
         if (!validated.includes(currentIndex)) {
             validated.push(currentIndex);
             saveValidated(validated);
         }
-        closeAnimatedModal(() => { currentIndex = null; activeModal = null; });
+
+        // Animation succès puis fermeture
+        modalEl.classList.add("modal-success-flash");
+        setTimeout(() => {
+            modalEl.classList.remove("modal-success-flash");
+            closeAnimatedModal(() => { currentIndex = null; activeModal = null; buildGrid(); });
+        }, 800);
+
     } else {
+        // Animation échec
+        modalEl.classList.remove("modal-fail-flash");
+        void modalEl.offsetWidth; // force reflow pour relancer l'animation
+        modalEl.classList.add("modal-fail-flash");
         document.getElementById("answer-error").classList.remove("hidden");
+
+        setTimeout(() => modalEl.classList.remove("modal-fail-flash"), 500);
     }
 }
+
 
 document.querySelectorAll(".modal-close-btn").forEach(btn => btn.addEventListener("click", closeModal));
 document.querySelectorAll(".modal-overlay").forEach(o => o.addEventListener("click", closeModal));
