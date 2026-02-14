@@ -19,9 +19,9 @@
     --color-text-dim:       #56707f;
 
     /* Bordures arrondies */
-    --radius-sm:            4px;
-    --radius-md:            6px;
-    --radius-lg:            8px;
+    --radius-sm:            2px;
+    --radius-md:            4px;
+    --radius-lg:            12px;
     --radius-full:          50%;
 
     /* Polices */
@@ -53,6 +53,7 @@ body {
     background: var(--color-bg);
     color: var(--color-text);
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 /* ============================================================
@@ -110,9 +111,16 @@ body {
 .global-progress-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-size: 0.85rem;
     color: var(--color-text-muted);
     margin-bottom: 8px;
+}
+
+.global-progress-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 #progress-pct {
@@ -135,6 +143,27 @@ body {
     transition: width 0.6s ease;
 }
 
+/* Bouton objectifs (caché sur desktop) */
+.progress-btn {
+    display: none;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: var(--color-border);
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-full);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    line-height: 1;
+}
+
+.progress-btn:hover {
+    background: var(--color-accent);
+    color: var(--color-bg);
+}
+
 /* ============================================================
    GRILLE
    ============================================================ */
@@ -150,11 +179,12 @@ body {
     gap: 14px;
     background: var(--color-panel);
     padding: 10px 14px;
-    border-radius: var(--radius-md);
     border-bottom: 1px solid var(--color-border);
     cursor: pointer;
     transition: background var(--transition-fast);
     min-height: 68px;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .cell:hover {
@@ -186,6 +216,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    overflow: hidden;
 }
 
 .cell-title {
@@ -214,6 +245,7 @@ body {
 
 .cell-status {
     flex-shrink: 0;
+    min-width: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -390,7 +422,7 @@ body {
 
 .modal-content {
     position: relative;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     width: var(--modal-width);
     max-width: 95vw;
     max-height: 90vh;
@@ -412,7 +444,7 @@ body {
     z-index: 10;
     width: 30px;
     height: 30px;
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -594,6 +626,63 @@ body {
 }
 
 /* ============================================================
+   ANIMATIONS RÉPONSE
+   ============================================================ */
+.modal-success-flash {
+    animation: successFlash 0.6s ease forwards;
+}
+
+.modal-success-flash .modal-body::before {
+    content: "\2713";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: var(--color-green-light);
+    background: rgba(76, 107, 34, 0.15);
+    border-radius: var(--radius-md);
+    z-index: 10;
+    animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-success-flash .modal-body {
+    position: relative;
+}
+
+@keyframes successFlash {
+    0%   { box-shadow: inset 0 0 0 0 rgba(164, 208, 7, 0); }
+    30%  { box-shadow: inset 0 0 40px 0 rgba(164, 208, 7, 0.15); }
+    100% { box-shadow: inset 0 0 0 0 rgba(164, 208, 7, 0); }
+}
+
+.modal-fail-flash {
+    animation: failFlash 0.5s ease;
+}
+
+.modal-fail-flash .input-group input {
+    border-color: var(--color-red) !important;
+    animation: failShake 0.4s ease;
+}
+
+@keyframes failFlash {
+    0%   { box-shadow: inset 0 0 0 0 rgba(233, 69, 96, 0); }
+    30%  { box-shadow: inset 0 0 30px 0 rgba(233, 69, 96, 0.15); }
+    100% { box-shadow: inset 0 0 0 0 rgba(233, 69, 96, 0); }
+}
+
+@keyframes failShake {
+    0%, 100% { transform: translateX(0); }
+    15%      { transform: translateX(-8px); }
+    30%      { transform: translateX(8px); }
+    45%      { transform: translateX(-6px); }
+    60%      { transform: translateX(6px); }
+    75%      { transform: translateX(-3px); }
+    90%      { transform: translateX(3px); }
+}
+
+/* ============================================================
    ANIMATIONS
    ============================================================ */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -602,73 +691,81 @@ body {
 @keyframes modalSlideOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(20px) scale(0.97); } }
 @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 @keyframes popIn { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
-
-
-
+@keyframes modalSlideUp { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: translateY(0); } }
+@keyframes modalSlideDown { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(100%); } }
 
 /* ============================================================
    MOBILE
    ============================================================ */
-@media (max-width: 500px) {
-    .grid { grid-template-columns: 1fr; }
-}
-
 @media (max-width: 768px) {
     .layout { flex-direction: column; }
 
     .main {
-        padding: 12px 8px 64px;
+        padding: 10px 4px 20px;
         width: 100%;
     }
 
-    /* Grille : GARDER 2 colonnes sur mobile */
-    .grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 2px;
-    }
-
-    .cell {
-        padding: 8px 8px;
-        gap: 8px;
-        min-height: 50px;
-    }
-
-    .cell-icon { width: 36px; height: 36px; }
-    .cell-title { font-size: 0.75rem; }
-    .cell-number-tag { font-size: 0.6rem; }
-    .cell-check-icon { width: 18px; height: 18px; font-size: 0.65rem; }
-    .cell-lock-icon, .cell-unlocked-icon { font-size: 0.8rem; }
-
     /* Header */
     .app-header {
-        padding: 12px 16px;
+        padding: 10px 12px;
         position: sticky;
         top: 0;
         z-index: 100;
     }
-    .app-header h1 { font-size: 1.15rem; }
-    .app-subtitle { font-size: 0.75rem; }
+    .app-header h1 { font-size: 1.1rem; }
+    .app-subtitle { font-size: 0.7rem; }
 
     /* Progress */
-    .global-progress { padding: 10px 12px; margin-bottom: 8px; border-radius: 0; }
-    .global-progress-header { font-size: 0.78rem; }
-    .global-progress-track { height: 6px; }
+    .global-progress { padding: 8px 10px; margin-bottom: 6px; border-radius: 0; }
+    .global-progress-header { font-size: 0.75rem; }
+    .global-progress-track { height: 5px; }
 
-    /* Sidebar */
+    /* Bouton objectifs visible */
+    .progress-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Grille 2 colonnes qui ne déborde pas */
+    .grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 2px;
+        width: 100%;
+    }
+
+    .cell {
+        padding: 6px 6px;
+        gap: 6px;
+        min-height: 46px;
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    .cell-icon { width: 32px; height: 32px; flex-shrink: 0; }
+    .cell-title { font-size: 0.72rem; }
+    .cell-number-tag { font-size: 0.58rem; }
+    .cell-check-icon { width: 16px; height: 16px; font-size: 0.6rem; }
+    .cell-lock-icon, .cell-unlocked-icon { font-size: 0.75rem; }
+    .cell-info { overflow: hidden; min-width: 0; }
+    .cell-status { flex-shrink: 0; min-width: 16px; }
+
+    /* Sidebar plein écran, complètement cachée */
     .sidebar {
         width: 100%;
-        border-left: none;
+        height: 100%;
         position: fixed;
-        bottom: 0; left: 0; right: 0;
-        z-index: 150;
-        min-height: 0;
-        max-height: 70vh;
+        inset: 0;
+        z-index: 200;
         padding: 0;
-        background: var(--color-panel);
-        border-radius: 16px 16px 0 0;
-        box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5);
-        transform: translateY(calc(100% - 52px));
+        background: var(--color-bg);
+        transform: translateY(100%);
         transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        border: none;
+        border-radius: 0;
+        min-height: 0;
+        max-height: 100%;
+        box-shadow: none;
     }
 
     .sidebar.open { transform: translateY(0); }
@@ -677,35 +774,24 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
         width: 100%;
-        padding: 14px;
+        padding: 16px;
         background: var(--color-panel);
         border: none;
-        border-radius: 16px 16px 0 0;
+        border-bottom: 1px solid var(--color-border);
+        border-radius: 0;
         color: var(--color-accent);
         font-size: 0.9rem;
         font-weight: 700;
         cursor: pointer;
-        position: relative;
     }
 
-    .sidebar-toggle::before {
-        content: "";
-        position: absolute;
-        top: 8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 36px;
-        height: 4px;
-        background: var(--color-border);
-        border-radius: 2px;
-    }
+    .sidebar-toggle::before { display: none; }
 
     .sidebar-inner {
-        padding: 12px 16px 24px;
+        padding: 16px;
         overflow-y: auto;
-        max-height: calc(70vh - 52px);
+        height: calc(100% - 52px);
         -webkit-overflow-scrolling: touch;
     }
 
@@ -719,17 +805,23 @@ body {
     .modal-content { width: 100%; max-width: 100%; max-height: 90vh; border-radius: 16px 16px 0 0; }
     .modal.anim-in .modal-content { animation: modalSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     .modal.anim-out .modal-content { animation: modalSlideDown 0.25s ease forwards; }
-    .modal-icon-row { padding: 16px 16px 10px; gap: 12px; }
-    .modal-icon { width: 48px; height: 48px; }
-    .modal-title { font-size: 1rem; }
-    .modal-badge { font-size: 0.6rem; }
-    .modal-separator { margin: 0 16px; }
-    .modal-body { padding: 16px; }
+    .modal-icon-row { padding: 14px 14px 10px; gap: 10px; }
+    .modal-icon { width: 44px; height: 44px; }
+    .modal-title { font-size: 0.95rem; }
+    .modal-badge { font-size: 0.58rem; }
+    .modal-separator { margin: 0 14px; }
+    .modal-body { padding: 14px; }
     .input-group { flex-direction: column; gap: 8px; }
-    .input-group input { padding: 14px; font-size: 1rem; }
-    .input-group button { width: 100%; padding: 14px; font-size: 0.95rem; }
+    .input-group input { padding: 12px; font-size: 1rem; }
+    .input-group button { width: 100%; padding: 12px; font-size: 0.9rem; }
     .modal-close { top: 8px; right: 8px; width: 28px; height: 28px; font-size: 1rem; }
-    .question { font-size: 0.92rem !important; padding: 8px 12px; }
-    .done-icon { width: 48px; height: 48px; font-size: 1.3rem; }
-    .lock-row { font-size: 0.82rem; }
+    .question { font-size: 0.88rem !important; padding: 8px 10px; }
+    .done-icon { width: 44px; height: 44px; font-size: 1.2rem; }
+    .lock-row { font-size: 0.8rem; }
+}
+
+@media (max-width: 360px) {
+    .cell-icon { width: 26px; height: 26px; }
+    .cell { padding: 5px 4px; gap: 4px; }
+    .cell-title { font-size: 0.65rem; }
 }

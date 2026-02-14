@@ -142,6 +142,26 @@ function saveValidated(arr) {
     refValidated.set(arr);
 }
 
+
+// ============================================================
+//  SONS — Modifier les fichiers dans le dossier sounds/
+// ============================================================
+const SOUNDS = {
+    click:   new Audio("sounds/click.mp3"),
+    success: new Audio("sounds/success.mp3"),
+    fail:    new Audio("sounds/fail.mp3"),
+};
+
+function playSound(name) {
+    const s = SOUNDS[name];
+    if (!s) return;
+    s.currentTime = 0;
+    s.play().catch(() => {});
+}
+
+
+
+
 // ============================================================
 //  UI
 // ============================================================
@@ -261,19 +281,31 @@ function closeAnimatedModal(callback) {
     modal.classList.remove("anim-in");
     modal.classList.add("anim-out");
 
+    let done = false;
+    function finish() {
+        if (done) return;
+        done = true;
+        modal.classList.add("hidden");
+        modal.classList.remove("anim-out");
+        activeModal = null;
+        modal.removeEventListener("animationend", handler);
+        if (callback) callback();
+    }
+
     function handler(e) {
         if (e.target === modal.querySelector(".modal-content")) {
-            modal.classList.add("hidden");
-            modal.classList.remove("anim-out");
-            activeModal = null;
-            modal.removeEventListener("animationend", handler);
-            if (callback) callback();
+            finish();
         }
     }
+
     modal.addEventListener("animationend", handler);
+    // Fallback si l'animation ne se déclenche pas
+    setTimeout(finish, 400);
 }
 
+
 function openModal(index) {
+    playSound("click");
     currentIndex = index;
     const unlocked = getUnlocked();
     const validated = getValidated();
@@ -326,6 +358,7 @@ function checkPassword() {
         document.getElementById("password-error").classList.add("hidden");
         transitionToQuestion();
     } else {
+        playSound("fail");
         document.getElementById("password-error").classList.remove("hidden");
     }
 }
@@ -366,6 +399,7 @@ function checkAnswer() {
     const modalEl = document.getElementById("modal-question").querySelector(".modal-content");
 
     if (isCloseEnough(input, ACHIEVEMENTS[currentIndex].answer, 2)) {
+    playSound("success");
 
         const validated = getValidated();
         if (!validated.includes(currentIndex)) {
@@ -381,6 +415,7 @@ function checkAnswer() {
         }, 800);
 
     } else {
+    playSound("fail");
         // Animation échec
         modalEl.classList.remove("modal-fail-flash");
         void modalEl.offsetWidth; // force reflow pour relancer l'animation
@@ -399,6 +434,13 @@ document.getElementById("sidebar-toggle").addEventListener("click", () => {
     document.getElementById("sidebar").classList.toggle("open");
 });
 
+// Bouton "Objectifs" (mobile)
+document.getElementById("open-progress").addEventListener("click", () => {
+    playSound("click");
+    document.getElementById("sidebar").classList.add("open");
+});
+
+
 // Init : afficher la grille immédiatement, Firebase la mettra à jour ensuite
 buildGrid();
 
@@ -406,4 +448,3 @@ buildGrid();
 db.ref(".info/connected").on("value", (snap) => {
     console.log("Firebase connecté:", snap.val());
 });
-

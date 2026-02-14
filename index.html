@@ -15,15 +15,19 @@
 
     <div class="layout">
         <main class="main">
-            <div class="global-progress">
+           <div class="global-progress">
                 <div class="global-progress-header">
                     <span><span id="unlocked-count">0</span> sur <span id="total-count">0</span> succès validés</span>
-                    <span id="progress-pct">0%</span>
+                    <div class="global-progress-right">
+                        <span id="progress-pct">0%</span>
+                        <button class="progress-btn" id="open-progress">&#127942;</button>
+                    </div>
                 </div>
                 <div class="global-progress-track">
                     <div class="global-progress-fill" id="progress-bar"></div>
                 </div>
             </div>
+
 
             <div id="grid" class="grid"></div>
         </main>
