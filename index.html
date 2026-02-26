@@ -52,8 +52,12 @@
                         <div class="zoom-controls">
                             <span class="sort-label">Grille</span>
                             <button class="zoom-btn" id="zoom-out" title="Moins de colonnes">−</button>
-                            <span class="zoom-label" id="zoom-label">2</span>
+                            <span class="zoom-label" id="zoom-label">4</span>
                             <button class="zoom-btn" id="zoom-in" title="Plus de colonnes">+</button>
+                            <button class="zoom-toggle-btn" id="zoom-toggle" title="Changer la grille">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="13px" viewBox="0 -960 960 960" width="13px" fill="currentColor"><path d="M120-520v-320h320v320H120Zm0 400v-320h320v320H120Zm400-400v-320h320v320H520Zm0 400v-320h320v320H520ZM200-600h160v-160H200v160Zm400 0h160v-160H600v160Zm0 400h160v-160H600v160Zm-400 0h160v-160H200v160Z"/></svg>
+                                <span id="zoom-toggle-label">2</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -91,8 +95,23 @@
                         <span class="progress-stat-label">complété</span>
                     </div>
                 </div>
+                <div class="sidebar-next-milestone" id="sidebar-next-milestone">
+                    <div class="sidebar-next-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="12px" viewBox="0 -960 960 960" width="12px" fill="currentColor"><path d="m354-247 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143Zm-68 167 65-281L120-539l288-25 112-265 112 265 288 25-231 198 65 281-234-141-234 141Zm234-380Z"/></svg>
+                        PROCHAIN PALIER
+                    </div>
+                    <span class="sidebar-next-count" id="sidebar-next-count">—</span>
+                    <p class="sidebar-next-reward" id="sidebar-next-reward">—</p>
+                    <span class="sidebar-next-progress" id="sidebar-next-progress">0 / 0</span>
+                </div>
                 <div class="sidebar-milestones-label">PALIERS</div>
                 <div id="milestones" class="milestones"></div>
+                <div class="sidebar-reset-wrap">
+                    <button id="sidebar-reset" class="sidebar-reset-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                        Réinitialiser les sauvegardes
+                    </button>
+                </div>
             </div>
         </aside>
     </div>

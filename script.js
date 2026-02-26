@@ -183,6 +183,26 @@ function updateCounter() {
     document.getElementById("progress-bar").style.width = pct + "%";
     document.getElementById("sidebar-bar").style.width = pct + "%";
     document.getElementById("sidebar-pct").textContent = pct + "%";
+    updateNextMilestone();
+}
+
+function updateNextMilestone() {
+    const validated = getValidated();
+    const count = validated.length;
+    const next = MILESTONES.find(m => count < m.count);
+    const el = document.getElementById("sidebar-next-milestone");
+    if (!el) return;
+    if (!next) {
+        el.classList.add("all-done");
+        document.getElementById("sidebar-next-count").textContent = "Tous les paliers atteints !";
+        document.getElementById("sidebar-next-reward").textContent = "Félicitations, tu as tout accompli !";
+        document.getElementById("sidebar-next-progress").textContent = count + " succès";
+        return;
+    }
+    el.classList.remove("all-done");
+    document.getElementById("sidebar-next-count").textContent = next.count + " succès requis";
+    document.getElementById("sidebar-next-reward").textContent = next.reward;
+    document.getElementById("sidebar-next-progress").textContent = count + " / " + next.count;
 }
 
 function buildMilestones() {
@@ -468,6 +488,12 @@ document.getElementById("sidebar-back").addEventListener("click", () => {
     document.getElementById("sidebar").classList.remove("open");
 });
 
+document.getElementById("sidebar-reset").addEventListener("click", () => {
+    if (!confirm("Réinitialiser toutes les sauvegardes ? Cette action est irréversible.")) return;
+    refUnlocked.set([]);
+    refValidated.set([]);
+});
+
 // Bouton "Objectifs" (mobile)
 document.getElementById("open-progress").addEventListener("click", () => {
     playSound("click");
@@ -476,7 +502,7 @@ document.getElementById("open-progress").addEventListener("click", () => {
 
 
 // Zoom de la grille (2 à 4 colonnes)
-let currentCols = 2;
+let currentCols = window.innerWidth > 768 ? 4 : 2;
 
 function setGridCols(n) {
     currentCols = n;
@@ -486,13 +512,20 @@ function setGridCols(n) {
     document.getElementById("zoom-label").textContent = n;
     document.getElementById("zoom-out").disabled = n <= 2;
     document.getElementById("zoom-in").disabled  = n >= 4;
+    const tgl = document.getElementById("zoom-toggle-label");
+    if (tgl) tgl.textContent = n;
 }
+
+setGridCols(currentCols);
 
 document.getElementById("zoom-out").addEventListener("click", () => {
     if (currentCols > 2) setGridCols(currentCols - 1);
 });
 document.getElementById("zoom-in").addEventListener("click", () => {
     if (currentCols < 4) setGridCols(currentCols + 1);
+});
+document.getElementById("zoom-toggle").addEventListener("click", () => {
+    setGridCols(currentCols === 2 ? 3 : 2);
 });
 
 // Boutons de tri
