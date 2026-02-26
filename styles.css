@@ -3,10 +3,10 @@
    ============================================================ */
 :root {
     /* Couleurs principales */
-    --color-bg:             #171a21;
-    --color-panel:          #1b2838;
-    --color-panel-hover:    #2a475e;
-    --color-border:         #2a475e;
+    --color-bg:             #1c1e22;
+    --color-panel:          #2b3139;
+    --color-panel-hover:    #3c4d5c;
+    --color-border:         #3a4c5a;
     --color-accent:         #66c0f4;
     --color-green:          #4c6b22;
     --color-green-light:    #a4d007;
@@ -49,12 +49,16 @@
     box-sizing: border-box;
 }
 
+html {
+    overflow-x: clip;
+}
+
 body {
     font-family: var(--font-main);
     background: var(--color-bg);
     color: var(--color-text);
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow-x: clip;
 }
 
 /* ============================================================
@@ -107,7 +111,7 @@ body {
    ============================================================ */
 .sticky-controls {
     position: sticky;
-    top: 0px;
+    top: 0;
     z-index: 100;
     background: var(--color-bg);
     padding: 12px 0 0;
@@ -118,8 +122,8 @@ body {
     content: "";
     position: absolute;
     top: 100%;
-    left: -24px;
-    right: -24px;
+    left: 0;
+    right: 0;
     height: 28px;
     background: linear-gradient(to bottom, var(--color-bg), transparent);
     pointer-events: none;
@@ -128,15 +132,22 @@ body {
 /* ============================================================
    BARRE DE PROGRESSION GLOBALE
    ============================================================ */
-.global-progress {
+
+.global-progress-group {
     background: var(--color-panel);
     border-radius: var(--radius-md);
-    padding: 10px 14px;
-    margin-bottom: 16px;
+    padding: 10px 12px;
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 10px;
     border: 1px solid var(--color-border);
+}
+
+.global-progress {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 14px;
 }
 
 .progress-center {
@@ -146,7 +157,7 @@ body {
 
 .global-progress-track {
     background: rgba(255, 255, 255, 0.08);
-    height: 8px;
+    height: 12px;
     border-radius: 99px;
     overflow: hidden;
 }
@@ -192,7 +203,7 @@ body {
     background: transparent;
     color: var(--color-accent);
     border: 1px solid var(--color-accent);
-    border-radius: var(--radius-sm);
+    border-radius: 5px;
     font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
@@ -215,22 +226,40 @@ body {
    ============================================================ */
 .sort-bar {
     display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 0 14px;
+}
+
+.sort-bar-group {
+    background: var(--color-panel);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    flex: 1;
+    display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 8px;
-    padding: 8px 0 10px;
+    padding: 6px 10px;
+}
+
+.sort-bar-group:last-child {
+    justify-content: center;
+    flex: 0 0 auto;
 }
 
 .sort-label {
-    font-size: 0.72rem;
+    font-size: 0.6rem;
     color: var(--color-text-dim);
     text-transform: uppercase;
     letter-spacing: 1px;
     flex-shrink: 0;
-    margin-right: 2px;
+    margin-right: 6px;
 }
 
 .sort-btn {
-    padding: 4px 14px;
+    padding: 7px 18px;
     border: 1px solid var(--color-border);
     border-radius: 4px;
     background: transparent;
@@ -245,6 +274,51 @@ body {
 .sort-btn:hover {
     border-color: var(--color-accent);
     color: var(--color-accent);
+}
+
+/* Contrôles de zoom */
+.zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.zoom-btn {
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color var(--transition-fast), color var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.zoom-btn:hover:not(:disabled) {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.zoom-btn:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+}
+
+.zoom-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-text-dim);
+    min-width: 10px;
+    text-align: center;
 }
 
 .sort-btn.active {
@@ -263,6 +337,10 @@ body {
     padding: 4px 0;
 }
 
+.grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
 /* Cellule = affiche portrait */
 .cell {
     position: relative;
@@ -273,7 +351,28 @@ body {
     background: var(--color-panel);
     display: block;
     min-width: 0;
+    border: 1px solid rgba(0, 0, 0, 0.663);
     transition: all 0.2s ease;
+}
+
+.cell.mystery {
+    box-shadow: 0 0 10px rgba(124, 58, 237, 0.3);
+}
+
+/* Grand "?" centré sur les films mystère */
+.cell.mystery::before {
+    content: "?";
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5rem;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.9), 0 0 40px rgba(124, 58, 237, 0.6);
+    z-index: 2;
+    pointer-events: none;
+    line-height: 1;
 }
 
 /* Dégradé permanent sur l'image pour lisibilité du texte */
@@ -358,8 +457,8 @@ body {
 }
 
 .cell-title {
-    font-size: 0.82rem;
-    font-weight: 700;
+    font-size: 0.9rem;
+    font-weight: 400;
     color: #f0f0f0;
     white-space: normal;
     line-height: 1.25;
@@ -393,55 +492,51 @@ body {
     position: absolute;
     top: 8px;
     right: 8px;
+    gap: 5px;
     z-index: 3;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.cell-lock-icon {
-    background-color: rgba(0, 0, 0, 0.623);
-    border-radius: 5px;
-    padding: 4px 4px 0px 4px;
+/* Icônes (toujours visibles dans leur wrapper) */
+.cell-lock-icon    { display: inline-flex; color: rgba(255, 255, 255, 0.9); }
+.cell-unlocked-icon { display: inline-flex; color: var(--color-green-light); }
+.cell-check-icon   {
     display: inline-flex;
-    color: rgba(255, 255, 255, 0.894);
-}
-
-.cell-unlocked-icon {
-    display: none;
-    background-color: rgba(0, 0, 0, 0.623);
-    border-radius: 3px;
-    padding: 2px 4px;
-    color: var(--color-green-light);
-    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9));
-}
-
-.cell-check-icon {
-    display: none;
-    width: 22px;
-    height: 22px;
-    padding: 2px 4px;
-    background: var(--color-green);
-    color: var(--color-green-light);
-    border-radius: 3px;
-    font-size: 0.75rem;
     align-items: center;
     justify-content: center;
+    font-size: 0.8rem;
     font-weight: bold;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    color: var(--color-green-light);
 }
 
-.cell .cell-lock-icon { display: inline; }
-.cell .cell-unlocked-icon { display: none; }
-.cell .cell-check-icon { display: none; }
+/* Label texte */
+.cell-status-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
 
-.cell.unlocked .cell-lock-icon { display: none; }
-.cell.unlocked .cell-unlocked-icon { display: inline; }
-.cell.unlocked .cell-check-icon { display: none; }
+.cell-lock-label   { color: rgba(255, 255, 255, 0.75); }
+.cell-unlock-label { color: var(--color-green-light); }
+.cell-valid-label  { color: var(--color-green-light); }
 
-.cell.validated .cell-lock-icon { display: none; }
-.cell.validated .cell-unlocked-icon { display: none; }
-.cell.validated .cell-check-icon { display: flex; }
+/* Wrapper label + icône */
+.cell-background {
+    display: none; /* caché par défaut */
+    align-items: center;
+    gap: 5px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 5px;
+    padding: 3px 7px 3px 6px;
+}
+
+/* Afficher le bon bloc selon l'état */
+.cell:not(.unlocked):not(.validated) .cell-background:nth-child(1) { display: flex; }
+.cell.unlocked  .cell-background:nth-child(2) { display: flex; }
+.cell.validated .cell-background:nth-child(3) { display: flex; }
 
 /* ============================================================
    SIDEBAR
@@ -946,6 +1041,53 @@ body {
 @keyframes modalSlideDown { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(100%); } }
 
 /* ============================================================
+   SPLASH SCREEN
+   ============================================================ */
+#splash {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease;
+    pointer-events: all;
+}
+
+#splash.splash-fade {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.splash-spinner {
+    width: 44px;
+    height: 44px;
+    border: 3px solid rgba(255, 255, 255, 0.08);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: splashSpin 0.9s linear infinite;
+}
+
+@keyframes splashSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   INTRO ANIMATION GRILLE
+   ============================================================ */
+@keyframes cellFadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.cell.cell-intro {
+    opacity: 0;
+    animation: cellFadeIn 0.45s ease both;
+    animation-delay: var(--cell-delay, 0s);
+}
+
+/* ============================================================
    MOBILE
    ============================================================ */
 @media (max-width: 768px) {
@@ -972,15 +1114,14 @@ body {
     .sticky-controls::after { left: -6px; right: -6px; height: 20px; }
 
     /* Progress */
-    .global-progress { padding: 6px 8px; margin-bottom: 0; border-radius: var(--radius-sm); gap: 8px; }
+    .global-progress-group { padding: 6px 8px; gap: 6px; }
+    .global-progress { gap: 8px; }
     .global-progress-track { height: 6px; }
     .progress-btn { padding: 5px 8px; font-size: 0.72rem; gap: 4px; }
-    .progress-btn-label { display: none; }
     .progress-stats { font-size: 0.75rem; }
 
     /* Sort bar mobile */
     .sort-bar { padding: 6px 0 8px; gap: 6px; }
-    .sort-label { display: none; }
     .sort-btn { padding: 3px 10px; font-size: 0.72rem; }
 
     /* Grille 2 colonnes */
@@ -992,7 +1133,6 @@ body {
     }
 
     .cell-content { padding: 8px 8px 8px; }
-    .cell-title { font-size: 0.72rem; }
     .cell-check-icon { width: 18px; height: 18px; font-size: 0.65rem; }
     .cell-status { top: 6px; right: 6px; }
 

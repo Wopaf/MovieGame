@@ -143,6 +143,30 @@ function playSound(name) {
 
 
 // ============================================================
+//  TRI
+// ============================================================
+
+let currentSort = "number";
+
+function getSortedIndices() {
+    const validated = getValidated();
+    const unlocked  = getUnlocked();
+    let indices = ACHIEVEMENTS.map((_, i) => i);
+
+    if (currentSort === "alpha") {
+        indices.sort((a, b) => {
+            const ta = ACHIEVEMENTS[a].mystery ? "\uFFFF" : ACHIEVEMENTS[a].title;
+            const tb = ACHIEVEMENTS[b].mystery ? "\uFFFF" : ACHIEVEMENTS[b].title;
+            return ta.localeCompare(tb, "fr", { sensitivity: "base" });
+        });
+    } else if (currentSort === "validated") {
+        const rank = i => validated.includes(i) ? 0 : unlocked.includes(i) ? 1 : 2;
+        indices.sort((a, b) => rank(a) - rank(b));
+    }
+    return indices;
+}
+
+// ============================================================
 //  UI
 // ============================================================
 
@@ -191,7 +215,8 @@ function buildGrid() {
     const validated = getValidated();
     grid.innerHTML = "";
 
-    ACHIEVEMENTS.forEach((ach, i) => {
+    getSortedIndices().forEach(i => {
+        const ach = ACHIEVEMENTS[i];
         const isUnlocked = unlocked.includes(i);
         const isValidated = validated.includes(i);
         const isMystery = ach.mystery && !isUnlocked && !isValidated;
@@ -202,7 +227,7 @@ function buildGrid() {
         else if (isUnlocked) cell.classList.add("unlocked");
         if (isMystery) cell.classList.add("mystery");
 
-        const displayTitle = isMystery ? "????" : ach.title;
+        const displayTitle = isMystery ? "Film mystère" : ach.title;
         const imgSrc = `medias/${i + 1}.png`;
 
         const SVG_LOCKED = `<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm296.5-143.5Q560-327 560-360t-23.5-56.5Q513-440 480-440t-56.5 23.5Q400-393 400-360t23.5 56.5Q447-280 480-280t56.5-23.5ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></svg>`;
@@ -217,9 +242,18 @@ function buildGrid() {
                 </div>
             </div>
             <div class="cell-status">
+            <div class="cell-background">
+                <span class="cell-status-label cell-lock-label">Verrouillé</span>
                 <span class="cell-lock-icon">${SVG_LOCKED}</span>
+            </div>
+            <div class="cell-background">
+                <span class="cell-status-label cell-unlock-label">Déverrouillé</span>
                 <span class="cell-unlocked-icon">${SVG_UNLOCKED}</span>
+            </div>
+            <div class="cell-background">
+                <span class="cell-status-label cell-valid-label">Validé</span>
                 <span class="cell-check-icon">&#10003;</span>
+            </div>
             </div>
         `;
 
@@ -229,6 +263,8 @@ function buildGrid() {
 
     updateCounter();
     buildMilestones();
+    firstBuildDone = true;
+    if (splashDone && !gridAnimStarted) startGridIntroAnimation();
 }
 
 // ===== MODALS =====
@@ -245,7 +281,7 @@ function fillModal(modal, index, forceReveal) {
     const isMystery = ach.mystery && !revealed;
 
     modal.querySelector(".modal-number").textContent = num;
-    modal.querySelector(".modal-title").textContent = isMystery ? "????" : ach.title;
+    modal.querySelector(".modal-title").textContent = isMystery ? "Film mystère" : ach.title;
 
     const icon = modal.querySelector(".modal-icon");
     if (isMystery) {
@@ -437,6 +473,68 @@ document.getElementById("open-progress").addEventListener("click", () => {
     document.getElementById("sidebar").classList.add("open");
 });
 
+
+// Zoom de la grille (2 à 4 colonnes)
+let currentCols = 2;
+
+function setGridCols(n) {
+    currentCols = n;
+    const grid = document.getElementById("grid");
+    grid.classList.remove("cols-2", "cols-3", "cols-4");
+    grid.classList.add("cols-" + n);
+    document.getElementById("zoom-label").textContent = n;
+    document.getElementById("zoom-out").disabled = n <= 2;
+    document.getElementById("zoom-in").disabled  = n >= 4;
+}
+
+document.getElementById("zoom-out").addEventListener("click", () => {
+    if (currentCols > 2) setGridCols(currentCols - 1);
+});
+document.getElementById("zoom-in").addEventListener("click", () => {
+    if (currentCols < 4) setGridCols(currentCols + 1);
+});
+
+// Boutons de tri
+document.querySelectorAll(".sort-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        currentSort = btn.dataset.sort;
+        document.querySelectorAll(".sort-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        buildGrid();
+    });
+});
+
+// ============================================================
+//  SPLASH SCREEN + INTRO ANIMATION
+// ============================================================
+let splashDone = false;
+let firstBuildDone = false;
+let gridAnimStarted = false;
+
+function startGridIntroAnimation() {
+    if (gridAnimStarted) return;
+    gridAnimStarted = true;
+    const cells = [...document.querySelectorAll("#grid .cell")];
+    cells.forEach((cell, i) => {
+        cell.style.setProperty("--cell-delay", (i * 0.1) + "s");
+        cell.classList.add("cell-intro");
+    });
+    setTimeout(() => {
+        cells.forEach(c => c.classList.remove("cell-intro"));
+    }, 3000);
+}
+
+setTimeout(() => {
+    startGridIntroAnimation();
+}, 400);
+
+setTimeout(() => {
+    const splash = document.getElementById("splash");
+    if (!splash) return;
+    splash.classList.add("splash-fade");
+    splash.addEventListener("transitionend", onSplashDone, { once: true });
+    setTimeout(onSplashDone, 700); // fallback si transitionend ne se déclenche pas
+}, 600);
 
 // Init : afficher la grille immédiatement, Firebase la mettra à jour ensuite
 buildGrid();

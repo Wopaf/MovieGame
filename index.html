@@ -14,26 +14,40 @@
     <div class="layout">
         <main class="main">
            <div class="sticky-controls">
-                <div class="global-progress">
-                    <button class="progress-btn" id="open-progress">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor"><path d="M536.5-543.5Q560-567 560-600t-23.5-56.5Q513-680 480-680t-56.5 23.5Q400-633 400-600t23.5 56.5Q447-520 480-520t56.5-23.5ZM440-200v-124q-49-11-87.5-41.5T296-442q-75-9-125.5-65.5T120-640v-40q0-33 23.5-56.5T200-760h80q0-33 23.5-56.5T360-840h240q33 0 56.5 23.5T680-760h80q33 0 56.5 23.5T840-680v40q0 76-50.5 132.5T664-442q-18 46-56.5 76.5T520-324v124h120q17 0 28.5 11.5T680-160q0 17-11.5 28.5T640-120H320q-17 0-28.5-11.5T280-160q0-17 11.5-28.5T320-200h120ZM280-528v-152h-80v40q0 38 22 68.5t58 43.5Zm285 93q35-35 35-85v-240H360v240q0 50 35 85t85 35q50 0 85-35Zm115-93q36-13 58-43.5t22-68.5v-40h-80v152Zm-200-52Z"/></svg>
-                        <span class="progress-btn-label">Objectifs</span>
-                    </button>
-                    <div class="progress-center">
-                        <div class="global-progress-track">
-                            <div class="global-progress-fill" id="progress-bar"></div>
+                <div class="global-progress-group">
+                    <div class="global-progress">
+                        <div class="progress-stats">
+                            <span id="unlocked-count">0</span><span class="progress-stats-sep">/</span><span id="total-count">0</span>
+                        </div>
+                        <div class="progress-center">
+                            <div class="global-progress-track">
+                                <div class="global-progress-fill" id="progress-bar"></div>
+                            </div>
+                        </div>
+                        <div class="progress-stats">
+                            <span id="progress-pct" class="progress-pct-badge">0%</span>
                         </div>
                     </div>
-                    <div class="progress-stats">
-                        <span id="unlocked-count">0</span><span class="progress-stats-sep">/</span><span id="total-count">0</span>
-                        <span id="progress-pct" class="progress-pct-badge">0%</span>
-                    </div>
+                    <button class="progress-btn" id="open-progress">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor"><path d="M536.5-543.5Q560-567 560-600t-23.5-56.5Q513-680 480-680t-56.5 23.5Q400-633 400-600t23.5 56.5Q447-520 480-520t56.5-23.5ZM440-200v-124q-49-11-87.5-41.5T296-442q-75-9-125.5-65.5T120-640v-40q0-33 23.5-56.5T200-760h80q0-33 23.5-56.5T360-840h240q33 0 56.5 23.5T680-760h80q33 0 56.5 23.5T840-680v40q0 76-50.5 132.5T664-442q-18 46-56.5 76.5T520-324v124h120q17 0 28.5 11.5T680-160q0 17-11.5 28.5T640-120H320q-17 0-28.5-11.5T280-160q0-17 11.5-28.5T320-200h120ZM280-528v-152h-80v40q0 38 22 68.5t58 43.5Zm285 93q35-35 35-85v-240H360v240q0 50 35 85t85 35q50 0 85-35Zm115-93q36-13 58-43.5t22-68.5v-40h-80v152Zm-200-52Z"/></svg>
+                            <span class="progress-btn-label">Progression</span>
+                    </button>
                 </div>
                 <div class="sort-bar">
-                    <span class="sort-label">Trier</span>
-                    <button class="sort-btn active" data-sort="number"># Numéro</button>
-                    <button class="sort-btn" data-sort="alpha">A–Z</button>
-                    <button class="sort-btn" data-sort="validated">✓ Validés</button>
+                    <div class="sort-bar-group">
+                        <span class="sort-label">Trier</span>
+                        <button class="sort-btn active" data-sort="number">Numéro</button>
+                        <button class="sort-btn" data-sort="alpha">A–Z</button>
+                        <button class="sort-btn" data-sort="validated">Validés</button>
+                    </div>
+                    <div class="sort-bar-group">
+                        <div class="zoom-controls">
+                            <span class="sort-label">Grille</span>
+                            <button class="zoom-btn" id="zoom-out" title="Moins de colonnes">−</button>
+                            <span class="zoom-label" id="zoom-label">2</span>
+                            <button class="zoom-btn" id="zoom-in" title="Plus de colonnes">+</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -46,7 +60,6 @@
                     <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
                     Retour
                 </button>
-                <span class="sidebar-header-title">Objectifs</span>
             </div>
             <div class="sidebar-inner">
                 <h2>Objectifs</h2>
@@ -136,5 +149,10 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
     <!-- Ton script APRÈS -->
     <script src="script.js" charset="UTF-8"></script>
+
+    <!-- Splash Screen -->
+    <div id="splash">
+        <div class="splash-spinner"></div>
+    </div>
 </body>
 </html>
