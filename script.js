@@ -16,16 +16,16 @@ const FIREBASE_CONFIG = {
 //  PALIERS / OBJECTIFS — Modifier ici facilement
 // ============================================================
 const MILESTONES = [
-    { count: 5,  reward: "Indice gratuit pour un succès au choix" },
-    { count: 10, reward: "Révélation du mot de passe d'un succès au choix" },
-    { count: 15, reward: "Droit de passer une question" },
-    { count: 20, reward: "Deux indices gratuits" },
-    { count: 25, reward: "Révélation de deux mots de passe" },
-    { count: 30, reward: "Un joker : valide un succès sans répondre" },
-    { count: 40, reward: "Trois indices gratuits" },
-    { count: 50, reward: "Deux jokers" },
-    { count: 60, reward: "Titre de Cinéphile confirmé" },
-    { count: 70, reward: "Titre de Maître du Cinéma — Jeu terminé !" },
+    { count: 5,  reward: "Tu peux gratter la case numéro 13 ou 15" },
+    { count: 10, reward: "Tu peux gratter la case numéro 13 ou 15" },
+    { count: 15, reward: "Tu peux gratter la case numéro 17 ou 25" },
+    { count: 20, reward: "Tu peux gratter la case numéro 17 ou 25" },
+    { count: 25, reward: "Tu peux gratter la case numéro 36 ou 48" },
+    { count: 30, reward: "Tu peux gratter la case numéro 36 ou 48" },
+    { count: 35, reward: "Tu peux gratter la case numéro 51 ou 53" },
+    { count: 40, reward: "Tu peux gratter la case numéro 51 ou 53" },
+    { count: 50, reward: "Tu peux gratter la case numéro 54 ou 59" },
+    { count: 65, reward: "Tu peux gratter la case numéro 70" },
 ];
 
 // ============================================================
@@ -33,76 +33,55 @@ const MILESTONES = [
 //  mystery : true = caché tant que le mot de passe n'est pas entré
 // ============================================================
 const ACHIEVEMENTS = [
-    { title: "Les Dents de la mer", password: "a1b", question: "Quel film met en scène un requin géant ?", answer: "Les Dents de la mer", mystery: false },
-    { title: "Iron Man", password: "c2d", question: "Qui joue Iron Man ?", answer: "Robert Downey Jr", mystery: false },
-    { title: "L'Empire contre-attaque", password: "e3f", question: "Dans quel film entend-on « Je suis ton père » ?", answer: "L'Empire contre-attaque", mystery: true },
-    { title: "Titanic", password: "g4h", question: "Quel est le nom du bateau dans Titanic ?", answer: "Titanic", mystery: false },
-    { title: "Les Évadés", password: "i5j", question: "Quel film de 1994 se passe dans une prison ?", answer: "Les Évadés", mystery: true },
-    { title: "Inception", password: "k6l", question: "Qui réalise Inception ?", answer: "Christopher Nolan", mystery: false },
-    { title: "Le Roi Lion", password: "m7n", question: "Quel animal est Simba ?", answer: "Lion", mystery: false },
-    { title: "Retour vers le futur", password: "o8p", question: "Dans quel film trouve-t-on la DeLorean ?", answer: "Retour vers le futur", mystery: true },
-    { title: "The Dark Knight", password: "q9r", question: "Quel personnage dit « Pourquoi si sérieux ? » ?", answer: "Le Joker", mystery: false },
-    { title: "Pulp Fiction", password: "s0t", question: "Qui est le réalisateur de Pulp Fiction ?", answer: "Quentin Tarantino", mystery: false },
-    { title: "Jurassic Park", password: "u1v", question: "Quel film montre un parc de dinosaures ?", answer: "Jurassic Park", mystery: false },
-    { title: "Forrest Gump", password: "w2x", question: "Quel est le prénom de Forrest dans Forrest Gump ?", answer: "Forrest", mystery: true },
-    { title: "Superman", password: "y3z", question: "Quel super-héros vient de Krypton ?", answer: "Superman", mystery: false },
-    { title: "Matrix", password: "b4c", question: "Dans Matrix, pilule rouge ou bleue ?", answer: "Rouge", mystery: false },
-    { title: "Batman Begins", password: "d5e", question: "Quel est le vrai nom de Batman ?", answer: "Bruce Wayne", mystery: false },
-    { title: "Vice-Versa", password: "f6g", question: "Quel film de Pixar parle d'émotions ?", answer: "Vice-Versa", mystery: false },
-    { title: "Pirates des Caraïbes", password: "h7i", question: "Qui joue Jack Sparrow ?", answer: "Johnny Depp", mystery: true },
-    { title: "Avatar", password: "j8k", question: "Quel film se passe sur la planète Pandora ?", answer: "Avatar", mystery: false },
-    { title: "Le Seigneur des Anneaux", password: "l9m", question: "Combien d'anneaux dans Le Seigneur des Anneaux ?", answer: "1", mystery: false },
-    { title: "Harry Potter", password: "n0o", question: "Quel est le nom de famille de Harry Potter ?", answer: "Potter", mystery: false },
-    { title: "E.T.", password: "p1q", question: "Qui a réalisé E.T. ?", answer: "Steven Spielberg", mystery: true },
-    { title: "Seul au monde", password: "r2s", question: "Quel film montre un naufragé sur une île avec un ballon ?", answer: "Seul au monde", mystery: false },
-    { title: "Pinocchio", password: "t3u", question: "Quel personnage Disney a un nez qui s'allonge ?", answer: "Pinocchio", mystery: false },
-    { title: "Terminator", password: "v4w", question: "Quel est le nom du robot dans Terminator ?", answer: "T-800", mystery: false },
-    { title: "Shrek", password: "x5y", question: "Quel film parle d'un ogre vert ?", answer: "Shrek", mystery: false },
-    { title: "Le Parrain", password: "z6a", question: "Qui joue le Parrain ?", answer: "Marlon Brando", mystery: true },
-    { title: "Star Wars", password: "b7c", question: "Quel film contient le Faucon Millenium ?", answer: "Star Wars", mystery: false },
-    { title: "Rocky", password: "d8e", question: "Quel est le sport principal dans Rocky ?", answer: "Boxe", mystery: false },
-    { title: "Le Château ambulant", password: "f9g", question: "Quel film de Miyazaki montre un château volant ?", answer: "Le Château ambulant", mystery: true },
-    { title: "Wolverine", password: "h0i", question: "Qui joue Wolverine ?", answer: "Hugh Jackman", mystery: false },
-    { title: "Dunkerque", password: "j1k", question: "Quel film de 2017 se passe à Dunkerque ?", answer: "Dunkerque", mystery: false },
-    { title: "Le Monde de Nemo", password: "l2m", question: "Quel animal est Nemo ?", answer: "Poisson-clown", mystery: false },
-    { title: "Narnia", password: "n3o", question: "Quel est le nom du lion dans Narnia ?", answer: "Aslan", mystery: false },
-    { title: "Indiana Jones", password: "p4q", question: "Quel film met en scène un archéologue avec un fouet ?", answer: "Indiana Jones", mystery: true },
-    { title: "Le Grinch", password: "r5s", question: "Qui interprète le Grinch en 2000 ?", answer: "Jim Carrey", mystery: false },
-    { title: "James Bond", password: "t6u", question: "Quel est le prénom de l'agent 007 ?", answer: "James", mystery: false },
-    { title: "Toy Story", password: "v7w", question: "Quel film montre des jouets vivants ?", answer: "Toy Story", mystery: false },
-    { title: "Ça", password: "x8y", question: "Quel réalisateur est connu pour ses films d'horreur et a fait Ça ?", answer: "Andy Muschietti", mystery: true },
-    { title: "Amadeus", password: "z9a", question: "Quel film raconte la vie de Mozart ?", answer: "Amadeus", mystery: false },
-    { title: "Alien", password: "b0c", question: "Quel est le nom du vaisseau dans Alien ?", answer: "Nostromo", mystery: false },
-    { title: "Hunger Games", password: "d1e", question: "Qui joue Katniss dans Hunger Games ?", answer: "Jennifer Lawrence", mystery: false },
-    { title: "Interstellar", password: "f2g", question: "Quel film de Nolan parle d'un trou noir ?", answer: "Interstellar", mystery: true },
-    { title: "Il faut sauver le soldat Ryan", password: "h3i", question: "Quel est le surnom de Tom Hanks dans Il faut sauver le soldat Ryan ?", answer: "Capitaine Miller", mystery: false },
-    { title: "Vaiana", password: "j4k", question: "Quel film Disney se passe en Polynésie ?", answer: "Vaiana", mystery: false },
-    { title: "Scream", password: "l5m", question: "Quel personnage porte un masque blanc dans Scream ?", answer: "Ghostface", mystery: false },
-    { title: "Parasite", password: "n6o", question: "Quel film de 2019 a gagné l'Oscar du meilleur film ?", answer: "Parasite", mystery: true },
-    { title: "Matrix", password: "p7q", question: "Qui joue Neo dans Matrix ?", answer: "Keanu Reeves", mystery: false },
-    { title: "Spider-Man", password: "r8s", question: "Quel est le vrai nom de Spider-Man (version Tobey) ?", answer: "Peter Parker", mystery: false },
-    { title: "Ça", password: "t9u", question: "Quel film montre un clown tueur nommé Pennywise ?", answer: "Ça", mystery: false },
-    { title: "Ratatouille", password: "v0w", question: "Quel studio a produit Ratatouille ?", answer: "Pixar", mystery: false },
-    { title: "Star Wars", password: "x1y", question: "Quel est le nom du mentor de Luke Skywalker ?", answer: "Obi-Wan Kenobi", mystery: false },
-    { title: "Speed", password: "z2a", question: "Quel film met en scène un bus qui ne doit pas ralentir ?", answer: "Speed", mystery: true },
-    { title: "Le Roi Lion", password: "b3c", question: "Qui est le méchant principal dans Le Roi Lion ?", answer: "Scar", mystery: false },
-    { title: "Inception", password: "d4e", question: "Quel film de 2010 parle de rêves dans des rêves ?", answer: "Inception", mystery: false },
-    { title: "Terminator 2", password: "f5g", question: "Quel personnage dit « Hasta la vista, baby » ?", answer: "Terminator", mystery: false },
-    { title: "The Social Network", password: "h6i", question: "Quel film raconte la création de Facebook ?", answer: "The Social Network", mystery: false },
-    { title: "La Belle et la Bête", password: "j7k", question: "Quel est le nom de la princesse dans La Belle et la Bête ?", answer: "Belle", mystery: false },
-    { title: "Dante's Peak", password: "l8m", question: "Quel film montre un volcan de lave et un couple ?", answer: "Dante's Peak", mystery: true },
-    { title: "Kill Bill", password: "n9o", question: "Qui réalise Kill Bill ?", answer: "Quentin Tarantino", mystery: false },
-    { title: "Edward aux mains d'argent", password: "p0q", question: "Quel personnage a des ciseaux à la place des mains ?", answer: "Edward", mystery: false },
-    { title: "Shining", password: "r1s", question: "Quel film se passe dans un hôtel hanté appelé Overlook ?", answer: "Shining", mystery: true },
-    { title: "Black Panther", password: "t2u", question: "Quel super-héros est aussi roi du Wakanda ?", answer: "Black Panther", mystery: false },
-    { title: "Les Bronzés font du ski", password: "v3w", question: "Quel film français culte se passe au ski ?", answer: "Les Bronzés font du ski", mystery: false },
-    { title: "Dumbo", password: "x4y", question: "Quel animal est Dumbo ?", answer: "Éléphant", mystery: false },
-    { title: "Dirty Dancing", password: "z5a", question: "Quel film montre une compétition de danse avec Patrick Swayze ?", answer: "Dirty Dancing", mystery: false },
-    { title: "Thor", password: "b6c", question: "Quel personnage Marvel a un marteau magique ?", answer: "Thor", mystery: false },
-    { title: "Là-haut", password: "d7e", question: "Quel film d'animation parle d'une maison qui vole avec des ballons ?", answer: "Là-haut", mystery: true },
-    { title: "Alice au pays des merveilles", password: "f8g", question: "Quel est le nom du chat dans Alice au pays des merveilles ?", answer: "Le Chat du Cheshire", mystery: false },
-    { title: "Sixième Sens", password: "h9i", question: "Quel film de science-fiction montre un enfant qui voit des gens morts ?", answer: "Sixième Sens", mystery: false },
-    { title: "Pirates des Caraïbes", password: "j0k", question: "Qui joue le capitaine Jack dans Pirates des Caraïbes ?", answer: "Johnny Depp", mystery: false },
+    { title: "Le Seigneur des anneaux La communauté de l'anneau", password: "X8q", question: "Comment s'appelle l'auberge où les Hobbits doivent retrouver Gandalf à Brie ?", answer: "Le Poney Fringant", mystery: false },
+    { title: "Le Seigneur des anneaux Les deux tours", password: "v2M", question: "Quel peuple de cavaliers est dirigé par le roi Théoden ?", answer: "Les Rohirrim", mystery: false },
+    { title: "Le Seigneur des anneaux Le retour du roi", password: "7pL", question: "Quelle est la dernière phrase d'Aragorn aux Hobbits lors de son couronnement ?", answer: "Vous ne vous inclinez devant personne", mystery: false },
+    { title: "Interstelar", password: "4kZ", question: "Quel est le nom de la station spatiale que Cooper tente de rattraper en plein mouvement de rotation ?", answer: "Endurance", mystery: false },
+    { title: "Forest Gump", password: "1nS", question: "Quelle marque de chaussures Jenny offre-t-elle à Forrest avant qu'il ne commence à courir ?", answer: "Nike", mystery: false },
+    { title: "Her", password: "8bY", question: "Quel est le nom de l'ex-femme de Theodore avec qui il doit signer les papiers du divorce ?", answer: "Catherine", mystery: false },
+    { title: "Matrix 1", password: "5hW", question: "Comment s'appelle le vaisseau dirigé par Morpheus ?", answer: "Nebuchadnezzar", mystery: false },
+    { title: "Matrix 2", password: "3dR", question: "Selon l'Architecte, à quelle version de la Matrice Néo appartient-il ?", answer: "La sixième", mystery: false },
+    { title: "Matrix 3", password: "6uF", question: "Quelle est la condition finale imposée par Néo aux Machines pour arrêter Smith ?", answer: "La Paix", mystery: false },
+    { title: "10 Cloverfield Lane", password: "9jN", question: "À quel jeu de société Howard, Emmett et Michelle jouent-ils dans le bunker ?", answer: "Le jeu de la vie", mystery: false },
+    { title: "Stargate", password: "2tX", question: "Comment s'appelle le minéral instable utilisé pour faire fonctionner la porte ?", answer: "Naquadah", mystery: true },
+    { title: "Scary Movie 3", password: "1pB", question: "Comment s'appelle la petite fille terrifiante qui sort du puits (parodie du Cercle) ?", answer: "Tabitha", mystery: true },
+    { title: "Daaaaaalie", password: "4vC", question: "Quel objet insolite Dalí veut-il absolument filmer lors de l'interview ?", answer: "Une fontaine", mystery: false },
+    { title: "Fumer fait tousser", password: "7mX", question: "Comment s'appelle le robot dépressif et suicidaire qui accompagne la Tabac Force ?", answer: "Norbert", mystery: false },
+    { title: "Abysse", password: "8rA", question: "Quel message Bud écrit-il sur son ardoise à sa femme alors qu'il manque d'oxygène au fond ?", answer: "Je t'aime", mystery: false },
+    { title: "Le Guide du Voyageur galactique", password: "5wK", question: "En quoi le moteur à improbabilité infinie transforme-t-il les deux missiles nucléaires ?", answer: "Un pétunia et une baleine", mystery: false },
+    { title: "Oss 117 1", password: "3fS", question: "Quel est le nom de la princesse égyptienne dont Hubert tombe 'presque' amoureux ?", answer: "Al Tarouk", mystery: false },
+    { title: "Oss 117 2", password: "9pZ", question: "Comment s'appelle le nazi que recherche Hubert au Brésil ?", answer: "Von Zimmel", mystery: false },
+    { title: "La cité de la peur", password: "2hK", question: "Quel est le nom de famille de l'ami de Simon Jérémi qui 'est content' ?", answer: "Odile", mystery: false },
+    { title: "L'amour Ouf", password: "6lD", question: "Sur quelle chanson de The Cure les deux protagonistes dansent-ils dans la cour d'école ?", answer: "A Forest", mystery: false },
+    { title: "Transcendance", password: "1xQ", question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood", mystery: false },
+    { title: "Jumper", password: "4uG", question: "Où se trouve la 'bibliothèque' secrète de Griffin, là où il garde ses preuves sur les Paladins ?", answer: "Dans le Colisée", mystery: false },
+    { title: "Il y a t'il un pilote dans l'avion", password: "8dV", question: "Quel est le problème de boisson récurrent de Ted Striker ?", answer: "Il s'arrose le visage", mystery: false },
+    { title: "Jumanji", password: "5jN", question: "Quel est le nom du chasseur qui poursuit Alan Parrish depuis 26 ans ?", answer: "Van Pelt", mystery: false },
+    { title: "Ready Player One", password: "7gM", question: "Quel est le nom de l'avatar de la rebelle dont Wade tombe amoureux ?", answer: "Art3mis", mystery: false },
+    { title: "Le Seigneur des anneaux l'animé de 1979", password: "3bK", question: "Quel personnage majeur des livres est totalement absent de cette version de Bakshi ?", answer: "Tom Bombadil", mystery: true },
+    { title: "Chappee", password: "6tW", question: "Quel est le nom du robot massif et lourd piloté à distance par le personnage de Hugh Jackman ?", answer: "Moose", mystery: false },
+    { title: "Premier Contact", password: "9kF", question: "Comment les humains finissent-ils par appeler les deux extraterrestres avec qui ils communiquent ?", answer: "Abbott et Costello", mystery: false },
+    { title: "Borat", password: "1mR", question: "Quelle célébrité Borat essaie-t-il d'enlever avec un sac de mariage traditionnel ?", answer: "Pamela Anderson", mystery: false },
+    { title: "RRRrrrrr", password: "4vS", question: "Comment la tribu appelle-t-elle l'acte criminel inédit commis dans le film ?", answer: "Un criminu", mystery: false },
+    { title: "La classe Américaine", password: "8rD", question: "Quelle est la dernière phrase (le dernier mot) prononcée par George Abitbol ?", answer: "Monde de merde", mystery: false },
+    { title: "Ill Manors", password: "2pT", question: "Quel est le prénom du bébé abandonné dans le sac que les dealers trouvent ?", answer: "Michelle", mystery: false },
+    { title: "Into the Wild", password: "5kS", question: "Quel est le numéro écrit sur le côté du 'Magic Bus' où s'installe Christopher ?", answer: "142", mystery: false },
+    { title: "Incassable", password: "3vH", question: "Quel est le nom de la galerie d'art spécialisée dans les comics tenue par Elijah Price ?", answer: "Limited Edition", mystery: false },
+    { title: "Bruce tous puissant", password: "9mC", question: "Quel est le nom du présentateur rival que Bruce humilie en direct en lui faisant dire des bêtises ?", answer: "Evan Baxter", mystery: false },
+    { title: "Looper", password: "1zL", question: "Quel est le surnom du futur chef de la pègre qui envoie les victimes dans le passé ?", answer: "Le Maître des Pluies", mystery: false },
+    { title: "True man Show", password: "4qR", question: "Comment s'appelle le créateur et réalisateur de l'émission qui surveille Truman depuis la lune ?", answer: "Christof", mystery: false },
+    { title: "Le Cinquième élement", password: "6xM", question: "Quelle est la première phrase complète que Leeloo dit à Korben Dallas ?", answer: "Multipass", mystery: false },
+    { title: "Rec", password: "8fL", question: "Quel est le nom de la jeune fille 'possédée' à l'origine de l'infection dans le grenier ?", answer: "Tristana Medeiros", mystery: false },
+    { title: "Mulan", password: "2nY", question: "Quel nom masculin Mulan choisit-elle pour s'enrôler dans l'armée ?", answer: "Ping", mystery: false },
+    { title: "Tarzan", password: "5vW", question: "Quel est le nom de l'explorateur qui veut capturer les gorilles pour les vendre ?", answer: "Clayton", mystery: false },
+    { title: "Dune 1", password: "7mS", question: "Comment s'appelle le test de douleur infligé à Paul par la Révérende Mère ?", answer: "Le Gom Jabbar", mystery: false },
+    { title: "Dune 2", password: "3hB", question: "Comment appelle-t-on le liquide bleu mortel que Paul doit boire pour devenir le Kwisatz Haderach ?", answer: "L'Eau de Vie", mystery: false },
+    { title: "Blade Runner 2049", password: "1vR", question: "Quel est le nom de l'intelligence artificielle holographique qui partage la vie de K ?", answer: "Joi", mystery: false },
+    { title: "Gladiator", password: "4bX", question: "Quel est le nom de l'ancien gladiateur qui a racheté Maximus et lui donne sa chance à Rome ?", answer: "Proximo", mystery: false },
+    { title: "Je suis une légende", password: "8nN", question: "Comment s'appelle le mannequin à qui Robert Neville parle tous les jours dans le magasin vidéo ?", answer: "Fred", mystery: false },
+    { title: "The Big Lebowski", password: "5tV", question: "Qu'est-ce qui a été volé au 'Duc' et qui, selon lui, 'donnait tout son style à la pièce' ?", answer: "Son tapis", mystery: false },
+    { title: "Tenacious D et le médiator du destin", password: "2fP", question: "De quelle partie du corps de Satan provient le médiator magique ?", answer: "Une dent", mystery: false },
+    { title: "Réalité", password: "7xL", question: "Que doit trouver le réalisateur Jason en 48h pour que son film soit produit ?", answer: "Le meilleur gémissement de l'histoire", mystery: false },
 ];
 
 // ============================================================
@@ -148,6 +127,7 @@ function saveValidated(arr) {
 // ============================================================
 const SOUNDS = {
     click:   new Audio("sounds/click.mp3"),
+    close:   new Audio("sounds/close.mp3"),
     success: new Audio("sounds/success.mp3"),
     fail:    new Audio("sounds/fail.mp3"),
 };
@@ -184,16 +164,22 @@ function buildMilestones() {
     const container = document.getElementById("milestones");
     const validated = getValidated();
     container.innerHTML = "";
-    MILESTONES.forEach(m => {
+    
+    MILESTONES.forEach((m, index) => {
         const reached = validated.length >= m.count;
         const div = document.createElement("div");
         div.className = "milestone" + (reached ? " reached" : "");
+        
+        // On utilise index + 1 pour correspondre à s1.png, s2.png, etc.
         div.innerHTML = `
-            <div class="milestone-header">
-                <span class="milestone-count">${m.count} succès</span>
-                <span class="milestone-check">&#10003;</span>
+            <img src="medias/s${index + 1}.png" class="milestone-icon" alt="Palier ${m.count}">
+            <div class="milestone-content">
+                <div class="milestone-header">
+                    <span class="milestone-count">${m.count} succès</span>
+                    <span class="milestone-check">&#10003;</span>
+                </div>
+                <p class="milestone-reward">${m.reward}</p>
             </div>
-            <p class="milestone-reward">${m.reward}</p>
         `;
         container.appendChild(div);
     });
@@ -217,19 +203,22 @@ function buildGrid() {
         if (isMystery) cell.classList.add("mystery");
 
         const displayTitle = isMystery ? "????" : ach.title;
-        const imgSrc = isMystery
-            ? "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 54 54"><rect fill="%231b2838" width="54" height="54"/><text x="27" y="33" text-anchor="middle" fill="%2356707f" font-size="24" font-family="Arial">?</text></svg>')
-            : `medias/${i + 1}.png`;
+        const imgSrc = `medias/${i + 1}.png`;
+
+        const SVG_LOCKED = `<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm296.5-143.5Q560-327 560-360t-23.5-56.5Q513-440 480-440t-56.5 23.5Q400-393 400-360t23.5 56.5Q447-280 480-280t56.5-23.5ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></svg>`;
+        const SVG_UNLOCKED = `<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M240-160h480v-400H240v400Zm296.5-143.5Q560-327 560-360t-23.5-56.5Q513-440 480-440t-56.5 23.5Q400-393 400-360t23.5 56.5Q447-280 480-280t56.5-23.5ZM240-160v-400 400Zm0 80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h280v-80q0-83 58.5-141.5T720-920q83 0 141.5 58.5T920-720h-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80h120q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Z"/></svg>`;
 
         cell.innerHTML = `
             <img class="cell-icon" src="${imgSrc}" alt="${displayTitle}" loading="lazy">
-            <div class="cell-info">
-                <span class="cell-title">${displayTitle}</span>
-                <span class="cell-number-tag">Succès #${i + 1}${isMystery ? " — Mystère" : ""}</span>
+            <div class="cell-content">
+                <div class="cell-info">
+                    <span class="cell-title">${displayTitle}</span>
+                    <span class="cell-number-tag">${i + 1}${isMystery ? "" : ""}</span>
+                </div>
             </div>
             <div class="cell-status">
-                <span class="cell-lock-icon">&#128274;</span>
-                <span class="cell-unlocked-icon">&#128275;</span>
+                <span class="cell-lock-icon">${SVG_LOCKED}</span>
+                <span class="cell-unlocked-icon">${SVG_UNLOCKED}</span>
                 <span class="cell-check-icon">&#10003;</span>
             </div>
         `;
@@ -260,7 +249,7 @@ function fillModal(modal, index, forceReveal) {
 
     const icon = modal.querySelector(".modal-icon");
     if (isMystery) {
-        icon.src = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><rect fill="%231b2838" width="64" height="64"/><text x="32" y="40" text-anchor="middle" fill="%2356707f" font-size="30" font-family="Arial">?</text></svg>');
+        icon.src = "medias/Myst.png";
     } else {
         icon.src = `medias/${num}.png`;
     }
@@ -274,6 +263,9 @@ function openAnimatedModal(modalId, index, forceReveal) {
     modal.classList.add("anim-in");
     activeModal = modal;
 }
+
+
+
 
 function closeAnimatedModal(callback) {
     if (!activeModal) { if (callback) callback(); return; }
@@ -318,9 +310,10 @@ function openModal(index) {
     if (validated.includes(index)) {
         openAnimatedModal("modal-done", index);
     } else if (unlocked.includes(index)) {
-        document.getElementById("question-text").textContent = ACHIEVEMENTS[index].question;
-        openAnimatedModal("modal-question", index);
-        setTimeout(() => document.getElementById("answer-input").focus(), 100);
+    document.getElementById("question-text").textContent = ACHIEVEMENTS[index].question;
+    openAnimatedModal("modal-question", index);
+    document.getElementById("question-bg").style.backgroundImage = `url(medias/${index + 1}.png)`;
+    setTimeout(() => document.getElementById("answer-input").focus(), 100);
     } else {
         openAnimatedModal("modal-password", index);
         setTimeout(() => document.getElementById("password-input").focus(), 100);
@@ -328,6 +321,7 @@ function openModal(index) {
 }
 
 function closeModal() {
+    playSound("close");
     closeAnimatedModal();
     currentIndex = null;
 }
@@ -343,10 +337,13 @@ function transitionToQuestion() {
     }
 
     closeAnimatedModal(() => {
-        openAnimatedModal("modal-question", currentIndex, true);
-        setTimeout(() => document.getElementById("answer-input").focus(), 100);
+    openAnimatedModal("modal-question", currentIndex, true);
+    document.getElementById("question-bg").style.backgroundImage = `url(medias/${currentIndex + 1}.png)`;
+    setTimeout(() => document.getElementById("answer-input").focus(), 100);
     });
+
 }
+
 
 // Mot de passe
 document.getElementById("password-submit").addEventListener("click", checkPassword);
@@ -430,8 +427,8 @@ function checkAnswer() {
 document.querySelectorAll(".modal-close-btn").forEach(btn => btn.addEventListener("click", closeModal));
 document.querySelectorAll(".modal-overlay").forEach(o => o.addEventListener("click", closeModal));
 
-document.getElementById("sidebar-toggle").addEventListener("click", () => {
-    document.getElementById("sidebar").classList.toggle("open");
+document.getElementById("sidebar-back").addEventListener("click", () => {
+    document.getElementById("sidebar").classList.remove("open");
 });
 
 // Bouton "Objectifs" (mobile)
