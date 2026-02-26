@@ -182,6 +182,7 @@ function updateCounter() {
     document.getElementById("progress-pct").textContent = pct + "%";
     document.getElementById("progress-bar").style.width = pct + "%";
     document.getElementById("sidebar-bar").style.width = pct + "%";
+    document.getElementById("sidebar-pct").textContent = pct + "%";
 }
 
 function buildMilestones() {
