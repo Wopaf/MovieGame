@@ -4,7 +4,7 @@
 const FIREBASE_CONFIG = {
     apiKey: "AIzaSyBsjr0peOj1jFPhAA080MWuUGlyYapjxn0",
     authDomain: "moviegame-1b838.firebaseapp.com",
-    databaseURL: "https://moviegame-1b838-default-rtdb.firebaseio.com",
+    databaseURL: "https://moviegame-1b838-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "moviegame-1b838",
     storageBucket: "moviegame-1b838.firebasestorage.app",
     messagingSenderId: "448540908211",
