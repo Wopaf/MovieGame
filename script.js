@@ -29,6 +29,20 @@ const MILESTONES = [
 ];
 
 // ============================================================
+//  TIER LIST — Catégories (modifier ici les labels/couleurs)
+// ============================================================
+const TIERS = [
+    { num: 1, label: "Le GOAT",                                                    color: "#FFD700", dark: true  },
+    { num: 2, label: "Du grand cinéma !",                                          color: "#FF9900", dark: true  },
+    { num: 3, label: "Un très bon film",                                           color: "#AAEE44", dark: true  },
+    { num: 4, label: "Un bon film",                                                color: "#44BB44", dark: true  },
+    { num: 5, label: "Mouai",                                                      color: "#7799BB", dark: false },
+    { num: 6, label: "C'est nul !",                                                color: "#FF8844", dark: true  },
+    { num: 7, label: "J'ai passé un horrible moment",                              color: "#FF4444", dark: false },
+    { num: 8, label: "Le pire film de la liste (sans doute le pire film tout court)", color: "#661122", dark: false },
+];
+
+// ============================================================
 //  DONNÉES DES SUCCÈS — Modifier ici facilement
 //  mystery : true = caché tant que le mot de passe n'est pas entré
 // ============================================================
@@ -284,12 +298,14 @@ const ACHIEVEMENTS = [
 // ============================================================
 firebase.initializeApp(FIREBASE_CONFIG);
 const db = firebase.database();
-const refUnlocked = db.ref("game/unlocked");
+const refUnlocked  = db.ref("game/unlocked");
 const refValidated = db.ref("game/validated");
+const refTierlist  = db.ref("game/tierlist");
 
 // État local (cache synchronisé avec Firebase)
-let cachedUnlocked = [];
+let cachedUnlocked  = [];
 let cachedValidated = [];
+let cachedTierlist  = {};
 
 // ---- Notifications toast ----
 function showToast(msg, type = "error") {
@@ -353,6 +369,22 @@ function saveValidated(arr) {
     refValidated.set(arr.length ? arr : null).catch(err => {
         console.error("Firebase save error (validated):", err);
         showToast("Erreur sauvegarde : " + err.code);
+    });
+}
+
+refTierlist.on("value", (snap) => {
+    cachedTierlist = snap.val() || {};
+    const modal = document.getElementById("modal-tierlist");
+    if (modal && !modal.classList.contains("hidden")) buildTierlistUI();
+}, (err) => {
+    console.error("Firebase read error (tierlist):", err);
+});
+
+function saveTierlist() {
+    const data = Object.keys(cachedTierlist).length ? cachedTierlist : null;
+    refTierlist.set(data).catch(err => {
+        console.error("Firebase save error (tierlist):", err);
+        showToast("Erreur sauvegarde tier list : " + err.code);
     });
 }
 
@@ -787,6 +819,7 @@ document.querySelectorAll(".modal-overlay").forEach(o => o.addEventListener("cli
 document.getElementById("info-cta").addEventListener("click", proceedFromInfo);
 
 document.getElementById("sidebar-back").addEventListener("click", () => {
+    playSound("close");
     document.getElementById("sidebar").classList.remove("open");
 });
 
@@ -807,8 +840,9 @@ document.getElementById("open-progress").addEventListener("click", () => {
 
 // Zoom de la grille (2 à 4 colonnes)
 let currentCols = window.innerWidth > 768 ? 4 : 2;
+const refCols = db.ref("game/cols");
 
-function setGridCols(n) {
+function setGridCols(n, persist = true) {
     currentCols = n;
     const grid = document.getElementById("grid");
     grid.classList.remove("cols-2", "cols-3", "cols-4");
@@ -818,18 +852,24 @@ function setGridCols(n) {
     document.getElementById("zoom-in").disabled  = n >= 4;
     const tgl = document.getElementById("zoom-toggle-label");
     if (tgl) tgl.textContent = n;
+    if (persist) refCols.set(n);
 }
 
-setGridCols(currentCols);
+// Lire la valeur sauvegardée, sinon utiliser la valeur par défaut
+refCols.once("value", (snap) => {
+    const saved = snap.val();
+    setGridCols(saved ?? currentCols, false);
+});
 
 document.getElementById("zoom-out").addEventListener("click", () => {
-    if (currentCols > 2) setGridCols(currentCols - 1);
+    if (currentCols > 2) { setGridCols(currentCols - 1); triggerGridAnimation(); }
 });
 document.getElementById("zoom-in").addEventListener("click", () => {
-    if (currentCols < 4) setGridCols(currentCols + 1);
+    if (currentCols < 4) { setGridCols(currentCols + 1); triggerGridAnimation(); }
 });
 document.getElementById("zoom-toggle").addEventListener("click", () => {
     setGridCols(currentCols === 2 ? 3 : 2);
+    triggerGridAnimation();
 });
 
 // Boutons de tri
@@ -839,6 +879,7 @@ document.querySelectorAll(".sort-btn").forEach(btn => {
         document.querySelectorAll(".sort-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         buildGrid();
+        triggerGridAnimation();
     });
 });
 
@@ -862,22 +903,209 @@ function startGridIntroAnimation() {
     }, 3000);
 }
 
-setTimeout(() => {
+function triggerGridAnimation() {
+    gridAnimStarted = false;
     startGridIntroAnimation();
-}, 400);
+}
+
+function onSplashDone() {
+    splashDone = true;
+    const splash = document.getElementById("splash");
+    if (splash) splash.remove();
+    if (firstBuildDone && !gridAnimStarted) startGridIntroAnimation();
+}
 
 setTimeout(() => {
     const splash = document.getElementById("splash");
     if (!splash) return;
     splash.classList.add("splash-fade");
     splash.addEventListener("transitionend", onSplashDone, { once: true });
-    setTimeout(onSplashDone, 700); // fallback si transitionend ne se déclenche pas
 }, 600);
+setTimeout(onSplashDone, 500); // fallback si transitionend ne se déclenche pas
 
 // Init : afficher la grille immédiatement, Firebase la mettra à jour ensuite
 buildGrid();
 
-// Log erreurs Firebase dans la console
-db.ref(".info/connected").on("value", (snap) => {
-    console.log("Firebase connecté:", snap.val());
-});
+// ===== SCROLL — Masquer la sort-bar au scroll bas, révéler au scroll haut =====
+// Principe : on ne change d'état qu'après 30px de scroll vers le bas,
+// ou 15px vers le haut. Cela absorbe l'inertie et empêche tout glitch.
+const stickyControls = document.querySelector(".sticky-controls");
+let sortHidden = false;
+let lastDecisionY = window.scrollY;
+
+window.addEventListener("scroll", () => {
+    const y = window.scrollY;
+    const diff = y - lastDecisionY;
+
+    if (!sortHidden && diff > 30) {
+        sortHidden = true;
+        stickyControls.classList.add("sort-hidden");
+        lastDecisionY = y;
+    } else if (sortHidden && diff < -15) {
+        sortHidden = false;
+        stickyControls.classList.remove("sort-hidden");
+        lastDecisionY = y;
+    }
+}, { passive: true });
+
+
+// ============================================================
+//  TIER LIST
+// ============================================================
+let tlDragIdx    = null;  // index du film en cours de drag
+let tlSelectedIdx = null; // index sélectionné (mode tap mobile)
+
+function openTierlist() {
+    playSound("click");
+    const modal = document.getElementById("modal-tierlist");
+    modal.classList.remove("hidden");
+    modal.offsetHeight; // force reflow pour déclencher la transition
+    modal.classList.add("tl-open");
+    buildTierlistUI();
+}
+function closeTierlist() {
+    playSound("close");
+    const modal = document.getElementById("modal-tierlist");
+    modal.classList.remove("tl-open");
+    modal.addEventListener("transitionend", () => {
+        modal.classList.add("hidden");
+    }, { once: true });
+    tlSelectedIdx = null;
+}
+
+// Crée une carte film draggable
+function makeTlCard(idx) {
+    const ach  = ACHIEVEMENTS[idx];
+    const card = document.createElement("div");
+    card.className   = "tl-card";
+    card.draggable   = true;
+    card.dataset.idx = idx;
+    card.innerHTML   = `<img src="medias/${idx + 1}.png" alt="${ach.title}" loading="lazy"><span class="tl-card-name">${ach.title}</span>`;
+
+    // ---- Drag & Drop (desktop) ----
+    card.addEventListener("dragstart", (e) => {
+        tlDragIdx = idx;
+        card.classList.add("tl-dragging");
+        e.dataTransfer.effectAllowed = "move";
+    });
+    card.addEventListener("dragend", () => {
+        tlDragIdx = null;
+        card.classList.remove("tl-dragging");
+        document.querySelectorAll(".tl-drag-over").forEach(el => el.classList.remove("tl-drag-over"));
+    });
+
+    // ---- Double-clic : retirer du tier ----
+    card.addEventListener("dblclick", () => {
+        if (idx in cachedTierlist) {
+            delete cachedTierlist[idx];
+            saveTierlist();
+            buildTierlistUI();
+        }
+    });
+
+    // ---- Tap mobile : sélectionner puis placer ----
+    card.addEventListener("click", (e) => {
+        if (!("ontouchstart" in window)) return;
+        e.stopPropagation();
+        if (tlSelectedIdx === idx) {
+            tlSelectedIdx = null;
+            card.classList.remove("tl-selected");
+        } else {
+            document.querySelectorAll(".tl-selected").forEach(c => c.classList.remove("tl-selected"));
+            tlSelectedIdx = idx;
+            card.classList.add("tl-selected");
+        }
+    });
+
+    return card;
+}
+
+// Attache les événements drag/drop et tap sur une zone de dépôt
+function setupTlDropZone(el, tierNum) {
+    el.addEventListener("dragover", (e) => {
+        if (tlDragIdx === null) return;
+        e.preventDefault();
+        el.classList.add("tl-drag-over");
+    });
+    el.addEventListener("dragleave", (e) => {
+        if (!el.contains(e.relatedTarget)) el.classList.remove("tl-drag-over");
+    });
+    el.addEventListener("drop", (e) => {
+        e.preventDefault();
+        el.classList.remove("tl-drag-over");
+        if (tlDragIdx === null) return;
+        if (tierNum === 0) delete cachedTierlist[tlDragIdx];
+        else               cachedTierlist[tlDragIdx] = tierNum;
+        saveTierlist();
+        buildTierlistUI();
+    });
+    // Tap mobile : placer la carte sélectionnée
+    el.addEventListener("click", () => {
+        if (tlSelectedIdx === null) return;
+        if (tierNum === 0) delete cachedTierlist[tlSelectedIdx];
+        else               cachedTierlist[tlSelectedIdx] = tierNum;
+        tlSelectedIdx = null;
+        saveTierlist();
+        buildTierlistUI();
+    });
+}
+
+// (Re)construit l'UI complète de la tier list
+function buildTierlistUI() {
+    const search   = (document.getElementById("tl-search")?.value || "").toLowerCase();
+    const placed   = new Set(Object.keys(cachedTierlist).map(Number));
+
+    // — Tier rows —
+    const rowsEl = document.getElementById("tl-rows");
+    rowsEl.innerHTML = "";
+    TIERS.forEach(tier => {
+        const row   = document.createElement("div");
+        row.className = "tl-row";
+
+        const label = document.createElement("div");
+        label.className = "tl-row-label " + (tier.dark ? "tl-dark" : "tl-light");
+        label.style.setProperty("--tc", tier.color);
+        label.innerHTML = `<span class="tl-tier-num">${tier.num}</span><span class="tl-tier-name">${tier.label}</span>`;
+
+        const drop = document.createElement("div");
+        drop.className   = "tl-row-drop";
+        drop.dataset.tier = tier.num;
+        setupTlDropZone(drop, tier.num);
+
+        Object.entries(cachedTierlist).forEach(([i, t]) => {
+            if (t === tier.num) drop.appendChild(makeTlCard(Number(i)));
+        });
+
+        row.appendChild(label);
+        row.appendChild(drop);
+        rowsEl.appendChild(row);
+    });
+
+    // — Banque de films —
+    const bank     = document.getElementById("tl-bank");
+    bank.innerHTML = "";
+    const unplaced = ACHIEVEMENTS.map((_, i) => i).filter(i => !placed.has(i));
+    const filtered = search
+        ? unplaced.filter(i => ACHIEVEMENTS[i].title.toLowerCase().includes(search))
+        : unplaced;
+
+    if (filtered.length === 0) {
+        const empty = document.createElement("div");
+        empty.className  = "tl-bank-empty";
+        empty.textContent = search ? "Aucun film trouvé" : "Tous les films sont classés !";
+        bank.appendChild(empty);
+    } else {
+        filtered.forEach(i => bank.appendChild(makeTlCard(i)));
+    }
+}
+
+// Init (appelé une fois — les drop zones permanentes et listeners)
+function initTierlist() {
+    document.getElementById("open-tierlist").addEventListener("click", openTierlist);
+    document.getElementById("tl-close").addEventListener("click", closeTierlist);
+    document.getElementById("tl-search").addEventListener("input", buildTierlistUI);
+    // La banque est un élément permanent → drop zone configurée une seule fois
+    setupTlDropZone(document.getElementById("tl-bank"), 0);
+}
+
+initTierlist();
