@@ -1263,7 +1263,7 @@ body {
     justify-content: center;
     gap: 9px;
     padding: 10px 16px;
-    background: #FF0000;
+    background: #f22929;
     border: none;
     border-radius: var(--radius-sm);
     color: #fff;
@@ -1583,5 +1583,61 @@ body {
     .modal-info-theme .modal-icon-row { margin-top: 160px; }
     #question-bg, #info-bg { height: 220px; }
 
+}
+
+/* ============================================================
+   FIREBASE — Indicateur de connexion + Notifications toast
+   ============================================================ */
+
+.firebase-badge {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-text-dim);
+    margin-left: 6px;
+    vertical-align: middle;
+    flex-shrink: 0;
+    transition: background 0.5s ease;
+    cursor: default;
+}
+.firebase-badge.connected    { background: var(--color-green-light); }
+.firebase-badge.disconnected { background: var(--color-red); }
+
+#toast-container {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 8px;
+    align-items: center;
+    pointer-events: none;
+}
+
+.toast {
+    padding: 9px 18px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    color: #fff;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: toast-in 0.3s ease forwards;
+}
+.toast.toast-error   { background: var(--color-red); }
+.toast.toast-success { background: var(--color-green); color: var(--color-green-light); }
+.toast.toast-fadeout { animation: toast-out 0.4s ease forwards; }
+
+@keyframes toast-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes toast-out {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-8px); }
 }
 

@@ -291,16 +291,50 @@ const refValidated = db.ref("game/validated");
 let cachedUnlocked = [];
 let cachedValidated = [];
 
-// Écoute temps réel : la grille se met à jour automatiquement
-// pour tous les visiteurs dès qu'un succès change
+// ---- Notifications toast ----
+function showToast(msg, type = "error") {
+    const container = document.getElementById("toast-container");
+    if (!container) return;
+    const toast = document.createElement("div");
+    toast.className = "toast toast-" + type;
+    toast.textContent = msg;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.classList.add("toast-fadeout");
+        setTimeout(() => toast.remove(), 400);
+    }, 5000);
+}
+
+// ---- Indicateur de connexion Firebase ----
+db.ref(".info/connected").on("value", (snap) => {
+    const badge = document.getElementById("firebase-badge");
+    if (!badge) return;
+    if (snap.val() === true) {
+        badge.classList.add("connected");
+        badge.classList.remove("disconnected");
+        badge.title = "Firebase : connecté";
+    } else {
+        badge.classList.add("disconnected");
+        badge.classList.remove("connected");
+        badge.title = "Firebase : déconnecté";
+    }
+});
+
+// ---- Écoute temps réel ----
 refUnlocked.on("value", (snapshot) => {
     cachedUnlocked = snapshot.val() || [];
     buildGrid();
+}, (err) => {
+    console.error("Firebase read error (unlocked):", err);
+    showToast("Erreur Firebase (lecture) : " + err.code);
 });
 
 refValidated.on("value", (snapshot) => {
     cachedValidated = snapshot.val() || [];
     buildGrid();
+}, (err) => {
+    console.error("Firebase read error (validated):", err);
+    showToast("Erreur Firebase (lecture) : " + err.code);
 });
 
 function getUnlocked() { return [...cachedUnlocked]; }
@@ -308,12 +342,18 @@ function getValidated() { return [...cachedValidated]; }
 
 function saveUnlocked(arr) {
     cachedUnlocked = arr;
-    refUnlocked.set(arr);
+    refUnlocked.set(arr.length ? arr : null).catch(err => {
+        console.error("Firebase save error (unlocked):", err);
+        showToast("Erreur sauvegarde : " + err.code);
+    });
 }
 
 function saveValidated(arr) {
     cachedValidated = arr;
-    refValidated.set(arr);
+    refValidated.set(arr.length ? arr : null).catch(err => {
+        console.error("Firebase save error (validated):", err);
+        showToast("Erreur sauvegarde : " + err.code);
+    });
 }
 
 
@@ -752,8 +792,10 @@ document.getElementById("sidebar-back").addEventListener("click", () => {
 
 document.getElementById("sidebar-reset").addEventListener("click", () => {
     if (!confirm("Réinitialiser toutes les sauvegardes ? Cette action est irréversible.")) return;
-    refUnlocked.set([]);
-    refValidated.set([]);
+    Promise.all([refUnlocked.set(null), refValidated.set(null)]).catch(err => {
+        console.error("Firebase reset error:", err);
+        showToast("Erreur reset : " + err.code);
+    });
 });
 
 // Bouton "Objectifs" (mobile)
