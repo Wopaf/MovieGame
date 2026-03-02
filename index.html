@@ -17,21 +17,12 @@
                 <div class="progress-panel">
                     <div class="progress-panel-header">
                         <div class="progress-panel-title">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M536.5-543.5Q560-567 560-600t-23.5-56.5Q513-680 480-680t-56.5 23.5Q400-633 400-600t23.5 56.5Q447-520 480-520t56.5-23.5ZM440-200v-124q-49-11-87.5-41.5T296-442q-75-9-125.5-65.5T120-640v-40q0-33 23.5-56.5T200-760h80q0-33 23.5-56.5T360-840h240q33 0 56.5 23.5T680-760h80q33 0 56.5 23.5T840-680v40q0 76-50.5 132.5T664-442q-18 46-56.5 76.5T520-324v124h120q17 0 28.5 11.5T680-160q0 17-11.5 28.5T640-120H320q-17 0-28.5-11.5T280-160q0-17 11.5-28.5T320-200h120ZM280-528v-152h-80v40q0 38 22 68.5t58 43.5Zm285 93q35-35 35-85v-240H360v240q0 50 35 85t85 35q50 0 85-35Zm115-93q36-13 58-43.5t22-68.5v-40h-80v152Zm-200-52Z"/></svg>
-                            SUCCÈS
                             <span id="firebase-badge" class="firebase-badge" title="Firebase : connexion en cours..."></span>
+                            Le Jeu des films de Matthias
                         </div>
-                        <div style="display: flex; flex-direction: columns; gap: 4px; margin-right: -6px;">
-                            <button class="progress-panel-btn" id="open-tierlist" title="TierList">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 24 24" width="15px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19.65 9.04l-4.84-.42-1.89-4.45c-.34-.81-1.5-.81-1.84 0L9.19 8.63l-4.83.41c-.88.07-1.24 1.17-.57 1.75l3.67 3.18-1.1 4.72c-.2.86.73 1.54 1.49 1.08l4.15-2.5 4.15 2.51c.76.46 1.69-.22 1.49-1.08l-1.1-4.73 3.67-3.18c.67-.58.32-1.68-.56-1.75zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>
-                                <span class="progress-panel-btn-label">TierList</span>
-                            </button>
-                            <button class="progress-panel-btn" id="open-progress" title="Reward">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="15px" viewBox="0 0 24 24" width="15px" fill="currentColor"><rect fill="none" height="24" width="24"/><path d="M19,5h-2V4c0-0.55-0.45-1-1-1H8C7.45,3,7,3.45,7,4v1H5C3.9,5,3,5.9,3,7v1c0,2.55,1.92,4.63,4.39,4.94 c0.63,1.5,1.98,2.63,3.61,2.96V19H8c-0.55,0-1,0.45-1,1v0c0,0.55,0.45,1,1,1h8c0.55,0,1-0.45,1-1v0c0-0.55-0.45-1-1-1h-3v-3.1 c1.63-0.33,2.98-1.46,3.61-2.96C19.08,12.63,21,10.55,21,8V7C21,5.9,20.1,5,19,5z M5,8V7h2v3.82C5.84,10.4,5,9.3,5,8z M19,8 c0,1.3-0.84,2.4-2,2.82V7h2V8z"/></svg>
-                                <span class="progress-panel-btn-label">Reward</span>
-                            </button>
-                        </div>
+                        
                     </div>
+                    
                     <div class="progress-panel-body">
                         <div class="progress-stat">
                             <span class="progress-stat-value" id="unlocked-count">0</span>
@@ -50,14 +41,14 @@
                 </div>
                 <div class="sort-bar">
                     <div class="sort-bar-group">
-                        <span class="sort-label">Trier</span>
-                        <button class="sort-btn active" data-sort="number">Numéro</button>
-                        <button class="sort-btn" data-sort="alpha">A–Z</button>
-                        <button class="sort-btn" data-sort="validated">Validés</button>
+                        <svg class="sort-bar-icon" xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor"><path d="M440-160q-17 0-28.5-11.5T400-200v-240L168-736q-15-20-4.5-42t36.5-22h560q26 0 36.5 22t-4.5 42L560-440v240q0 17-11.5 28.5T520-160h-80Zm40-308 198-252H282l198 252Zm0 0Z"/></svg>
+                        <button class="filter-btn" data-filter="validated">Validé</button>
+                        <button class="filter-btn" data-filter="unvalidated">Non validé</button>
+                        <button class="filter-btn" data-filter="locked">Verrouillé</button>
+                        <button class="filter-btn" data-filter="secret">Secret</button>
                     </div>
                     <div class="sort-bar-group">
                         <div class="zoom-controls">
-                            <span class="sort-label">Grille</span>
                             <button class="zoom-btn" id="zoom-out" title="Moins de colonnes">−</button>
                             <span class="zoom-label" id="zoom-label">4</span>
                             <button class="zoom-btn" id="zoom-in" title="Plus de colonnes">+</button>
@@ -73,37 +64,22 @@
             <div id="grid" class="grid"></div>
         </main>
 
+
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <button class="sidebar-back" id="sidebar-back">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
-                    Retour
-                </button>
-            </div>
             <div class="sidebar-inner">
                 <div class="sidebar-panel-body">
-                    <div class="progress-stat">
-                        <span class="progress-stat-value" id="sidebar-count">0</span>
-                        <span class="progress-stat-label">/ <span id="sidebar-total">0</span> validés</span>
+                    <div class="sidebar-prog-counts">
+                        <span class="sidebar-prog-num" id="sidebar-count">0</span>
+                        <span class="sidebar-prog-sep">/</span>
+                        <span class="sidebar-prog-total" id="sidebar-total">0</span>
+                        <span class="sidebar-prog-unit">validés</span>
                     </div>
-                    <div class="progress-bar-wrap">
+                    <div class="sidebar-prog-bar-row">
                         <div class="sidebar-progress-track">
                             <div class="sidebar-progress-fill" id="sidebar-bar"></div>
                         </div>
+                        <span class="sidebar-prog-pct" id="sidebar-pct">0%</span>
                     </div>
-                    <div class="progress-stat">
-                        <span class="progress-stat-value" id="sidebar-pct">0%</span>
-                        <span class="progress-stat-label">complété</span>
-                    </div>
-                </div>
-                <div class="sidebar-next-milestone" id="sidebar-next-milestone">
-                    <div class="sidebar-next-label">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="12px" viewBox="0 -960 960 960" width="12px" fill="currentColor"><path d="m354-247 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143Zm-68 167 65-281L120-539l288-25 112-265 112 265 288 25-231 198 65 281-234-141-234 141Zm234-380Z"/></svg>
-                        PROCHAIN PALIER
-                    </div>
-                    <span class="sidebar-next-count" id="sidebar-next-count">—</span>
-                    <p class="sidebar-next-reward" id="sidebar-next-reward">—</p>
-                    <span class="sidebar-next-progress" id="sidebar-next-progress">0 / 0</span>
                 </div>
                 <div class="sidebar-milestones-label">PALIERS</div>
                 <div id="milestones" class="milestones"></div>
@@ -112,10 +88,54 @@
                         <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
                         Réinitialiser les sauvegardes
                     </button>
+                    <div class="sidebar-reset-confirm hidden" id="sidebar-reset-confirm">
+                        <span class="sidebar-reset-confirm-label">Confirmer la réinitialisation ?</span>
+                        <div class="sidebar-reset-confirm-btns">
+                            <button id="sidebar-reset-cancel" class="sidebar-confirm-btn sidebar-confirm-cancel">Annuler</button>
+                            <button id="sidebar-reset-ok" class="sidebar-confirm-btn sidebar-confirm-ok">Réinitialiser</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </aside>
     </div>
+
+    <!-- Écran révélation film mystère -->
+    <div id="poster-reveal-screen" class="poster-reveal-screen hidden">
+        <div class="poster-reveal-inner">
+            <div class="poster-reveal-badge">Film débloqué !</div>
+            <img id="poster-reveal-img" class="poster-reveal-img" src="" alt="">
+            <h2 class="poster-reveal-title" id="poster-reveal-title"></h2>
+            <button id="poster-reveal-next" class="poster-reveal-next-btn">
+                Suivant
+                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="mystery-points-indicator hidden" id="mystery-points-indicator">
+        <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M280-400q-17 0-28.5-11.5T240-440q0-17 11.5-28.5T280-480q17 0 28.5 11.5T320-440q0 17-11.5 28.5T280-400Zm0 200q-117 0-198.5-81.5T0-480q0-117 81.5-198.5T280-760q109 0 190 70.5T562-520h278l80 80-120 120-80-80-80 80-80-80H562q-11 58-46.5 104T420-160q-33 22-70.5 31T280-120Zm0-80q83 0 141.5-58.5T480-400q0-83-58.5-141.5T280-600q-83 0-141.5 58.5T80-400q0 83 58.5 141.5T280-200Z"/></svg>
+        <span id="mystery-points-text">1 clé(s)</span>
+    </div>
+
+        <div class="menu">
+            <div class="menu-btn-group">
+            <button class="menu-btn" data-view="tierlist" title="TierList">
+                <div class="menu-btn-badge hidden" id="tierlist-badge"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="currentColor"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19.65 9.04l-4.84-.42-1.89-4.45c-.34-.81-1.5-.81-1.84 0L9.19 8.63l-4.83.41c-.88.07-1.24 1.17-.57 1.75l3.67 3.18-1.1 4.72c-.2.86.73 1.54 1.49 1.08l4.15-2.5 4.15 2.51c.76.46 1.69-.22 1.49-1.08l-1.1-4.73 3.67-3.18c.67-.58.32-1.68-.56-1.75zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>
+                <span class="menu-btn-label">TierList</span>
+            </button>
+            <button class="menu-btn nav-active" data-view="films" title="Films">
+                <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="currentColor"><path d="M160-80q-33 0-56.5-23.5T80-160v-640q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v640q0 33-23.5 56.5T800-80H160Zm0-80h640v-560H160v560Zm80-80v-80h80v80h-80Zm0-120v-80h80v80h-80Zm0-120v-80h80v80h-80Zm0-120v-80h80v80h-80Zm480 360v-80h80v80h-80Zm0-120v-80h80v80h-80Zm0-120v-80h80v80h-80Zm0-120v-80h80v80h-80ZM320-400v-160l160 80-160 80Z"/></svg>
+                <span class="menu-btn-label">Films</span>
+            </button>
+            <button class="menu-btn" data-view="rewards" title="Récompenses">
+                <div class="menu-btn-badge hidden" id="rewards-badge"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="currentColor"><rect fill="none" height="24" width="24"/><path d="M19,5h-2V4c0-0.55-0.45-1-1-1H8C7.45,3,7,3.45,7,4v1H5C3.9,5,3,5.9,3,7v1c0,2.55,1.92,4.63,4.39,4.94 c0.63,1.5,1.98,2.63,3.61,2.96V19H8c-0.55,0-1,0.45-1,1v0c0,0.55,0.45,1,1,1h8c0.55,0,1-0.45,1-1v0c0-0.55-0.45-1-1-1h-3v-3.1 c1.63-0.33,2.98-1.46,3.61-2.96C19.08,12.63,21,10.55,21,8V7C21,5.9,20.1,5,19,5z M5,8V7h2v3.82C5.84,10.4,5,9.3,5,8z M19,8 c0,1.3-0.84,2.4-2,2.82V7h2V8z"/></svg>
+                <span class="menu-btn-label">Récompenses</span>
+            </button>
+            </div>
+        </div>
 
     <!-- Modal Info Film -->
     <div id="modal-info" class="modal hidden">
@@ -137,37 +157,12 @@
                     <span id="info-director"></span>
                 </div>
                 <p class="info-desc" id="info-desc"></p>
+                <p class="info-hint hidden" id="info-hint"></p>
                 <a class="info-trailer-btn" id="info-trailer" href="#" target="_blank" rel="noopener noreferrer">
                     <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="white"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
                     Voir la bande annonce
                 </a>
-            </div>
-            <div class="info-footer">
                 <button id="info-cta" class="info-cta-btn"></button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Mot de passe -->
-    <div id="modal-password" class="modal hidden">
-        <div class="modal-overlay"></div>
-        <div class="modal-content modal-password-theme">
-            <button class="modal-close modal-close-btn">&times;</button>
-            <div class="modal-icon-row">
-                <img class="modal-icon" src="" alt="">
-                <div class="modal-info">
-                    <span class="modal-badge">#<span class="modal-number"></span></span>
-                    <h2 class="modal-title"></h2>
-                </div>
-            </div>
-            <div class="modal-separator"></div>
-            <div class="modal-body">
-                <div class="lock-row">&#128274; Entrez le mot de passe pour accéder au défi</div>
-                <div class="input-group">
-                    <input type="text" id="password-input" maxlength="3" autocomplete="off" placeholder="•••">
-                    <button id="password-submit">Déverrouiller</button>
-                </div>
-                <p id="password-error" class="error hidden">Mot de passe incorrect.</p>
             </div>
         </div>
     </div>
@@ -222,21 +217,10 @@
     <div id="modal-tierlist" class="tl-modal hidden">
         <div class="tl-inner">
             <header class="tl-header">
-                <button id="tl-close" class="sidebar-back">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>
-                    Retour
-                </button>
                 <span class="tl-hint">Glisse · Double-clic pour retirer</span>
             </header>
             <div class="tl-rows-area" id="tl-rows"></div>
             <div class="tl-bank-area">
-                <div class="tl-bank-header">
-                    <span class="tl-bank-label">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="12px" viewBox="0 -960 960 960" width="12px" fill="currentColor"><path d="M480-120 200-272v-240L40-600l440-240 440 240v320h-80v-276l-80 44v240L480-120Zm0-332 274-148-274-148-274 148 274 148Zm0 241 200-108v-151L480-360 280-471v151l200 109Zm0-241Zm0 90Zm0 0Z"/></svg>
-                        Films non classés
-                    </span>
-                    <input type="text" id="tl-search" class="tl-search" placeholder="Rechercher un film...">
-                </div>
                 <div class="tl-bank-scroll" id="tl-bank"></div>
             </div>
         </div>
