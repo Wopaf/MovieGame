@@ -67,23 +67,20 @@
 
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-inner">
-                <div class="sidebar-panel-body">
-                    <div class="sidebar-prog-counts">
-                        <span class="sidebar-prog-num" id="sidebar-count">0</span>
-                        <span class="sidebar-prog-sep">/</span>
-                        <span class="sidebar-prog-total" id="sidebar-total">0</span>
-                        <span class="sidebar-prog-unit">validés</span>
-                    </div>
-                    <div class="sidebar-prog-bar-row">
-                        <div class="sidebar-progress-track">
-                            <div class="sidebar-progress-fill" id="sidebar-bar"></div>
-                        </div>
-                        <span class="sidebar-prog-pct" id="sidebar-pct">0%</span>
+                <div class="sidebar-title-wrap" id="sidebar-title-wrap">
+                    <img id="sidebar-title-icon" class="sidebar-title-icon" src="" alt="">
+                    <div class="sidebar-title-text">
+                        <span class="sidebar-title-label">Grade</span>
+                        <span class="sidebar-title-value" id="sidebar-title-value">—</span>
                     </div>
                 </div>
-                <div class="sidebar-milestones-label">PALIERS</div>
+                <div class="sidebar-milestones-label">Succès</div>
                 <div id="milestones" class="milestones"></div>
                 <div class="sidebar-reset-wrap">
+                    <button id="test-secret-reward-btn" class="sidebar-test-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Zm-20 200v-280l200 140-200 140Z"/></svg>
+                        Simuler récompense spéciale
+                    </button>
                     <button id="sidebar-reset" class="sidebar-reset-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
                         Réinitialiser les sauvegardes
@@ -100,6 +97,23 @@
         </aside>
     </div>
 
+    <!-- Écran fin de jeu -->
+    <div id="game-over-screen" class="game-over-screen hidden">
+        <div id="game-over-heart" class="game-over-heart">♥</div>
+    </div>
+
+    <!-- Écran récompense spéciale (palier ?) -->
+    <div id="secret-reward-screen" class="secret-reward-screen hidden">
+        <div class="secret-reward-inner">
+            <div class="secret-reward-badge">Récompense spéciale !</div>
+            <div class="secret-reward-lines" id="secret-reward-lines"></div>
+            <button id="secret-reward-next" class="poster-reveal-next-btn">
+                <span class="secret-reward-btn-label">Suivant</span>
+                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
+            </button>
+        </div>
+    </div>
+
     <!-- Écran révélation film mystère -->
     <div id="poster-reveal-screen" class="poster-reveal-screen hidden">
         <div class="poster-reveal-inner">
@@ -107,6 +121,21 @@
             <img id="poster-reveal-img" class="poster-reveal-img" src="" alt="">
             <h2 class="poster-reveal-title" id="poster-reveal-title"></h2>
             <button id="poster-reveal-next" class="poster-reveal-next-btn">
+                Suivant
+                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Écran révélation clés -->
+    <div id="key-reveal-screen" class="key-reveal-screen hidden">
+        <div class="key-reveal-inner">
+            <div class="key-reveal-badge">Récompense débloquée !</div>
+            <div class="key-reveal-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" height="100px" viewBox="0 -960 960 960" width="100px" fill="currentColor"><path d="M280-400q-17 0-28.5-11.5T240-440q0-17 11.5-28.5T280-480q17 0 28.5 11.5T320-440q0 17-11.5 28.5T280-400Zm0 200q-117 0-198.5-81.5T0-480q0-117 81.5-198.5T280-760q109 0 190 70.5T562-520h278l80 80-120 120-80-80-80 80-80-80H562q-11 58-46.5 104T420-160q-33 22-70.5 31T280-120Zm0-80q83 0 141.5-58.5T480-400q0-83-58.5-141.5T280-600q-83 0-141.5 58.5T80-400q0 83 58.5 141.5T280-200Z"/></svg>
+            </div>
+            <div class="key-reveal-count" id="key-reveal-count">+1 Clé</div>
+            <button id="key-reveal-next" class="poster-reveal-next-btn">
                 Suivant
                 <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
             </button>
@@ -140,31 +169,43 @@
     <!-- Modal Info Film -->
     <div id="modal-info" class="modal hidden">
         <div class="modal-overlay"></div>
-        <div class="modal-content modal-info-theme">
-            <div id="info-bg"></div>
-            <button class="modal-close modal-close-btn">&times;</button>
-            <div class="modal-icon-row">
-                <img class="modal-icon unlocked-icon" id="info-icon" src="" alt="">
-                <div class="modal-info">
-                    <span class="modal-badge badge-info">#<span id="info-num"></span></span>
-                    <h2 class="modal-title" id="info-title"></h2>
+            <div class="modal-content modal-info-theme">
+                <div id="info-bg"></div>
+                <button class="modal-close modal-close-btn">&times;</button>
+                <div class="modal-icon-row">
+                    <img class="modal-icon unlocked-icon" id="info-icon" src="" alt="">
+                    <div class="modal-info">
+                        <span class="modal-badge badge-info">#<span id="info-num"></span></span>
+                        <h2 class="modal-title" id="info-title"></h2>
+                    </div>
+                </div>
+                <div class="modal-body info-body">
+                    <div class="info-genres-row hidden" id="info-genres-row"></div>
+                    <div class="modal-separator"></div>
+                    <div class="info-director-row" id="info-director-row">
+                        <span class="info-director-label">Réalisateur: </span>
+                        <span id="info-director"></span>
+                    </div>
+                    <div class="info-rating-row hidden" id="info-rating-row">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 0 24 24" width="16px" fill="#F5C518"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                        <span class="info-rating-value" id="info-rating-value">7.5</span>
+                        <span class="info-rating-label">/10 — IMDB</span>
+                    </div>
+                    <p class="info-desc" id="info-desc"></p>
+
+                    <div style="display: flex; flex-direction: row; gap: 8px;">
+                        <a class="info-trailer-btn" id="info-trailer" href="#" target="_blank" rel="noopener noreferrer">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="white"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                            Bande annonce
+                        </a>
+                        <a class="info-imdb-btn" id="info-imdb" href="#" target="_blank" rel="noopener noreferrer">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="currentColor"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                            Plus d'info
+                        </a>
+                    </div>
+                    <button id="info-cta" class="info-cta-btn"></button>
                 </div>
             </div>
-            <div class="modal-separator"></div>
-            <div class="modal-body info-body">
-                <div class="info-director-row" id="info-director-row">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="m260-260 300-140 140-300-300 140-140 300Zm220-180q-17 0-28.5-11.5T440-480q0-17 11.5-28.5T480-520q17 0 28.5 11.5T520-480q0 17-11.5 28.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
-                    <span id="info-director"></span>
-                </div>
-                <p class="info-desc" id="info-desc"></p>
-                <p class="info-hint hidden" id="info-hint"></p>
-                <a class="info-trailer-btn" id="info-trailer" href="#" target="_blank" rel="noopener noreferrer">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="white"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
-                    Voir la bande annonce
-                </a>
-                <button id="info-cta" class="info-cta-btn"></button>
-            </div>
-        </div>
     </div>
 
     <!-- Modal Question -->
