@@ -125,7 +125,7 @@ body {
     background: rgba(14, 14, 13, 0.92);
     backdrop-filter: blur(28px);
     -webkit-backdrop-filter: blur(28px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     padding: 6px 28px;
     display: flex;
     justify-content: center;
@@ -748,8 +748,7 @@ body {
     padding: 3px 7px 3px 6px;
 }
 
-/* Afficher le bon bloc selon l'état */
-.cell:not(.validated) .cell-background:nth-child(1) { display: flex; }
+/* Afficher uniquement le badge Validé */
 .cell.validated .cell-background:nth-child(2) { display: flex; }
 
 /* ============================================================
@@ -1164,9 +1163,6 @@ body {
     pointer-events: none;
 }
 
-.milestone.reached.claimed .milestone-check {
-    display: inline-flex;
-}
 
 
 .milestone-reward-label {
@@ -1513,7 +1509,7 @@ body {
 .modal {
     position: fixed;
     inset: 0;
-    z-index: 200;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1805,6 +1801,15 @@ body {
     background: rgba(255, 255, 255, 0.07);
     border-radius: var(--radius-md);
     margin-bottom: 18px !important;
+}
+
+.question-rebus {
+    width: 100%;
+    max-height: 260px;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+    margin-bottom: 18px;
+    display: block;
 }
 
 .modal-question-theme .input-group input:focus { border-color: var(--color-accent); }
@@ -2110,22 +2115,44 @@ body {
     left: 50%;
     transform: translateX(-50%);
     z-index: 998;
-    background: rgba(197, 162, 39, 0.18);
+    background: rgba(43, 36, 10, 0.67);
     border: 1px solid rgba(197, 162, 39, 0.4);
     border-radius: 20px;
-    padding: 7px 14px 7px 10px;
+    padding: 9px 18px 9px 18px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 1px;
     color: var(--color-gold);
     font-family: var(--font-main);
-    font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.5px;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
     white-space: nowrap;
+    text-align: center;
+}
+
+#mystery-points-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mpi-count {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+#mystery-points-text .mpi-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--color-gold);
 }
 
 /* ============================================================
@@ -2502,6 +2529,117 @@ body {
 }
 .modal.anim-mystery-reveal .modal-overlay { animation: fadeIn 0.3s ease forwards; }
 .modal.anim-mystery-reveal .modal-content { animation: mysteryRevealIn 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+/* ============================================================
+   ÉCRAN SUCCÈS DÉFI
+   ============================================================ */
+@keyframes successBurst {
+    0%   { transform: scale(0); opacity: 1; }
+    60%  { transform: scale(1.6); opacity: 0.6; }
+    100% { transform: scale(2.4); opacity: 0; }
+}
+@keyframes successCheckPop {
+    0%   { opacity: 0; transform: scale(0) rotate(-20deg); }
+    55%  { opacity: 1; transform: scale(1.18) rotate(4deg); }
+    75%  { transform: scale(0.93) rotate(-2deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+@keyframes successLabelIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes successTitleIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes successConfetti {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(180px) rotate(720deg); opacity: 0; }
+}
+@keyframes successScreenOut {
+    0%   { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.success-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(8, 12, 8, 0.88);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    pointer-events: none;
+    animation: successScreenOut 4s ease forwards;
+}
+.success-screen.hidden { display: none; }
+
+.success-burst {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 60%, white) 0%, transparent 70%);
+    animation: successBurst 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    pointer-events: none;
+}
+
+.success-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+    padding: 0 32px;
+}
+
+.success-check {
+    font-size: 5rem;
+    line-height: 1;
+    color: var(--color-accent);
+    filter: drop-shadow(0 0 24px color-mix(in srgb, var(--color-accent) 80%, transparent));
+    animation: successCheckPop 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+.success-label {
+    font-family: var(--font-main);
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    animation: successLabelIn 0.5s ease 0.45s both;
+}
+
+.success-title {
+    font-family: var(--font-main);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1.35;
+    max-width: 280px;
+    animation: successTitleIn 0.5s ease 0.6s both;
+}
+
+.success-confetti {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.success-confetti-piece {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    animation: successConfetti 1.4s ease-out forwards;
+    top: 50%;
+}
 
 /* ============================================================
    SPLASH SCREEN
@@ -2885,6 +3023,10 @@ body {
     outline: 2px dashed rgba(102,192,244,0.4);
     outline-offset: -2px;
 }
+.tl-row-drop.tl-drop-ready {
+    outline: 2px dashed rgba(102,192,244,0.25);
+    outline-offset: -2px;
+}
 
 /* Carte film */
 .tl-card {
@@ -2996,5 +3138,8 @@ body {
     .tl-header    { padding: 8px 12px; }
     .tl-rows-area { padding: 8px 10px; }
     .tl-bank-area { padding: 8px 10px 12px; }
+
+    /* Toujours laisser une zone vide cliquable en bas de chaque tier */
+    .tl-row-drop { padding-bottom: 36px; }
 }
 

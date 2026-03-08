@@ -97,6 +97,17 @@
         </aside>
     </div>
 
+    <!-- Écran succès défi -->
+    <div id="success-screen" class="success-screen hidden">
+        <div class="success-burst"></div>
+        <div class="success-content">
+            <div class="success-check">✓</div>
+            <div class="success-label">Bien joué !</div>
+            <div class="success-title" id="success-title"></div>
+        </div>
+        <div class="success-confetti" id="success-confetti"></div>
+    </div>
+
     <!-- Écran fin de jeu -->
     <div id="game-over-screen" class="game-over-screen hidden">
         <div id="game-over-heart" class="game-over-heart">♥</div>
@@ -132,7 +143,7 @@
         <div class="key-reveal-inner">
             <div class="key-reveal-badge">Récompense débloquée !</div>
             <div class="key-reveal-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" height="100px" viewBox="0 -960 960 960" width="100px" fill="currentColor"><path d="M280-400q-17 0-28.5-11.5T240-440q0-17 11.5-28.5T280-480q17 0 28.5 11.5T320-440q0 17-11.5 28.5T280-400Zm0 200q-117 0-198.5-81.5T0-480q0-117 81.5-198.5T280-760q109 0 190 70.5T562-520h278l80 80-120 120-80-80-80 80-80-80H562q-11 58-46.5 104T420-160q-33 22-70.5 31T280-120Zm0-80q83 0 141.5-58.5T480-400q0-83-58.5-141.5T280-600q-83 0-141.5 58.5T80-400q0 83 58.5 141.5T280-200Z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" height="100px" viewBox="0 -960 960 960" width="100px" fill="currentColor"><path d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70q66 0 121 33t87 87h352q33 0 56.5 23.5T920-520v80q0 33-23.5 56.5T840-360v40q0 33-23.5 56.5T760-240h-80q-33 0-56.5-23.5T600-320v-40H488q-32 54-87 87t-121 33Zm0-80q66 0 106-40.5t48-79.5h246v120h80v-120h80v-80H434q-8-39-48-79.5T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47Zm0-80q33 0 56.5-23.5T360-480q0-33-23.5-56.5T280-560q-33 0-56.5 23.5T200-480q0 33 23.5 56.5T280-400Zm0-80Z"/></svg>
             </div>
             <div class="key-reveal-count" id="key-reveal-count">+1 Clé</div>
             <button id="key-reveal-next" class="poster-reveal-next-btn">
@@ -143,8 +154,7 @@
     </div>
 
     <div class="mystery-points-indicator hidden" id="mystery-points-indicator">
-        <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M280-400q-17 0-28.5-11.5T240-440q0-17 11.5-28.5T280-480q17 0 28.5 11.5T320-440q0 17-11.5 28.5T280-400Zm0 200q-117 0-198.5-81.5T0-480q0-117 81.5-198.5T280-760q109 0 190 70.5T562-520h278l80 80-120 120-80-80-80 80-80-80H562q-11 58-46.5 104T420-160q-33 22-70.5 31T280-120Zm0-80q83 0 141.5-58.5T480-400q0-83-58.5-141.5T280-600q-83 0-141.5 58.5T80-400q0 83 58.5 141.5T280-200Z"/></svg>
-        <span id="mystery-points-text">1 clé(s)</span>
+        <span id="mystery-points-text"></span>
     </div>
 
         <div class="menu">
@@ -224,6 +234,7 @@
             <div class="modal-separator sep-gold"></div>
             <div class="modal-body">
                 <p id="question-text" class="question"></p>
+                <img id="question-rebus" class="question-rebus hidden" src="" alt="Rébus">
                 <div class="input-group">
                     <input type="text" id="answer-input" autocomplete="off" placeholder="Votre réponse…">
                     <button id="answer-submit" class="btn-question">Valider</button>

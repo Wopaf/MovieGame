@@ -70,7 +70,7 @@ const SECRET_REWARD_STEPS = [
     ["Désormais ce jeu prend fin"],
     ["Et comme pour toutes les surprises et autres inventions dérilantes que nous avons partagé"],
     ["Il deviendras souvenir .."],
-    ["Un souvenir, distilé, dans un vaste océan qui mélée d'autres moment passé à te coté"],
+    ["Souvenir distilé, dans un vaste océan qui méllee d'autres moment passé à te coté"],
 ];
 
 // ============================================================
@@ -127,7 +127,7 @@ function buildGenreTags(genres) {
 
 const ACHIEVEMENTS = [
     { title: "Le Seigneur des anneaux La communauté de l'anneau", img: "1.png", password: "X8q",
-    question: "Comment s'appelle l'auberge où les Hobbits doivent retrouver Gandalf à Brie ?", answer: "Le Poney Fringant",
+    rebus: "medias/r1.png", answer: "Le Poney Fringant",
     realisateur: "Peter Jackson", description: "Un jeune Hobbit nommé Frodon hérite d'un anneau magique et doit entreprendre un périlleux voyage pour le détruire.",
     turl: "https://www.youtube.com/watch?v=V75dMMIW2B4", genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0120737/", rating: "8.8", verrouille: false },
 
@@ -538,8 +538,8 @@ function updateMysteryPointsIndicator() {
         el.classList.add("hidden");
     } else {
         el.classList.remove("hidden");
-        const text = points === 1 ? "1 clé(s) disponible" : `${points} films verrouillés à débloquer`;
-        document.getElementById("mystery-points-text").textContent = text;
+        const KEY_SVG = `<svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70q66 0 121 33t87 87h352q33 0 56.5 23.5T920-520v80q0 33-23.5 56.5T840-360v40q0 33-23.5 56.5T760-240h-80q-33 0-56.5-23.5T600-320v-40H488q-32 54-87 87t-121 33Zm0-80q66 0 106-40.5t48-79.5h246v120h80v-120h80v-80H434q-8-39-48-79.5T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47Zm0-80q33 0 56.5-23.5T360-480q0-33-23.5-56.5T280-560q-33 0-56.5 23.5T200-480q0 33 23.5 56.5T280-400Zm0-80Z"/></svg>`;
+        document.getElementById("mystery-points-text").innerHTML = `<span class="mpi-count">${points} ${KEY_SVG}</span><span class="mpi-label">disponible${points > 1 ? "s" : ""}</span>`;
     }
 }
 
@@ -895,8 +895,8 @@ function openAnimatedModal(modalId, index, forceReveal) {
 
 
 
-function setMenuVisible(visible) {
-    document.querySelector(".menu").classList.toggle("nav-hidden", !visible);
+function setMenuVisible(_visible) {
+    // Menu toujours visible
 }
 
 function closeAnimatedModal(callback) {
@@ -1008,8 +1008,7 @@ function openInfoModal(index, mysteryReveal = false) {
     cta.style.display = "";
 
     if (isValidated) {
-        cta.classList.add("cta-done");
-        cta.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg> Succès déjà validé`;
+        cta.style.display = "none";
     } else if (isSecret) {
         // Film secret : on ne peut pas le débloquer manuellement
         cta.style.display = "none";
@@ -1017,7 +1016,7 @@ function openInfoModal(index, mysteryReveal = false) {
         const points = getAvailablePoints();
         if (points > 0) {
             cta.classList.add("cta-unlock");
-            cta.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor"><path d="M280-400q-17 0-28.5-11.5T240-440q0-17 11.5-28.5T280-480q17 0 28.5 11.5T320-440q0 17-11.5 28.5T280-400Zm0 200q-117 0-198.5-81.5T0-480q0-117 81.5-198.5T280-760q109 0 190 70.5T562-520h278l80 80-120 120-80-80-80 80-80-80H562q-11 58-46.5 104T420-160q-33 22-70.5 31T280-120Zm0-80q83 0 141.5-58.5T480-400q0-83-58.5-141.5T280-600q-83 0-141.5 58.5T80-400q0 83 58.5 141.5T280-200Z"/></svg> Débloquer ce film (1 clé)`;
+            cta.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor"><path d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70q66 0 121 33t87 87h352q33 0 56.5 23.5T920-520v80q0 33-23.5 56.5T840-360v40q0 33-23.5 56.5T760-240h-80q-33 0-56.5-23.5T600-320v-40H488q-32 54-87 87t-121 33Zm0-80q66 0 106-40.5t48-79.5h246v120h80v-120h80v-80H434q-8-39-48-79.5T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47Zm0-80q33 0 56.5-23.5T360-480q0-33-23.5-56.5T280-560q-33 0-56.5 23.5T200-480q0 33 23.5 56.5T280-400Zm0-80Z"/></svg> Débloquer ce film (1 clé)`;
         } else {
             cta.style.display = "none";
         }
@@ -1114,6 +1113,40 @@ function renderSecretRewardStep(step) {
         linesEl.classList.remove("fading");
         label.textContent = isLast ? "Terminer" : "Suivant";
     }, 280);
+}
+
+function showSuccessAnimation(_index) {
+    const screen = document.getElementById("success-screen");
+    const confettiEl = document.getElementById("success-confetti");
+    const titleEl = document.getElementById("success-title");
+
+    titleEl.textContent = "Défi réussi !";
+
+    // Confetti
+    confettiEl.innerHTML = "";
+    const colors = ["var(--color-accent)", "#fff", "#ffd700", "#a4d007", "#66c0f4", "#e94560"];
+    for (let i = 0; i < 22; i++) {
+        const p = document.createElement("div");
+        p.className = "success-confetti-piece";
+        p.style.left = (20 + Math.random() * 60) + "%";
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.animationDelay = (Math.random() * 0.5) + "s";
+        p.style.animationDuration = (1.0 + Math.random() * 0.7) + "s";
+        p.style.transform = `rotate(${Math.random() * 360}deg)`;
+        confettiEl.appendChild(p);
+    }
+
+    screen.classList.remove("hidden");
+    // Force reflow then restart animation
+    void screen.offsetWidth;
+    screen.style.animation = "none";
+    void screen.offsetWidth;
+    screen.style.animation = "successScreenOut 4s ease forwards";
+
+    setTimeout(() => {
+        screen.classList.add("hidden");
+        screen.style.animation = "";
+    }, 4050);
 }
 
 function showSecretRewardReveal() {
@@ -1229,7 +1262,18 @@ function proceedFromInfo() {
         }, 650);
     } else {
         closeAnimatedModal(() => {
-            document.getElementById("question-text").textContent = ACHIEVEMENTS[index].question;
+            const ach = ACHIEVEMENTS[index];
+            const questionEl = document.getElementById("question-text");
+            const rebusEl    = document.getElementById("question-rebus");
+            if (ach.rebus) {
+                questionEl.classList.add("hidden");
+                rebusEl.src = ach.rebus;
+                rebusEl.classList.remove("hidden");
+            } else {
+                questionEl.textContent = ach.question;
+                questionEl.classList.remove("hidden");
+                rebusEl.classList.add("hidden");
+            }
             const qImgSrc = achImg(index);
             document.getElementById("modal-question").style.setProperty("--modal-poster", `url(${qImgSrc})`);
             openAnimatedModal("modal-question", index, true);
@@ -1244,7 +1288,7 @@ function closeModal() {
     currentIndex = null;
 }
 
-// Tolérance : accepte une réponse si elle est à 2 caractères près
+// Tolérance : accepte une réponse si elle est à 4 caractères près
 function isCloseEnough(input, expected, tolerance) {
     const a = input.toLowerCase();
     const b = expected.toLowerCase();
@@ -1277,7 +1321,7 @@ function checkAnswer() {
     const input = document.getElementById("answer-input").value.trim();
     const modalEl = document.getElementById("modal-question").querySelector(".modal-content");
 
-    if (isCloseEnough(input, ACHIEVEMENTS[currentIndex].answer, 2)) {
+    if (isCloseEnough(input, ACHIEVEMENTS[currentIndex].answer, 4)) {
     playSound("success");
 
         const validated = getValidated();
@@ -1286,12 +1330,10 @@ function checkAnswer() {
             saveValidated(validated);
         }
 
-        // Animation succès puis fermeture
-        modalEl.classList.add("modal-success-flash");
-        setTimeout(() => {
-            modalEl.classList.remove("modal-success-flash");
-            closeAnimatedModal(() => { currentIndex = null; activeModal = null; buildGrid(); });
-        }, 800);
+        // Animation succès plein écran
+        const idxForAnim = currentIndex;
+        closeAnimatedModal(() => { currentIndex = null; activeModal = null; buildGrid(); });
+        showSuccessAnimation(idxForAnim);
 
     } else {
     playSound("fail");
@@ -1534,10 +1576,12 @@ function makeTlCard(idx) {
         if (tlSelectedIdx === idx) {
             tlSelectedIdx = null;
             card.classList.remove("tl-selected");
+            document.querySelectorAll(".tl-row-drop").forEach(z => z.classList.remove("tl-drop-ready"));
         } else {
             document.querySelectorAll(".tl-selected").forEach(c => c.classList.remove("tl-selected"));
             tlSelectedIdx = idx;
             card.classList.add("tl-selected");
+            document.querySelectorAll(".tl-row-drop").forEach(z => z.classList.add("tl-drop-ready"));
         }
     });
 
@@ -1569,6 +1613,7 @@ function setupTlDropZone(el, tierNum) {
         if (tierNum === 0) delete cachedTierlist[tlSelectedIdx];
         else               cachedTierlist[tlSelectedIdx] = tierNum;
         tlSelectedIdx = null;
+        document.querySelectorAll(".tl-row-drop").forEach(z => z.classList.remove("tl-drop-ready"));
         saveTierlist();
         buildTierlistUI();
     });
