@@ -918,7 +918,6 @@ function openInfoModal(index, mysteryReveal = false) {
     setMenuVisible(false);
     currentIndex = index;
     const ach = ACHIEVEMENTS[index];
-    const num = index + 1;
     const validated = getValidated();
     const revealedMysteries = getRevealedMysteries();
     const isValidated = validated.includes(index);
@@ -927,23 +926,20 @@ function openInfoModal(index, mysteryReveal = false) {
     const isSecret  = ach.secret     && !isValidated && !isRevealedMystery;
     const isLocked  = isMystery || isSecret;
 
-    // Fond + icône
+    // Fond
     const imgSrc = isLocked ? "medias/Myst.png" : achImg(index);
     document.getElementById("info-bg").style.backgroundImage = `url(${imgSrc})`;
     document.getElementById("modal-info").style.setProperty("--modal-poster", `url(${imgSrc})`);
-    const icon = document.getElementById("info-icon");
-    icon.src = imgSrc;
-    icon.alt = isMystery ? "Film verrouillé" : isSecret ? "Film secret" : ach.title;
 
-    // Badge + titre
-    document.getElementById("info-num").textContent = num;
+    // Titre
     document.getElementById("info-title").textContent = isMystery ? "Film verrouillé" : isSecret ? "Film secret" : ach.title;
 
     // Réalisateur / description / bande annonce / note
     const dirRow    = document.getElementById("info-director-row");
     const descEl    = document.getElementById("info-desc");
-    const trailerEl = document.getElementById("info-trailer");
-    const imdbEl    = document.getElementById("info-imdb");
+    const trailerEl   = document.getElementById("info-trailer");
+    const imdbEl      = document.getElementById("info-imdb");
+    const posterBtn   = document.getElementById("info-poster-btn");
     const ratingRow = document.getElementById("info-rating-row");
     // Genres + note (affichés pour tous les états)
     buildGenreTags(ach.genres);
@@ -955,29 +951,33 @@ function openInfoModal(index, mysteryReveal = false) {
     }
 
     if (isSecret) {
-        dirRow.style.display    = "none";
-        trailerEl.style.display = "none";
-        imdbEl.style.display    = "none";
-        descEl.style.display    = "block";
-        descEl.textContent      = "Ce film se débloque en réclamant un palier de récompenses spécifique.";
+        dirRow.style.display      = "none";
+        trailerEl.style.display   = "none";
+        imdbEl.style.display      = "none";
+        posterBtn.style.display   = "none";
+        descEl.style.display      = "block";
+        descEl.textContent        = "Ce film se débloque en réclamant un palier de récompenses spécifique.";
     } else if (isMystery) {
-        dirRow.style.display    = "none";
-        trailerEl.style.display = "none";
-        imdbEl.style.display    = "none";
-        descEl.style.display    = "block";
-        descEl.textContent      = "Récupère les récompenses des prochains paliers pour débloquer ce film.";
+        dirRow.style.display      = "none";
+        trailerEl.style.display   = "none";
+        imdbEl.style.display      = "none";
+        posterBtn.style.display   = "none";
+        descEl.style.display      = "block";
+        descEl.textContent        = "Récupère les récompenses des prochains paliers pour débloquer ce film.";
     } else {
-        dirRow.style.display    = "flex";
-        descEl.style.display    = "block";
-        trailerEl.style.display = "inline-flex";
+        dirRow.style.display      = "flex";
+        descEl.style.display      = "block";
+        trailerEl.style.display   = "flex";
+        posterBtn.style.display   = "flex";
         document.getElementById("info-director").textContent = ach.realisateur;
-        descEl.textContent  = ach.description;
-        trailerEl.href      = ach.turl;
+        descEl.textContent        = ach.description;
+        trailerEl.href            = ach.turl;
+        posterBtn.onclick         = () => openPosterModal(achImg(currentIndex));
         if (ach.imdb) {
-            imdbEl.href           = ach.imdb;
-            imdbEl.style.display  = "inline-flex";
+            imdbEl.href          = ach.imdb;
+            imdbEl.style.display = "flex";
         } else {
-            imdbEl.style.display  = "none";
+            imdbEl.style.display = "none";
         }
     }
 
@@ -1597,6 +1597,70 @@ function triggerGridAnimation() {
     gridAnimStarted = false;
     startGridIntroAnimation();
 }
+
+// ============================================================
+//  MODAL AFFICHE PLEIN ÉCRAN
+// ============================================================
+function openPosterModal(src) {
+    const modal = document.getElementById("modal-poster");
+    const img   = document.getElementById("modal-poster-img");
+    img.src = src;
+    modal.classList.remove("hidden");
+    requestAnimationFrame(() => modal.classList.add("visible"));
+}
+
+(function initPosterModal() {
+    const modal    = document.getElementById("modal-poster");
+    const closeBtn = document.querySelector(".modal-poster-close");
+    const img      = document.getElementById("modal-poster-img");
+
+    // Fermeture
+    const close = () => {
+        modal.classList.remove("visible");
+        modal.addEventListener("transitionend", () => modal.classList.add("hidden"), { once: true });
+    };
+    closeBtn.addEventListener("click", close);
+    modal.addEventListener("click", (e) => { if (e.target === modal) close(); });
+
+    // Effet 3D
+    const MAX_TILT = 22;
+    let isDragging = false;
+
+    const resetTransform = () => {
+        img.classList.remove("grabbing");
+        img.style.transform = "scale(1)";
+        img.style.boxShadow = "0 24px 80px rgba(0,0,0,0.8)";
+    };
+
+    img.addEventListener("mousedown", (e) => {
+        if (e.button !== 0) return;
+        isDragging = true;
+        img.classList.add("grabbing");
+        e.preventDefault();
+    });
+
+    window.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        const rect   = img.getBoundingClientRect();
+        const cx     = rect.left + rect.width  / 2;
+        const cy     = rect.top  + rect.height / 2;
+        const dx     = (e.clientX - cx) / (rect.width  / 2);
+        const dy     = (e.clientY - cy) / (rect.height / 2);
+        const rotY   =  dx * MAX_TILT;
+        const rotX   = -dy * MAX_TILT;
+        const depth  = Math.sqrt(dx * dx + dy * dy) * 8;
+        img.style.transform  = `scale(1.03) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+        img.style.boxShadow  = `${-rotY * 0.8}px ${rotX * 0.8 + depth + 20}px ${60 + depth * 3}px rgba(0,0,0,0.9)`;
+        img.style.transition = "box-shadow 0.05s ease";
+    });
+
+    window.addEventListener("mouseup", () => {
+        if (!isDragging) return;
+        isDragging = false;
+        img.style.transition = "transform 0.5s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.4s ease";
+        resetTransform();
+    });
+})();
 
 function onSplashDone() {
     if (splashDone) return;

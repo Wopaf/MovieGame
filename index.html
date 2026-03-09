@@ -174,40 +174,56 @@
             <div class="modal-content modal-info-theme">
                 <div id="info-bg"></div>
                 <button class="modal-close modal-close-btn">&times;</button>
-                <div class="modal-icon-row">
-                    <img class="modal-icon unlocked-icon" id="info-icon" src="" alt="">
-                    <div class="modal-info">
-                        <span class="modal-badge badge-info">#<span id="info-num"></span></span>
-                        <h2 class="modal-title" id="info-title"></h2>
-                    </div>
-                </div>
+                <div class="modal-icon-row"></div>
                 <div class="modal-body info-body">
-                    <div class="info-genres-row hidden" id="info-genres-row"></div>
-                    <div class="modal-separator"></div>
-                    <div class="info-director-row" id="info-director-row">
-                        <span class="info-director-label">Réalisateur: </span>
-                        <span id="info-director"></span>
-                    </div>
+                    <h2 class="modal-title" id="info-title"></h2>
                     <div class="info-rating-row hidden" id="info-rating-row">
                         <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 0 24 24" width="16px" fill="#F5C518"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                         <span class="info-rating-value" id="info-rating-value">7.5</span>
                         <span class="info-rating-label">/10 — IMDB</span>
                     </div>
-                    <p class="info-desc" id="info-desc"></p>
-
-                    <div style="display: flex; flex-direction: row; gap: 8px;">
-                        <a class="info-trailer-btn" id="info-trailer" href="#" target="_blank" rel="noopener noreferrer">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="white"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
-                            Bande annonce
-                        </a>
-                        <a class="info-imdb-btn" id="info-imdb" href="#" target="_blank" rel="noopener noreferrer">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="currentColor"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
-                            Plus d'info
-                        </a>
+                    <div class="info-genres-row hidden" id="info-genres-row"></div>
+                    <div class="modal-separator"></div>
+                    <div class="info-section" id="info-director-row">
+                        <span class="info-section-label">Réalisateur</span>
+                        <span id="info-director"></span>
                     </div>
-                    <button id="info-cta" class="info-cta-btn"></button>
+                    <div class="info-section">
+                        <span class="info-section-label">Description</span>
+                        <p class="info-desc" id="info-desc"></p>
+                    </div>
+
+                    <div class="info-actions-row">
+                        <div class="info-links-row">
+                            <a class="info-link-btn" id="info-trailer" href="#" target="_blank" rel="noopener noreferrer">
+                                <div class="info-link-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 0 24 24" width="22px" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                                </div>
+                                <span>Trailer</span>
+                            </a>
+                            <a class="info-link-btn" id="info-imdb" href="#" target="_blank" rel="noopener noreferrer">
+                                <div class="info-link-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 0 24 24" width="22px" fill="currentColor"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                                </div>
+                                <span>IMDb</span>
+                            </a>
+                            <button class="info-link-btn" id="info-poster-btn">
+                                <div class="info-link-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L570-480 450-320l-90-120-120 160Zm-40 80v-560 560Z"/></svg>
+                                </div>
+                                <span>Affiche</span>
+                            </button>
+                        </div>
+                        <button id="info-cta" class="info-cta-btn"></button>
+                    </div>
                 </div>
             </div>
+    </div>
+
+    <!-- Modal Affiche plein écran -->
+    <div id="modal-poster" class="modal-poster hidden">
+        <button class="modal-poster-close">&times;</button>
+        <img id="modal-poster-img" src="" alt="" class="modal-poster-img">
     </div>
 
     <!-- Modal Question -->
