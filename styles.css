@@ -588,6 +588,7 @@ body {
     min-width: 0;
     border: 1px solid rgba(255, 255, 255, 0.08);
     transition: transform 0.1s ease, box-shadow 0.3s ease;
+    will-change: transform;
 }
 
 .cell.cell-expanded {
@@ -685,11 +686,6 @@ body {
     filter: none;
 }
 
-.cell.mystery .cell-icon,
-.cell.secret .cell-icon {
-    filter: blur(18px) brightness(0.55) saturate(0.5);
-    transform: scale(1.1); /* évite les bords blancs dus au blur */
-}
 
 /* Zone de texte en bas, par dessus l'image */
 .cell-content {
@@ -2700,6 +2696,13 @@ body {
    ============================================================ */
 body.splash-active #grid .cell {
     opacity: 0 !important;
+}
+
+body.tab-hidden .progress-fill::before,
+body.tab-hidden .sidebar-progress-fill::before,
+body.tab-hidden .milestone-claim-btn,
+body.tab-hidden .game-over-heart {
+    animation-play-state: paused;
 }
 
 #splash {

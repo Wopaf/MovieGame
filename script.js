@@ -779,10 +779,9 @@ function buildGrid() {
         if (isSecret)    cell.classList.add("secret");
 
         const displayTitle = isMystery ? "Film verrouillé" : isSecret ? "Film secret" : ach.title;
-        const imgSrc = achImg(i);
 
         cell.innerHTML = `
-            <img class="cell-icon" src="${imgSrc}" alt="${displayTitle}" loading="lazy">
+            ${!(isMystery || isSecret) ? `<img class="cell-icon" src="${achImg(i)}" alt="${displayTitle}" loading="lazy">` : ""}
             ${isMystery ? `<div class="cell-lock-overlay">${SVG_LOCKED}</div>` : ""}
             ${isSecret  ? `<div class="cell-lock-overlay cell-secret-overlay">?</div>` : ""}
             <div class="cell-content">
@@ -1631,7 +1630,12 @@ window.addEventListener("pageshow", (e) => {
         if (splash) splash.remove();
     }
 });
-;  
+
+// Pause des animations infinies quand l'onglet est en arrière-plan
+document.addEventListener("visibilitychange", () => {
+    document.body.classList.toggle("tab-hidden", document.hidden);
+});
+
 // Init : afficher la grille immédiatement, Firebase la mettra à jour ensuite
 buildGrid();
 
