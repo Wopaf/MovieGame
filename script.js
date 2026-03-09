@@ -156,30 +156,10 @@ const ACHIEVEMENTS = [
     realisateur: "Spike Jonze", description: "Dans un futur proche, un homme solitaire tombe amoureux d'une intelligence artificielle avancée.",
     turl: "https://www.youtube.com/watch?v=fAs4qKLnRZI", genres: ["Science-fiction", "Romance"], imdb: "https://www.imdb.com/title/tt1798709/", rating: "8.0", verrouille: false },
 
-    { title: "Matrix 1", img: "7.png", password: "5hW",
-    question: "Comment s'appelle le vaisseau dirigé par Morpheus ?", answer: "Nebuchadnezzar",
-    realisateur: "Lana et Lilly Wachowski", description: "Un hacker découvre que le monde tel qu'il le connaît n'est qu'une simulation virtuelle créée par des machines.",
-    turl: "https://www.youtube.com/watch?v=vKQi3bBA1y8", genres: ["Science-fiction", "Action", "Un classique !"], imdb: "https://www.imdb.com/title/tt0133093/", rating: "8.7", verrouille: false },
-
-    { title: "Matrix 2", img: "8.png", password: "3dR",
-    question: "Selon l'Architecte, à quelle version de la Matrice Néo appartient-il ?", answer: "La sixième",
-    realisateur: "Lana et Lilly Wachowski", description: "Néo doit faire face à de nouveaux défis pour protéger Sion tout en cherchant l'origine de la Matrice.",
-    turl: "https://www.youtube.com/watch?v=zmYE3Qrf66Y", genres: ["Science-fiction", "Action", "Un classique !"], imdb: "https://www.imdb.com/title/tt0234215/", rating: "7.2", verrouille: false },
-
-    { title: "Matrix 3", img: "9.png", password: "6uF",
-    question: "Quelle est la condition finale imposée par Néo aux Machines pour arrêter Smith ?", answer: "La Paix",
-    realisateur: "Lana et Lilly Wachowski", description: "La bataille finale entre l'humanité et les machines atteint son paroxysme tandis que Néo affronte l'agent Smith.",
-    turl: "https://www.youtube.com/watch?v=hMbexEPAOQI", genres: ["Science-fiction", "Action", "Un classique !"], imdb: "https://www.imdb.com/title/tt0242653/", rating: "6.7", verrouille: false },
-
     { title: "Persepolis", img: "50.png", password: "4vC",
     question: "", answer: "",
     realisateur: "Vincent Paronnaud et Marjane Satrapi", description: "Une journaliste tente de réaliser une interview avec Salvador Dalí, qui se transforme en un voyage absurde.",
     turl: "https://www.youtube.com/watch?v=MLILb_JnFx4", genres: ["Animation", "Drame", "Très beau film !"], imdb: "https://www.imdb.com/title/tt0808417/", rating: "7.9", verrouille: false },
-
-    { title: "The Big Lebowski", img: "47.png", password: "5tV",
-    question: "Qu'est-ce qui a été volé au 'Duc' et qui, selon lui, 'donnait tout son style à la pièce' ?", answer: "Son tapis",
-    realisateur: "Joel et Ethan Coen", description: "Un flemmard invétéré est pris pour un millionnaire et se retrouve mêlé à une affaire d'enlèvement.",
-    turl: "https://www.youtube.com/watch?v=mY93vL79W4s", genres: ["Comédie", "Crime"], imdb: "https://www.imdb.com/title/tt0118715/", rating: "8.1", verrouille: false },
 
     { title: "Tenacious D et le médiator du destin", img: "48.png", password: "2fP",
     question: "De quelle partie du corps de Satan provient le médiator magique ?", answer: "Une dent",
@@ -231,11 +211,6 @@ const ACHIEVEMENTS = [
     realisateur: "Denis Villeneuve", description: "Une linguiste est chargée de communiquer avec des extraterrestres dont les vaisseaux se sont posés sur Terre.",
     turl: "https://www.youtube.com/watch?v=f8mYf5p_f7I", genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt2543164/", rating: "7.9", verrouille: false },
 
-    { title: "Borat", img: "29.png", password: "1mR",
-    question: "Quelle célébrité Borat essaie-t-il d'enlever avec un sac de mariage traditionnel ?", answer: "Pamela Anderson",
-    realisateur: "Larry Charles", description: "Un journaliste kazakh parcourt les États-Unis dans un faux documentaire pour comprendre la culture américaine.",
-    turl: "https://www.youtube.com/watch?v=P_98O_K05Yw", genres: ["Comédie", "Absurde", "Je suis désolé"], imdb: "https://www.imdb.com/title/tt0443453/", rating: "7.3", verrouille: false },
-
     { title: "RRRrrrrr", img: "30.png", password: "4vS",
     question: "Comment la tribu appelle-t-elle l'acte criminel inédit commis dans le film ?", answer: "Un criminu",
     realisateur: "Alain Chabat", description: "Il y a 35 000 ans, deux tribus s'affrontent pour obtenir le secret du shampooing.",
@@ -266,6 +241,12 @@ const ACHIEVEMENTS = [
     realisateur: "Ridley Scott", description: "Un général romain trahi devient gladiateur pour se venger de l'empereur qui a assassiné sa famille.",
     turl: "https://www.youtube.com/watch?v=owK1at_O7_0", genres: ["Action", "Historique", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0172495/", rating: "8.5", verrouille: false },
 
+    { title: "Je suis une légende", img: "46.png", password: "8nN",
+    question: "Comment s'appelle le mannequin à qui Robert Neville parle tous les jours dans le magasin vidéo ?", answer: "Fred",
+    realisateur: "Francis Lawrence", description: "Le dernier survivant d'un virus ayant transformé l'humanité en mutants tente de trouver un remède à New York.",
+    genres: ["Horreur", "Drame", "Un bon film !"],
+    turl: "https://www.youtube.com/watch?v=uYUbLTxJl-A", imdb: "https://www.imdb.com/title/tt0480249/", rating: "7.2", verrouille: false },
+
     { title: "True man Show", img: "37.png", password: "4qR",
     question: "Comment s'appelle le créateur et réalisateur de l'émission qui surveille Truman depuis la lune ?", answer: "Christof",
     realisateur: "Peter Weir", description: "Un homme découvre que sa vie entière est en réalité une émission de télé-réalité diffusée 24h/24.",
@@ -276,11 +257,6 @@ const ACHIEVEMENTS = [
     realisateur: "Luc Besson", description: "Au XXIIIe siècle, un chauffeur de taxi doit protéger une jeune femme qui est la seule clé du salut de l'humanité.",
     turl: "https://www.youtube.com/watch?v=1p_BvXpC8oA", genres: ["Science-fiction", "Action", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0119116/", rating: "7.6", verrouille: false },
 
-    { title: "Rec", img: "39.png", password: "8fL",
-    question: "Quel est le nom de la jeune fille 'possédée' à l'origine de l'infection dans le grenier ?", answer: "Tristana Medeiros",
-    realisateur: "Jaume Balagueró et Paco Plaza", description: "Une équipe de télé filme une intervention de pompiers qui tourne au cauchemar infectieux dans un immeuble.",
-    turl: "https://www.youtube.com/watch?v=ylUf4V00sN4", genres: ["Horreur", "Thriller"], imdb: "https://www.imdb.com/title/tt1038988/", rating: "7.4", verrouille: false },
-
     { title: "Into the Wild", img: "33.png", password: "5kS",
     question: "Quel est le numéro écrit sur le côté du 'Magic Bus' où s'installe Christopher ?", answer: "142",
     realisateur: "Sean Penn", description: "Un jeune diplômé rejette la société de consommation et part vivre en solitaire dans la nature sauvage d'Alaska.",
@@ -290,16 +266,6 @@ const ACHIEVEMENTS = [
     question: "Quel est le nom de la galerie d'art spécialisée dans les comics tenue par Elijah Price ?", answer: "Limited Edition",
     realisateur: "M. Night Shyamalan", description: "Un homme découvre qu'il est invincible après avoir été le seul survivant d'un terrible accident de train.",
     turl: "https://www.youtube.com/watch?v=AC-LA9QVdmI", genres: ["Fantastique", "Thriller"], imdb: "https://www.imdb.com/title/tt0217869/", rating: "7.3", verrouille: false },
-
-    { title: "Bruce tous puissant", img: "35.png", password: "9mC",
-    question: "Quel est le nom du présentateur rival que Bruce humilie en direct en lui faisant dire des bêtises ?", answer: "Evan Baxter",
-    realisateur: "Tom Shadyac", description: "Un journaliste insatisfait de sa vie reçoit tous les pouvoirs de Dieu pour voir s'il peut faire mieux.",
-    turl: "https://www.youtube.com/watch?v=l5eK3q4JXZo", genres: ["Comédie", "Fantastique"], imdb: "https://www.imdb.com/title/tt0315327/", rating: "6.9", verrouille: false },
-
-    { title: "Mulan", img: "40.png", password: "2nY",
-    question: "Quel nom masculin Mulan choisit-elle pour s'enrôler dans l'armée ?", answer: "Ping",
-    realisateur: "Barry Cook et Tony Bancroft", description: "Une jeune femme se déguise en homme pour prendre la place de son père dans l'armée impériale chinoise.",
-    turl: "https://www.youtube.com/watch?v=M7S3P88eJ_s", genres: ["Animation", "Aventure"], imdb: "https://www.imdb.com/title/tt0120762/", rating: "7.3", verrouille: false },
 
     { title: "Transcendance", img: "21.png", password: "1xQ",
     question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
@@ -366,12 +332,6 @@ const ACHIEVEMENTS = [
     realisateur: "Alexandre Astier", description: "Les Dieux sont en colère contre Arthur ! Après la destruction de Kaamelott, son refus obstiné de tuer Lancelot précipite le Royaume de Logres à sa perte. Il réunit ses Chevaliers, novices téméraires et vétérans désabusés, autour de la Nouvelle Table Ronde et les envoie prouver leur valeur aux quatre coins du Monde, des Marais Orcaniens aux terres glacées du Dragon Opalescent.",
     genres: ["Aventure", "Fantastique", "L'excelente suite d'un film moyen"],
     turl: "https://www.youtube.com/watch?v=lYpdtB4UKWE", imdb: "https://www.imdb.com/title/tt9844322/", rating: "7.2", verrouille: true },
-
-    { title: "Je suis une légende", img: "46.png", password: "8nN",
-    question: "Comment s'appelle le mannequin à qui Robert Neville parle tous les jours dans le magasin vidéo ?", answer: "Fred",
-    realisateur: "Francis Lawrence", description: "Le dernier survivant d'un virus ayant transformé l'humanité en mutants tente de trouver un remède à New York.",
-    genres: ["Horreur", "Drame", "Un bon film !"],
-    turl: "https://www.youtube.com/watch?v=uYUbLTxJl-A", imdb: "https://www.imdb.com/title/tt0480249/", rating: "7.2", verrouille: true },
 
     { title: "10 Cloverfield Lane", img: "10.png", password: "9jN",
     question: "À quel jeu de société Howard, Emmett et Michelle jouent-ils dans le bunker ?", answer: "Le jeu de la vie",
@@ -538,6 +498,7 @@ function updateMysteryPointsIndicator() {
         el.classList.add("hidden");
     } else {
         el.classList.remove("hidden");
+        el.style.display = (currentView === 'tierlist' || currentView === 'rewards') ? 'none' : '';
         const KEY_SVG = `<svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70q66 0 121 33t87 87h352q33 0 56.5 23.5T920-520v80q0 33-23.5 56.5T840-360v40q0 33-23.5 56.5T760-240h-80q-33 0-56.5-23.5T600-320v-40H488q-32 54-87 87t-121 33Zm0-80q66 0 106-40.5t48-79.5h246v120h80v-120h80v-80H434q-8-39-48-79.5T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47Zm0-80q33 0 56.5-23.5T360-480q0-33-23.5-56.5T280-560q-33 0-56.5 23.5T200-480q0 33 23.5 56.5T280-400Zm0-80Z"/></svg>`;
         document.getElementById("mystery-points-text").innerHTML = `<span class="mpi-count">${points} ${KEY_SVG}</span><span class="mpi-label">disponible${points > 1 ? "s" : ""}</span>`;
     }
@@ -663,6 +624,17 @@ function updateCounter() {
     const pct = total > 0 ? Math.round((validated.length / total) * 100) : 0;
     document.getElementById("progress-pct").textContent = pct + "%";
     document.getElementById("progress-bar").style.width = pct + "%";
+
+    // Sidebar progress panel
+    const spCount = document.getElementById("sp-count");
+    const spTotal = document.getElementById("sp-total");
+    const spPct   = document.getElementById("sp-pct");
+    const spBar   = document.getElementById("sp-bar");
+    if (spCount) spCount.textContent = validated.length;
+    if (spTotal) spTotal.textContent = total;
+    if (spPct)   spPct.textContent   = pct + "%";
+    if (spBar)   spBar.style.width   = pct + "%";
+
     updateMysteryPointsIndicator();
     updateRewardsBadge(true);
 }
@@ -831,7 +803,11 @@ function buildGrid() {
             </div>
         `;
 
-        cell.addEventListener("click", () => openModal(i));
+        cell.addEventListener("click", () => {
+            activeCellEl = cell;
+            cell.classList.add("cell-expanded");
+            openModal(i);
+        });
 
         // —— DEBUG : bouton test verrouiller / valider (à retirer avant publication) ——
         const dbgBtn = document.createElement("button");
@@ -856,13 +832,13 @@ function buildGrid() {
     updateCounter();
     buildMilestones();
     firstBuildDone = true;
-    if (splashDone && !gridAnimStarted) startGridIntroAnimation();
 }
 
 // ===== MODALS =====
 
 let currentIndex = null;
 let activeModal = null;
+let activeCellEl = null;
 
 function fillModal(modal, index, forceReveal) {
     const ach = ACHIEVEMENTS[index];
@@ -913,6 +889,7 @@ function closeAnimatedModal(callback) {
         modal.classList.remove("anim-out");
         activeModal = null;
         modal.removeEventListener("animationend", handler);
+        if (activeCellEl) { activeCellEl.classList.remove("cell-expanded"); activeCellEl = null; }
         if (callback) callback();
         // Réafficher le menu si aucun nouveau modal n'a été ouvert par le callback
         if (!activeModal) setMenuVisible(true);
@@ -1407,6 +1384,60 @@ function setView(view) {
     } else if (view === 'rewards') {
         document.getElementById("sidebar").classList.add("open");
     }
+
+    // Cacher l'indicateur de clés si tierlist ou récompenses
+    const indicator = document.getElementById("mystery-points-indicator");
+    if (indicator && !indicator.classList.contains("hidden")) {
+        indicator.style.display = (view === 'tierlist' || view === 'rewards') ? 'none' : '';
+    }
+
+    updateMenuIndicator(view);
+}
+
+function updateMenuIndicator(view, instant = false) {
+    const bar = document.getElementById("menu-indicator");
+    const btn = document.querySelector(`.menu-btn[data-view="${view}"]`);
+    const group = document.querySelector(".menu-btn-group");
+    if (!bar || !btn || !group) return;
+
+    const groupRect = group.getBoundingClientRect();
+    const btnRect   = btn.getBoundingClientRect();
+    const newLeft   = btnRect.left - groupRect.left;
+    const newWidth  = btnRect.width;
+
+    if (instant || bar.style.left === "") {
+        bar.style.transition = "none";
+        bar.style.left      = newLeft  + "px";
+        bar.style.width     = newWidth + "px";
+        bar.style.transform = "translateY(-50%) scaleY(1)";
+        return;
+    }
+
+    const curLeft  = parseFloat(bar.style.left)  || newLeft;
+    const curWidth = parseFloat(bar.style.width) || newWidth;
+    const goingRight = newLeft > curLeft;
+
+    // Phase 1 — étirement + écrasement vertical
+    const stretchLeft  = goingRight ? curLeft : newLeft;
+    const stretchWidth = goingRight
+        ? (newLeft + newWidth) - curLeft
+        : (curLeft + curWidth) - newLeft;
+
+    bar.style.transition = "left 0.1s ease, width 0.1s ease, transform 0.1s ease";
+    bar.style.left      = stretchLeft  + "px";
+    bar.style.width     = stretchWidth + "px";
+    bar.style.transform = "translateY(-50%) scaleY(0.6)";
+
+    // Phase 2 — snap avec rebond + retour hauteur
+    setTimeout(() => {
+        bar.style.transition =
+            "left 0.26s cubic-bezier(0.34, 1.5, 0.64, 1), " +
+            "width 0.26s cubic-bezier(0.34, 1.5, 0.64, 1), " +
+            "transform 0.26s cubic-bezier(0.34, 1.6, 0.64, 1)";
+        bar.style.left      = newLeft  + "px";
+        bar.style.width     = newWidth + "px";
+        bar.style.transform = "translateY(-50%) scaleY(1)";
+    }, 100);
 }
 
 document.querySelectorAll(".menu-btn[data-view]").forEach(btn => {
@@ -1452,23 +1483,98 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", () => {
         const f = btn.dataset.filter;
         if (currentFilter === f) {
-            // Cliquer sur le filtre actif → désactiver (tout afficher)
             currentFilter = "all";
             btn.classList.remove("active");
+            hideFilterIndicator();
         } else {
             currentFilter = f;
             document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
+            updateFilterIndicator(btn);
         }
         buildGrid();
         triggerGridAnimation();
     });
 });
 
+function hideFilterIndicator() {
+    const bar = document.getElementById("filter-indicator");
+    if (!bar || !bar.style.width || bar.style.width === "0px") return;
+
+    // Écrasement puis disparition bouncy
+    bar.style.transition = "transform 0.07s ease";
+    bar.style.transform  = "translateY(-50%) scaleY(0.5) scaleX(0.85)";
+
+    setTimeout(() => {
+        bar.style.transition = "transform 0.12s cubic-bezier(0.4, 0, 1, 1)";
+        bar.style.transform  = "translateY(-50%) scale(0)";
+    }, 65);
+
+    setTimeout(() => {
+        bar.style.transition = "none";
+        bar.style.width = "0";
+        bar.style.left  = "";
+        bar.style.transform = "translateY(-50%) scale(1)";
+    }, 185);
+}
+
+function updateFilterIndicator(btn, instant = false) {
+    const bar = document.getElementById("filter-indicator");
+    const group = document.getElementById("filter-group");
+    if (!bar || !btn || !group) return;
+
+    const groupRect = group.getBoundingClientRect();
+    const btnRect   = btn.getBoundingClientRect();
+    const newLeft   = btnRect.left - groupRect.left;
+    const newWidth  = btnRect.width;
+
+    const isFirstAppear = !bar.style.left || bar.style.width === "0px" || bar.style.width === "";
+
+    if (isFirstAppear || instant) {
+        // Apparition bouncy depuis le centre du bouton
+        bar.style.transition = "none";
+        bar.style.left      = newLeft  + "px";
+        bar.style.width     = newWidth + "px";
+        bar.style.transform = "translateY(-50%) scale(0)";
+
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            bar.style.transition = "transform 0.22s cubic-bezier(0.34, 1.8, 0.64, 1)";
+            bar.style.transform  = "translateY(-50%) scale(1)";
+        }));
+        return;
+    }
+
+    // Déplacement liquid + écrasement vertical
+    const curLeft  = parseFloat(bar.style.left)  || newLeft;
+    const curWidth = parseFloat(bar.style.width) || newWidth;
+    const goingRight = newLeft > curLeft;
+
+    const stretchLeft  = goingRight ? curLeft : newLeft;
+    const stretchWidth = goingRight
+        ? (newLeft + newWidth) - curLeft
+        : (curLeft + curWidth) - newLeft;
+
+    bar.style.transition = "left 0.1s ease, width 0.1s ease, transform 0.1s ease";
+    bar.style.left      = stretchLeft  + "px";
+    bar.style.width     = stretchWidth + "px";
+    bar.style.transform = "translateY(-50%) scaleY(0.55)";
+
+    setTimeout(() => {
+        bar.style.transition =
+            "left 0.26s cubic-bezier(0.34, 1.5, 0.64, 1), " +
+            "width 0.26s cubic-bezier(0.34, 1.5, 0.64, 1), " +
+            "transform 0.26s cubic-bezier(0.34, 1.6, 0.64, 1)";
+        bar.style.left      = newLeft  + "px";
+        bar.style.width     = newWidth + "px";
+        bar.style.transform = "translateY(-50%) scaleY(1)";
+    }, 100);
+}
+
 // ============================================================
 //  SPLASH SCREEN + INTRO ANIMATION
 // ============================================================
 let splashDone = false;
+let splashCanDismiss = false;
 let firstBuildDone = false;
 let gridAnimStarted = false;
 
@@ -1491,22 +1597,46 @@ function triggerGridAnimation() {
 }
 
 function onSplashDone() {
+    if (splashDone) return;
+    if (!splashCanDismiss) {
+        setTimeout(onSplashDone, 100);
+        return;
+    }
     splashDone = true;
     const splash = document.getElementById("splash");
     if (splash) splash.remove();
-    if (firstBuildDone && !gridAnimStarted) startGridIntroAnimation();
+    document.body.classList.remove("splash-active");
+    if (!gridAnimStarted) startGridIntroAnimation();
 }
 
-setTimeout(() => {
+// Orchestration du splash
+(function initSplash() {
     const splash = document.getElementById("splash");
-    if (!splash) return;
-    splash.classList.add("splash-fade");
-    splash.addEventListener("transitionend", onSplashDone, { once: true });
-}, 600);
-setTimeout(onSplashDone, 500); // fallback si transitionend ne se déclenche pas
+    if (!splash) { splashCanDismiss = true; onSplashDone(); return; }
+
+    // Durée minimale d'affichage : 800ms, puis fondu de sortie
+    setTimeout(() => {
+        splash.classList.add("splash-fade");
+        splashCanDismiss = true;
+        splash.addEventListener("transitionend", onSplashDone, { once: true });
+        setTimeout(onSplashDone, 600); // fallback
+    }, 800);
+})();
+
+// bfcache : si la page est restaurée depuis le cache du navigateur, supprimer le splash
+window.addEventListener("pageshow", (e) => {
+    if (e.persisted) {
+        splashCanDismiss = true;
+        const splash = document.getElementById("splash");
+        if (splash) splash.remove();
+    }
+});
 ;  
 // Init : afficher la grille immédiatement, Firebase la mettra à jour ensuite
 buildGrid();
+
+// Init indicateur de menu
+requestAnimationFrame(() => updateMenuIndicator(currentView));
 
 // ===== SCROLL — Masquer la sort-bar au scroll bas, révéler au scroll haut =====
 // Principe : on ne change d'état qu'après 30px de scroll vers le bas,

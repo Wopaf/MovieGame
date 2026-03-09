@@ -7,7 +7,7 @@
     --color-panel:          #1e1e1d;
     --color-panel-hover:    #2e2e2c;
     --color-border:         #363634;
-    --color-accent:         #815bff;
+    --color-accent:         #e82929;
     --color-green:          #4c6b22;
     --color-green-light:    #a4d007;
     --color-gold:           #c5a227;
@@ -122,21 +122,38 @@ body {
     bottom: 0px;
     width: 100%;
     transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-    background: rgba(14, 14, 13, 0.92);
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
+    background: rgba(14, 14, 13, 0.5);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 6px 28px;
+    border-radius: 30px 30px 0px 0px;
+    padding: 8px 0px 14px 0px;
     display: flex;
     justify-content: center;
-    gap: 4px;   
+    gap: 16px;   
     box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .menu-btn-group {
+    position: relative;
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 12px;
+}
+
+.menu-indicator {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 90%;
+    border-radius: 50px;
+    background: linear-gradient(135deg,
+        color-mix(in srgb, var(--color-accent) 92%, white) 0%,
+        color-mix(in srgb, var(--color-accent) 92%, black) 100%);
+    box-shadow: 0 0 28px color-mix(in srgb, var(--color-accent) 30%, transparent),
+                0 0 10px color-mix(in srgb, var(--color-accent) 18%, transparent);
+    border: none;
+    pointer-events: none;
 }
 
 .menu.nav-hidden {
@@ -149,10 +166,10 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 80px;
-    height: 60px;
-    gap: 5px;
-    padding: 10px 24px;
+    width: 60px;
+    height: 50px;
+    gap: 0;
+    padding: 10px 16px;
     background: transparent;
     color: var(--color-text-dim);
     border: none;
@@ -198,21 +215,33 @@ body {
 }
 
 .menu-btn.nav-active {
-    color: var(--color-accent);
+    color: #fff;
 }
+
+.menu-btn svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease;
+    opacity: 1;
+}
+
+.menu-btn.nav-active svg {
+    opacity: 1;
+    transform: scale(1.1);
+    transition: all 0.2s ease;
+}
+
+
 
 /* ============================================================
    BARRE STICKY (progression + tri)
    ============================================================ */
 .sticky-controls {
     position: sticky;
-    background-color: rgba(14, 14, 13, 0.92);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
     top: 0;
     z-index: 100;
-    padding: 12px 0px;
-    /* Gradient de fondu sous la barre */
+    background: rgba(10, 10, 9, 0);
 }
 
 .sticky-controls::after {
@@ -344,8 +373,8 @@ body {
     display: flex;
     align-items: stretch;
     justify-content: space-between;
-    gap: 10px;
-    padding: 12px 0 14px;
+    gap: 8px;
+    padding: 8px 0 4px;
     overflow: hidden;
     max-height: 80px;
     opacity: 1;
@@ -375,18 +404,19 @@ body {
 }
 
 .sort-bar-group {
-    background: rgba(52, 52, 50, 0.75);
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    border-radius: var(--radius-md);
+    position: relative;
+    background: rgba(23, 23, 25, 0.6);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 8px rgba(0, 0, 0, 0.7);
+    border-radius: 50px;
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 8px;
-    padding: 4px;
+    gap: 2px;
+    padding: 5px;
 }
 
 .sort-bar-group:last-child {
@@ -433,11 +463,11 @@ body {
 }
 
 .zoom-btn {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
     border: none;
-    border-radius: var(--radius-sm);
-    background: rgba(255, 255, 255, 0.06);
+    border-radius: 50px;
+    background: transparent;
     color: var(--color-text-muted);
     font-size: 1.1rem;
     font-weight: 700;
@@ -451,20 +481,20 @@ body {
 }
 
 .zoom-btn:hover:not(:disabled) {
-    background: rgba(102, 192, 244, 0.15);
+    background: color-mix(in srgb, var(--color-accent) 100%, transparent);
     color: var(--color-accent);
 }
 
 .zoom-btn:disabled {
-    opacity: 0.25;
+    opacity: 0.2;
     cursor: not-allowed;
 }
 
 .zoom-label {
     font-size: 0.72rem;
     font-weight: 700;
-    color: var(--color-text-dim);
-    min-width: 10px;
+    color: var(--color-text-muted);
+    min-width: 14px;
     text-align: center;
 }
 
@@ -473,14 +503,14 @@ body {
 }
 
 .sort-btn.active {
-    background: rgba(102, 192, 244, 0.15);
-    color: var(--color-accent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .sort-bar-icon {
-    color: var(--color-text-dim);
+    color: var(--color-text-muted);
     flex-shrink: 0;
-    opacity: 0.7;
+    opacity: 0.6;
+    margin-left: 8px;
 }
 
 .sort-divider {
@@ -492,27 +522,44 @@ body {
 }
 
 .filter-btn {
-    padding: 5px 10px;
+    padding: 5px 12px;
     border: none;
-    border-radius: var(--radius-sm);
+    border-radius: 50px;
     background: transparent;
-    color: var(--color-text-dim);
+    color: var(--color-text-muted);
     font-size: 0.72rem;
     font-weight: 600;
     cursor: pointer;
     transition: background var(--transition-fast), color var(--transition-fast);
     white-space: nowrap;
     font-family: var(--font-main);
+    flex: 1;
+    text-align: center;
 }
 
 .filter-btn:hover {
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.06);
     color: var(--color-text);
 }
 
 .filter-btn.active {
-    background: rgba(102, 192, 244, 0.15);
-    color: var(--color-accent);
+    color: #fff;
+}
+
+.filter-indicator {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 68%;
+    border-radius: 50px;
+    background: var(--color-accent);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.filter-btn {
+    position: relative;
+    z-index: 1;
 }
 
 /* ============================================================
@@ -540,7 +587,13 @@ body {
     display: block;
     min-width: 0;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: all 0.2s ease;
+    transition: transform 0.1s ease, box-shadow 0.3s ease;
+}
+
+.cell.cell-expanded {
+    transform: scale(1.1);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+    z-index: 10;
 }
 
 .cell:hover {
@@ -758,8 +811,10 @@ body {
     max-width: 1000px;
     justify-self: center;
     flex-shrink: 0;
-    background: var(--color-panel);
-    border: 1px solid var(--color-border);
+    background: rgba(14, 14, 13, 0.55);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-md);
     position: sticky;
     top: 10px;
@@ -805,7 +860,7 @@ body {
     display: flex;
     align-items: center;
     padding: 7px 14px;
-    background: rgba(0, 0, 0, 0.2);
+    background: transparent;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -822,7 +877,7 @@ body {
 
 /* Titre joueur */
 .sidebar-title-wrap {
-    background-color: var(--color-panel);
+    background-color: transparent;
     padding: 12px 14px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     display: flex;
@@ -880,7 +935,7 @@ body {
 
 /* Stats + bar body */
 .sidebar-panel-body {
-    background-color: var(--color-panel);
+    background-color: transparent;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -898,7 +953,7 @@ body {
 .sidebar-prog-num {
     font-size: 2.4rem;
     font-weight: 800;
-    color: var(--color-green-light);
+    color: var(--color-accent);
     line-height: 1;
     letter-spacing: -1px;
 }
@@ -933,7 +988,7 @@ body {
 .sidebar-prog-pct {
     font-size: 0.9rem;
     font-weight: 700;
-    color: var(--color-green-light);
+    color: var(--color-accent);
     flex-shrink: 0;
     min-width: 34px;
     text-align: right;
@@ -951,7 +1006,7 @@ body {
 
 .sidebar-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--color-green), var(--color-green-light));
+    background: linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 80%, black), var(--color-accent));
     width: 0%;
     transition: width 0.6s ease;
     position: relative;
@@ -972,7 +1027,7 @@ body {
     padding: 7px 14px;
     font-size: 0.6rem;
     font-weight: 700;
-    color: var(--color-text-dim);
+    color: var(--color-text-muted);
     text-transform: uppercase;
     letter-spacing: 2.5px;
     background: transparent;
@@ -1053,7 +1108,7 @@ body {
     font-weight: 700;
     padding-top: 8px;
     padding-bottom: 8px;
-    color: var(--color-text-dim);
+    color: #b4b4b0;
     line-height: 1.2;
     white-space: nowrap;
     overflow: hidden;
@@ -1091,8 +1146,7 @@ body {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1.2px;
-    color: var(--color-text-dim);
-    opacity: 0.6;
+    color: #727270;
 }
 
 .milestone-col-value {
@@ -1103,7 +1157,7 @@ body {
     border-radius: var(--radius-lg);
     font-size: 0.7rem;
     font-weight: 600;
-    color: var(--color-text-muted);
+    color: #9e9e9a;
 }
 
 /* Zone statut à droite (check + bouton) */
@@ -1171,7 +1225,7 @@ body {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.6px;
-    color: var(--color-text-dim);
+    color: #7e7e7a;
     margin-top: 8px;
 }
 
@@ -1738,7 +1792,7 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    height: 360px;
+    height: 260px;
     background-size: cover;
     background-position: center;
     z-index: 0;
@@ -1758,7 +1812,7 @@ body {
 .modal-question-theme .modal-icon-row {
     position: relative;
     z-index: 1;
-    margin-top: 280px;
+    margin-top: 180px;
 }
 
 .modal-question-theme .modal-separator,
@@ -1856,7 +1910,7 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(50px);
     max-width: 700px !important;
-    height: 800px !important;
+    height: 700px !important;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -1907,7 +1961,7 @@ body {
 .modal-info-theme .modal-icon-row {
     position: relative;
     z-index: 1;
-    margin-top: 380px;
+    margin-top: 280px;
 }
 
 .modal-info-theme .modal-separator,
@@ -2644,16 +2698,20 @@ body {
 /* ============================================================
    SPLASH SCREEN
    ============================================================ */
+body.splash-active #grid .cell {
+    opacity: 0 !important;
+}
+
 #splash {
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background: var(--color-bg);
+    background: #0a0a09;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.5s ease;
     pointer-events: all;
+    transition: opacity 0.5s ease;
 }
 
 #splash.splash-fade {
@@ -2662,12 +2720,12 @@ body {
 }
 
 .splash-spinner {
-    width: 44px;
-    height: 44px;
-    border: 3px solid rgba(255, 255, 255, 0.08);
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.12);
     border-top-color: var(--color-accent);
     border-radius: 50%;
-    animation: splashSpin 0.9s linear infinite;
+    animation: splashSpin 0.8s linear infinite;
 }
 
 @keyframes splashSpin {
@@ -2733,7 +2791,7 @@ body {
         padding: 4px 10px;
         border: none;
         border-radius: var(--radius-sm);
-        background: rgba(255, 255, 255, 0.06);
+        background: transparent;
         color: var(--color-text-muted);
         font-family: var(--font-main);
         font-size: 0.72rem;
@@ -2843,9 +2901,9 @@ body {
         padding: 14px;
     }
     .modal-question-theme .modal-icon-row,
-    .modal-info-theme .modal-icon-row { margin-top: 300px; }
-    #question-bg { height: 370px; }
-    #info-bg { height: 370px; }
+    .modal-info-theme .modal-icon-row { margin-top: 200px; }
+    #question-bg { height: 270px; }
+    #info-bg { height: 270px; }
 
 }
 
