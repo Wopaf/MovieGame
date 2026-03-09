@@ -420,10 +420,17 @@ db.ref(".info/connected").on("value", (snap) => {
     }
 });
 
+// ---- Debounce buildGrid pour éviter les reconstructions en rafale ----
+let _buildGridTimer = null;
+function buildGridDebounced() {
+    clearTimeout(_buildGridTimer);
+    _buildGridTimer = setTimeout(buildGrid, 50);
+}
+
 // ---- Écoute temps réel ----
 refUnlocked.on("value", (snapshot) => {
     cachedUnlocked = snapshot.val() || [];
-    buildGrid();
+    buildGridDebounced();
 }, (err) => {
     console.error("Firebase read error (unlocked):", err);
     showToast("Erreur Firebase (lecture) : " + err.code);
@@ -431,7 +438,7 @@ refUnlocked.on("value", (snapshot) => {
 
 refValidated.on("value", (snapshot) => {
     cachedValidated = snapshot.val() || [];
-    buildGrid();
+    buildGridDebounced();
     updateTierlistBadge();
 }, (err) => {
     console.error("Firebase read error (validated):", err);
@@ -535,7 +542,7 @@ refTierlist.on("value", (snap) => {
 
 refRevealedMysteries.on("value", (snapshot) => {
     cachedRevealedMysteries = snapshot.val() || [];
-    buildGrid();
+    buildGridDebounced();
 }, (err) => {
     console.error("Firebase read error (revealedMysteries):", err);
     showToast("Erreur Firebase (lecture) : " + err.code);
@@ -803,8 +810,6 @@ function buildGrid() {
         `;
 
         cell.addEventListener("click", () => {
-            activeCellEl = cell;
-            cell.classList.add("cell-expanded");
             openModal(i);
         });
 
@@ -837,7 +842,6 @@ function buildGrid() {
 
 let currentIndex = null;
 let activeModal = null;
-let activeCellEl = null;
 
 function fillModal(modal, index, forceReveal) {
     const ach = ACHIEVEMENTS[index];
@@ -888,7 +892,6 @@ function closeAnimatedModal(callback) {
         modal.classList.remove("anim-out");
         activeModal = null;
         modal.removeEventListener("animationend", handler);
-        if (activeCellEl) { activeCellEl.classList.remove("cell-expanded"); activeCellEl = null; }
         if (callback) callback();
         // Réafficher le menu si aucun nouveau modal n'a été ouvert par le callback
         if (!activeModal) setMenuVisible(true);
