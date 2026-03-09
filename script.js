@@ -653,7 +653,9 @@ function rewardBadgesHTML(rewards) {
         if (/clé/i.test(r))     cls += " reward-badge-key";
         else if (/secret/i.test(r))  cls += " reward-badge-secret";
         else if (/myst/i.test(r))    cls += " reward-badge-mystery";
-        return `<span class="${cls}">${r}</span>`;
+        const keySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" style="vertical-align:-0.15em;margin-left:4px"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></g></svg>`;
+        const label = r.replace(/🗝️?/g, keySvg);
+        return `<span class="${cls}">${label}</span>`;
     }).join("");
 }
 
@@ -835,7 +837,61 @@ function buildGrid() {
 
     updateCounter();
     buildMilestones();
+    updateNextChallengeBanner();
+    updateGridHeading();
     firstBuildDone = true;
+}
+
+function updateGridHeading() {
+    const heading = document.getElementById("grid-heading");
+    const banner  = document.getElementById("next-challenge");
+    const labels = {
+        "all":         "Tous les films",
+        "validated":   "Films validés",
+        "unvalidated": "Films non validés",
+        "locked":      "Films verrouillés",
+        "secret":      "Films secrets",
+    };
+    heading.textContent = labels[currentFilter] ?? "Tous les films";
+    if (currentFilter !== "all") banner.classList.add("hidden");
+}
+
+function updateNextChallengeBanner() {
+    const banner   = document.getElementById("next-challenge");
+    const validated       = getValidated();
+    const revealedMysteries = getRevealedMysteries();
+
+    // Premier film disponible (non verrouillé, non secret, non validé)
+    const nextIndex = getSortedIndices().find(i => {
+        const ach = ACHIEVEMENTS[i];
+        const isAvailable = (!ach.verrouille && !ach.secret) || revealedMysteries.includes(i);
+        return isAvailable && !validated.includes(i);
+    });
+
+    if (nextIndex === undefined) {
+        banner.classList.add("hidden");
+        return;
+    }
+
+    const ach = ACHIEVEMENTS[nextIndex];
+    banner.classList.remove("hidden");
+
+    const imgSrc = achImg(nextIndex);
+    document.getElementById("nc-poster").src = imgSrc;
+    document.getElementById("nc-poster").alt = ach.title;
+    document.getElementById("nc-bg").style.backgroundImage = `url(${imgSrc})`;
+    document.getElementById("nc-title").textContent = ach.title;
+
+    const ratingEl = document.getElementById("nc-rating");
+    if (ach.rating) {
+        document.getElementById("nc-rating-value").textContent = ach.rating;
+        ratingEl.style.display = "flex";
+    } else {
+        ratingEl.style.display = "none";
+    }
+
+    document.getElementById("nc-poster").onclick       = () => openInfoModal(nextIndex);
+    document.getElementById("nc-challenge-btn").onclick = () => openModal(nextIndex);
 }
 
 // ===== MODALS =====
