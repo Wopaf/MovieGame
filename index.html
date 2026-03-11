@@ -18,27 +18,6 @@
                 <span id="total-count" class="hidden"></span>
                 <span id="progress-pct" class="hidden"></span>
                 <div id="progress-bar" class="hidden"></div>
-                <div class="sort-bar">
-                    <div class="sort-bar-group" id="filter-group">
-                        <div id="filter-indicator" class="filter-indicator"></div>
-                        <svg class="sort-bar-icon" xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 5h20M6 12h12m-9 7h6"/></svg>
-                        <button class="filter-btn" data-filter="validated">Validé</button>
-                        <button class="filter-btn" data-filter="unvalidated">Non validé</button>
-                        <button class="filter-btn" data-filter="locked">Verrouillé</button>
-                        <button class="filter-btn" data-filter="secret">Secret</button>
-                    </div>
-                    <div class="sort-bar-group">
-                        <div class="zoom-controls">
-                            <button class="zoom-btn" id="zoom-out" title="Moins de colonnes">−</button>
-                            <span class="zoom-label" id="zoom-label">4</span>
-                            <button class="zoom-btn" id="zoom-in" title="Plus de colonnes">+</button>
-                            <button class="zoom-toggle-btn" id="zoom-toggle" title="Changer la grille">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="13px" viewBox="0 -960 960 960" width="13px" fill="currentColor"><path d="M120-520v-320h320v320H120Zm0 400v-320h320v320H120Zm400-400v-320h320v320H520Zm0 400v-320h320v320H520ZM200-600h160v-160H200v160Zm400 0h160v-160H600v160Zm0 400h160v-160H600v160Zm-400 0h160v-160H200v160Z"/></svg>
-                                <span id="zoom-toggle-label">2</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div id="next-challenge" class="next-challenge hidden">
@@ -56,9 +35,6 @@
                     </div>
                     <div class="nc-actions">
                         <button class="nc-btn nc-btn-challenge" id="nc-challenge-btn">
-                            <span class="nc-play-circle">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                            </span>
                             Accéder au défi
                         </button>
                     </div>
@@ -177,6 +153,35 @@
         <span id="mystery-points-text"></span>
     </div>
 
+    <div class="filter-bar view-hidden" id="filter-group">
+        <div id="filter-indicator" class="filter-indicator"></div>
+        <div class="filter-menu hidden" id="filter-menu">
+            <div id="filter-page-main">
+                <button class="filter-btn filter-btn-genre-item" data-filter="validated">Validé<span class="filter-genre-count" id="fc-validated"></span></button>
+                <button class="filter-btn filter-btn-genre-item" data-filter="unvalidated">Non validé<span class="filter-genre-count" id="fc-unvalidated"></span></button>
+                <button class="filter-btn filter-btn-genre-item" data-filter="locked">Verrouillé<span class="filter-genre-count" id="fc-locked"></span></button>
+                <button class="filter-btn filter-btn-genre-item" data-filter="secret">Secret<span class="filter-genre-count" id="fc-secret"></span></button>
+                <div class="filter-menu-divider"></div>
+                <button class="filter-btn filter-btn-genre" id="filter-genre-btn">
+                    Genre
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+            </div>
+            <div id="filter-page-genres" class="hidden">
+                <button class="filter-btn filter-btn-back" id="filter-back-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    Retour
+                </button>
+                <div class="filter-menu-divider"></div>
+                <div id="genre-filter-list"></div>
+            </div>
+        </div>
+        <button class="filter-toggle-btn" id="filter-toggle-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 5h20M6 12h12m-9 7h6"/></svg>
+            Filtrer
+        </button>
+    </div>
+
         <div class="menu">
             <div class="menu-btn-group">
             <div id="menu-indicator" class="menu-indicator"></div>
@@ -198,9 +203,11 @@
     <div id="modal-info" class="modal hidden">
         <div class="modal-overlay"></div>
             <div class="modal-content modal-info-theme">
-                <div id="info-bg"></div>
-                <button class="modal-close modal-close-btn">&times;</button>
-                <div class="modal-icon-row"></div>
+                <div class="modal-img-zone">
+                    <div id="info-bg"></div>
+                    <button class="modal-close modal-close-btn">&times;</button>
+                    <div class="modal-icon-row"></div>
+                </div>
                 <div class="modal-body info-body">
                     <h2 class="modal-title" id="info-title"></h2>
                     <div class="info-rating-row hidden" id="info-rating-row">
@@ -256,18 +263,11 @@
     <div id="modal-question" class="modal hidden">
         <div class="modal-overlay"></div>
         <div class="modal-content modal-question-theme">
-            <div class="modal-bg" id="question-bg"></div>
             <button class="modal-close modal-close-btn">&times;</button>
-            <div class="modal-icon-row">
-                <img class="modal-icon" src="" alt="">
-                <div class="modal-info">
-                    <span class="modal-badge badge-question">Défi #<span class="modal-number"></span></span>
-                    <h2 class="modal-title"></h2>
-                </div>
-            </div>
-            <div class="modal-separator sep-gold"></div>
-            <div class="modal-body">
-                <p id="question-text" class="question"></p>
+            <span class="modal-number" style="display:none"></span>
+            <h2 class="modal-title q-title"></h2>
+            <div class="q-body">
+                <p id="question-text" class="question hidden"></p>
                 <img id="question-rebus" class="question-rebus hidden" src="" alt="Rébus">
                 <div class="input-group">
                     <input type="text" id="answer-input" autocomplete="off" placeholder="Votre réponse…">
@@ -275,6 +275,7 @@
                 </div>
                 <p id="answer-error" class="error hidden">Mauvaise réponse, réessayez.</p>
             </div>
+            <img class="modal-icon" style="display:none" src="" alt="">
         </div>
     </div>
 
@@ -325,5 +326,13 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
     <!-- Ton script APRÈS -->
     <script src="script.js" charset="UTF-8"></script>
+
+    <!-- Intro défi -->
+    <div id="challenge-intro" class="challenge-intro hidden">
+        <div class="challenge-intro-content">
+            <span class="challenge-intro-num" id="challenge-intro-num"></span>
+            <h2 class="challenge-intro-title" id="challenge-intro-title"></h2>
+        </div>
+    </div>
 </body>
 </html>
