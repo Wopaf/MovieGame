@@ -11,6 +11,96 @@ const FIREBASE_CONFIG = {
     appId: "1:448540908211:web:894cb1e8c38d59c4a9eec6"
 };
 
+// ============================================================
+//  DEBUG MODE — Activé via easter egg, stocké en localStorage
+// ============================================================
+let DEBUG_MODE = localStorage.getItem('debugMode') === 'true';
+
+let _debugUIReady = false;
+function initDebugUI() {
+    if (_debugUIReady) return;
+    _debugUIReady = true;
+
+    document.getElementById("debug-menu-wrap").style.display = "";
+
+    const debugBtn   = document.getElementById("debug-menu-btn");
+    const debugPanel = document.getElementById("debug-panel");
+
+    function closeDebugPanel() {
+        debugPanel.classList.add("hidden");
+        document.getElementById("debug-reset-confirm").classList.add("hidden");
+        document.getElementById("debug-panel-main").classList.remove("hidden");
+    }
+
+    debugBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        debugPanel.classList.toggle("hidden");
+        if (!debugPanel.classList.contains("hidden")) {
+            document.getElementById("debug-reset-confirm").classList.add("hidden");
+            document.getElementById("debug-panel-main").classList.remove("hidden");
+        }
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!debugPanel.contains(e.target) && e.target !== debugBtn) closeDebugPanel();
+    });
+
+    const cellsToggleBtn = document.getElementById("debug-cells-toggle-btn");
+    let debugCellsActive = false;
+    cellsToggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        debugCellsActive = !debugCellsActive;
+        document.body.classList.toggle("debug-cells-visible", debugCellsActive);
+        cellsToggleBtn.classList.toggle("debug-btn-toggle-on", debugCellsActive);
+        cellsToggleBtn.lastChild.textContent = debugCellsActive ? " Masquer boutons valider" : " Afficher boutons valider";
+    });
+
+    document.getElementById("debug-simulate-btn").addEventListener("click", () => {
+        closeDebugPanel();
+        showSecretRewardReveal();
+    });
+
+    document.getElementById("debug-reset-trigger-btn").addEventListener("click", () => {
+        document.getElementById("debug-panel-main").classList.add("hidden");
+        document.getElementById("debug-reset-confirm").classList.remove("hidden");
+    });
+
+    document.getElementById("debug-reset-cancel-btn").addEventListener("click", () => {
+        document.getElementById("debug-reset-confirm").classList.add("hidden");
+        document.getElementById("debug-panel-main").classList.remove("hidden");
+    });
+
+    document.getElementById("debug-reset-ok-btn").addEventListener("click", () => {
+        closeDebugPanel();
+        Promise.all([
+            refUnlocked.set(null),
+            refValidated.set(null),
+            refTierlist.set(null),
+            refRevealedMysteries.set(null),
+            refClaimedMilestones.set(null)
+        ]).catch(err => {
+            console.error("Firebase reset error:", err);
+            showToast("Erreur reset : " + err.code);
+        });
+    });
+
+    document.getElementById("debug-disable-btn").addEventListener("click", () => {
+        closeDebugPanel();
+        DEBUG_MODE = false;
+        localStorage.removeItem('debugMode');
+        document.getElementById("debug-menu-wrap").style.display = "none";
+        document.body.classList.remove("debug-cells-visible");
+        showToast("Mode debug désactivé");
+    });
+}
+
+function enableDebugMode() {
+    DEBUG_MODE = true;
+    localStorage.setItem('debugMode', 'true');
+    initDebugUI();
+    showToast("Mode debug activé 🐛");
+}
+
 
 // ============================================================
 //  PALIERS / OBJECTIFS — Modifier ici facilement
@@ -126,27 +216,27 @@ function buildGenreTags(genres) {
 }
 
 const ACHIEVEMENTS = [
-    { title: "Le Seigneur des anneaux La communauté de l'anneau", img: "1.png", password: "X8q",
+    { title: "Le Seigneur des anneaux", sousTitre: "La communauté de l'anneau", img: "1.png", password: "X8q",
     question: "Trouve la réponse à ce rébus", rebus: "medias/r1.png", answer: "Le Poney Fringant",
     realisateur: "Peter Jackson", description: "Un jeune Hobbit nommé Frodon hérite d'un anneau magique et doit entreprendre un périlleux voyage pour le détruire.",
     turl: "https://www.youtube.com/watch?v=V75dMMIW2B4", genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0120737/", rating: "8.8", verrouille: false },
 
-    { title: "Le Seigneur des anneaux Les deux tours", img: "2.png", password: "v2M",
+    { title: "Le Seigneur des anneaux", sousTitre: "Les deux tours", img: "2.png", password: "v2M",
     question: "Comment se nomme cette forteresse", rebus: "medias/r2.png", answer: "Gouffre de Helm",
     realisateur: "Peter Jackson", description: "Frodon et Sam continuent vers le Mordor tandis que leurs amis défendent le Rohan contre les armées de Saroumane.",
     turl: "https://www.youtube.com/watch?v=LbfMDwc4azU", genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0167261/", rating: "8.7", verrouille: false },
 
-    { title: "Le Seigneur des anneaux Le retour du roi", img: "3.png", password: "7pL",
+    { title: "Le Seigneur des anneaux", sousTitre: "Le retour du roi", img: "3.png", password: "7pL",
     question: "Qui fut la dernière personne à détenir l'anneau unique ?", rebus: "medias/r3.png", answer: "Gollum",
     realisateur: "Peter Jackson", description: "L'affrontement final pour la Terre du Milieu commence alors que Frodon approche de la Montagne du Destin.",
     turl: "https://www.youtube.com/watch?v=r5X-hFf6Bwo", genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0167260/", rating: "8.9", verrouille: false },
 
-    { title: "Interstelar", img: "4.png", password: "4kZ", rebus: "medias/r4.png",
+    { title: "Interstelar", sousTitre: "Interstellar", img: "4.png", password: "4kZ", rebus: "medias/r4.png",
     question: "Quel est le nom de famille du scientifique à l'origine de la thérorie de la relativité ?", answer: "Einstein",
     realisateur: "Christopher Nolan", description: "Des astronautes s'aventurent à travers un trou de ver pour trouver une nouvelle planète et sauver l'humanité.",
     turl: "https://www.youtube.com/watch?v=0rDczIsHJn4", genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt0816692/", rating: "8.7", verrouille: false },
 
-    { title: "Forest Gump", img: "5.png", password: "1nS", rebus: "medias/r5.png",
+    { title: "Forest Gump", sousTitre: "Forrest Gump", img: "5.png", password: "1nS", rebus: "medias/r5.png",
     question: "Dans quel sport Forest Gump devient-il un professionnel ?", answer: "Ping Pong",
     realisateur: "Robert Zemeckis", description: "Le destin extraordinaire d'un homme simple qui traverse les événements marquants de l'histoire des États-Unis.",
     turl: "https://www.youtube.com/watch?v=bLvqoHBptjg", genres: ["Drame", "Comédie"], imdb: "https://www.imdb.com/title/tt0109830/", rating: "8.8", verrouille: false },
@@ -161,7 +251,7 @@ const ACHIEVEMENTS = [
     realisateur: "Vincent Paronnaud et Marjane Satrapi", description: "Une journaliste tente de réaliser une interview avec Salvador Dalí, qui se transforme en un voyage absurde.",
     turl: "https://www.youtube.com/watch?v=MLILb_JnFx4", genres: ["Animation", "Drame", "Très beau film !"], imdb: "https://www.imdb.com/title/tt0808417/", rating: "7.9", verrouille: false },
 
-    { title: "Tenacious D et le médiator du destin", img: "48.png", password: "2fP", rebus: "medias/r8.png",
+    { title: "Tenacious D", sousTitre: "et le médiator du destin", img: "48.png", password: "2fP", rebus: "medias/r8.png",
     question: "Dans le morceau Master Exploder, complète les paroles suivantes: I do not need, He does not need , a ...", answer: "microphone",
     realisateur: "Liam Lynch", description: "Deux musiciens partent en quête d'un médiator aux pouvoirs surnaturels pour devenir le plus grand groupe de rock.",
     turl: "https://www.youtube.com/watch?v=TXxH7H0KQWI", genres: ["Comédie", "Musical"], imdb: "https://www.imdb.com/title/tt0365830/", rating: "6.7", verrouille: false },
@@ -176,12 +266,12 @@ const ACHIEVEMENTS = [
     realisateur: "Quentin Dupieux", description: "La 'Tabac Force' part en retraite pour renforcer sa cohésion d'équipe avant d'affronter un maléfique empereur.",
     turl: "https://www.youtube.com/watch?v=y2x9WfC9SjM", genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/title/tt15471560/", rating: "6.1", verrouille: false },
 
-    { title: "Oss 117 1", img: "17.png", password: "3fS", rebus: "medias/r11.png",
+    { title: "Oss 117", sousTitre: "Le Caire, nid d'espions", img: "17.png", password: "3fS", rebus: "medias/r11.png",
     question: "Quel est le nom de la princesse égyptienne dont Hubert tombe 'presque' amoureux ?", answer: "Al Tarouk",
     realisateur: "Michel Hazanavicius", description: "Hubert Bonisseur de La Bath enquête au Caire en 1955 dans cette parodie culte des films d'espionnage.",
     turl: "https://www.youtube.com/watch?v=yYvHq-O_i1c", genres: ["Comédie", "Espionnage", "J'aime trop ce film"], imdb: "https://www.imdb.com/title/tt0464913/", rating: "7.4", verrouille: false },
 
-    { title: "Oss 117 2", img: "18.png", password: "9pZ", rebus: "medias/r12.png",
+    { title: "Oss 117", sousTitre: "Rio ne répond plus", img: "18.png", password: "9pZ", rebus: "medias/r12.png",
     question: "Comment s'appelle le nazi que recherche Hubert au Brésil ?", answer: "Von Zimmel",
     realisateur: "Michel Hazanavicius", description: "L'espion français se rend à Rio en 1967 pour mettre la main sur un microfilm compromettant.",
     turl: "https://www.youtube.com/watch?v=5VjI_jA_q7g", genres: ["Comédie", "Espionnage", "Celui ci est tout aussi bien"], imdb: "https://www.imdb.com/title/tt1167660/", rating: "6.8", verrouille: false },
@@ -221,12 +311,12 @@ const ACHIEVEMENTS = [
     realisateur: "Michel Hazanavicius et Dominique Mézerette", description: "Un détournement culte de films de la Warner où les dialogues originaux sont remplacés par des répliques absurdes.",
     turl: "https://www.youtube.com/watch?v=jWkCq0Q38E8", genres: ["Comédie", "Absurde", "Je suis désolé"], imdb: "https://www.imdb.com/title/tt0321715/", rating: "7.9", verrouille: false },
 
-    { title: "Dune 1", img: "42.png", password: "7mS", rebus: "medias/r20.png",
+    { title: "Dune", sousTitre: "Part. 1", img: "42.png", password: "7mS", rebus: "medias/r20.png",
     question: "Comment s'appelle le test de douleur infligé à Paul par la Révérende Mère ?", answer: "Le Gom Jabbar",
     realisateur: "Denis Villeneuve", description: "Un jeune noble doit protéger la ressource la plus précieuse de la galaxie sur la planète désertique Arrakis.",
     turl: "https://www.youtube.com/watch?v=fOvveuMeos0", genres: ["Science-fiction", "Aventure", "Un grand film !"], imdb: "https://www.imdb.com/title/tt1160419/", rating: "8.0", verrouille: false },
 
-    { title: "Dune 2", img: "43.png", password: "3hB", rebus: "medias/r21.png",
+    { title: "Dune", sousTitre: "Part. 2", img: "43.png", password: "3hB", rebus: "medias/r21.png",
     question: "Comment appelle-t-on le liquide bleu mortel que Paul doit boire pour devenir le Kwisatz Haderach ?", answer: "L'Eau de Vie",
     realisateur: "Denis Villeneuve", description: "Paul Atréides s'unit aux Fremen pour mener la révolte contre les conspirateurs qui ont détruit sa famille.",
     turl: "https://www.youtube.com/watch?v=WAY8-M268Xg", genres: ["Science-fiction", "Aventure", "Un grand film !"], imdb: "https://www.imdb.com/title/tt15239678/", rating: "8.5", verrouille: false },
@@ -356,6 +446,12 @@ const ACHIEVEMENTS = [
     realisateur: "Quentin Dupieux", description: "Une journaliste tente de réaliser une interview avec Salvador Dalí, qui se transforme en un voyage absurde.",
     genres: ["Comédie", "Absurde", "Pas mal non ?! C'est français"],
     turl: "https://www.youtube.com/watch?v=MLILb_JnFx4", imdb: "https://www.imdb.com/title/tt23476446/", rating: "6.5", verrouille: true },
+
+    { title: "Stéphane", img: "53.png", password: "4vC", rebus: "medias/r43.png",
+    question: "", answer: "",
+    realisateur: "Timothée Hochet et Lucas Pastor", description: "Un jeune vidéaste au talent douteux fait la rencontre de Stéphane, un ancien cascadeur brut de décoffrage, qui sous couvert d'une grande sympathie se montre de plus en plus étrange. Ils s’engagent alors dans un projet périlleux : réaliser à eux seuls un grand film de guerre.",
+    genres: ["Comédie", "Drame"],
+    turl: "https://www.youtube.com/watch?v=wLzyOnYXdCU", imdb: "https://www.imdb.com/fr/title/tt22180542/", rating: "6.4", verrouille: false },
 
     { title: "Le Seigneur des anneaux l'animé de 1979", img: "26.png", password: "3bK", rebus: "medias/r44.png",
     question: "Quel personnage majeur des livres est totalement absent de cette version de Bakshi ?", answer: "Tom Bombadil",
@@ -582,11 +678,8 @@ const SOUNDS = {
     clic1:      new Audio("sounds/clic1.wav"),
 };
 
-function playSound(name) {
-    const s = SOUNDS[name];
-    if (!s) return;
-    s.currentTime = 0;
-    s.play().catch(() => {});
+function playSound(_name) {
+    // Sons désactivés
 }
 
 
@@ -829,9 +922,8 @@ function buildGrid() {
                 <span class="cell-status-label cell-lock-label">${isSecret ? "Secret" : "Verrouillé"}</span>
                 <span class="cell-lock-icon">${SVG_LOCKED}</span>
             </div>
-            <div class="cell-background">
-                <span class="cell-status-label cell-valid-label">Validé</span>
-                <span class="cell-check-icon">&#10003;</span>
+            <div class="cell-background cell-background-valid">
+                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor"><path d="m438-452-58-57q-11-11-27.5-11T324-508q-11 11-11 28t11 28l86 86q12 12 28 12t28-12l170-170q12-12 11.5-28T636-592q-12-12-28.5-12.5T579-593L438-452ZM326-90l-58-98-110-24q-15-3-24-15.5t-7-27.5l11-113-75-86q-10-11-10-26t10-26l75-86-11-113q-2-15 7-27.5t24-15.5l110-24 58-98q8-13 22-17.5t28 1.5l104 44 104-44q14-6 28-1.5t22 17.5l58 98 110 24q15 3 24 15.5t7 27.5l-11 113 75 86q10 11 10 26t-10 26l-75 86 11 113q2 15-7 27.5T802-212l-110 24-58 98q-8 13-22 17.5T584-74l-104-44-104 44q-14 6-28 1.5T326-90Zm52-72 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Z"/></svg>
             </div>
             </div>
         `;
@@ -840,7 +932,6 @@ function buildGrid() {
             openModal(i);
         });
 
-        // —— DEBUG : bouton test verrouiller / valider (à retirer avant publication) ——
         const dbgBtn = document.createElement("button");
         dbgBtn.className = "debug-toggle-btn " + (isValidated ? "dbg-lock" : "dbg-validate");
         dbgBtn.textContent = isValidated ? "Vérrouiller" : "Valider";
@@ -855,7 +946,6 @@ function buildGrid() {
             }
         });
         cell.appendChild(dbgBtn);
-        // —— FIN DEBUG ——
 
         grid.appendChild(cell);
     });
@@ -1015,9 +1105,17 @@ function openInfoModal(index, mysteryReveal = false) {
     const imgSrc = isLocked ? "medias/Myst.png" : achImg(index);
     document.getElementById("info-bg").style.backgroundImage = `url(${imgSrc})`;
     document.getElementById("modal-info").style.setProperty("--modal-poster", `url(${imgSrc})`);
+    document.getElementById("info-validated-badge").classList.toggle("hidden", !isValidated);
 
-    // Titre
+    // Titre + sous-titre
     document.getElementById("info-title").textContent = isMystery ? "Film verrouillé" : isSecret ? "Film secret" : ach.title;
+    const sousTitreEl = document.getElementById("info-sous-titre");
+    if (!isLocked && ach.sousTitre) {
+        sousTitreEl.textContent = ach.sousTitre;
+        sousTitreEl.classList.remove("hidden");
+    } else {
+        sousTitreEl.classList.add("hidden");
+    }
 
     // Réalisateur / description / bande annonce / note
     const dirRow    = document.getElementById("info-director-row");
@@ -1055,7 +1153,16 @@ function openInfoModal(index, mysteryReveal = false) {
         trailerEl.style.display   = "flex";
         posterBtn.style.display   = "flex";
         document.getElementById("info-director").textContent = ach.realisateur;
-        descEl.textContent        = ach.description;
+        const MAX_DESC = 120;
+        const descMoreBtn = document.getElementById("info-desc-more");
+        if (ach.description && ach.description.length > MAX_DESC) {
+            descEl.textContent = ach.description.slice(0, MAX_DESC).trimEnd() + "…";
+            descMoreBtn.classList.remove("hidden");
+            descMoreBtn.onclick = () => openDescModal(ach.title, ach.description);
+        } else {
+            descEl.textContent = ach.description;
+            descMoreBtn.classList.add("hidden");
+        }
         trailerEl.href            = ach.turl;
         posterBtn.onclick         = () => openPosterModal(achImg(currentIndex));
         if (ach.imdb) {
@@ -1087,6 +1194,21 @@ function openInfoModal(index, mysteryReveal = false) {
     } else {
         cta.classList.add("cta-question");
         cta.innerHTML = ` Accéder au défi`;
+    }
+
+    // Easter egg : 10 clics sur l'affiche de Tenacious D active le debug mode
+    const infoBg = document.getElementById("info-bg");
+    if (!DEBUG_MODE && ach.title && ach.title.includes("Tenacious")) {
+        let eggClicks = 0;
+        infoBg.onclick = () => {
+            eggClicks++;
+            if (eggClicks >= 10) {
+                infoBg.onclick = null;
+                enableDebugMode();
+            }
+        };
+    } else {
+        infoBg.onclick = null;
     }
 
     const modal = document.getElementById("modal-info");
@@ -1496,31 +1618,7 @@ document.querySelectorAll(".modal-overlay").forEach(o => o.addEventListener("cli
 
 document.getElementById("info-cta").addEventListener("click", proceedFromInfo);
 
-document.getElementById("test-secret-reward-btn").addEventListener("click", () => {
-    showSecretRewardReveal();
-});
-
-document.getElementById("sidebar-reset").addEventListener("click", () => {
-    document.getElementById("sidebar-reset-confirm").classList.remove("hidden");
-});
-
-document.getElementById("sidebar-reset-cancel").addEventListener("click", () => {
-    document.getElementById("sidebar-reset-confirm").classList.add("hidden");
-});
-
-document.getElementById("sidebar-reset-ok").addEventListener("click", () => {
-    document.getElementById("sidebar-reset-confirm").classList.add("hidden");
-    Promise.all([
-        refUnlocked.set(null),
-        refValidated.set(null),
-        refTierlist.set(null),
-        refRevealedMysteries.set(null),
-        refClaimedMilestones.set(null)
-    ]).catch(err => {
-        console.error("Firebase reset error:", err);
-        showToast("Erreur reset : " + err.code);
-    });
-});
+if (DEBUG_MODE) initDebugUI();
 
 // ============================================================
 //  NAVIGATION — barre de menu bas
@@ -1752,6 +1850,22 @@ function triggerGridAnimation() {
 // ============================================================
 //  MODAL AFFICHE PLEIN ÉCRAN
 // ============================================================
+function openDescModal(title, description) {
+    document.getElementById("modal-desc-title").textContent = title;
+    document.getElementById("modal-desc-body").textContent = description;
+    document.getElementById("modal-desc").classList.remove("hidden");
+    requestAnimationFrame(() => document.getElementById("modal-desc").classList.add("visible"));
+}
+
+function closeDescModal() {
+    const modal = document.getElementById("modal-desc");
+    modal.classList.remove("visible");
+    modal.addEventListener("transitionend", () => modal.classList.add("hidden"), { once: true });
+}
+
+document.getElementById("modal-desc-close").addEventListener("click", closeDescModal);
+document.getElementById("modal-desc-overlay").addEventListener("click", closeDescModal);
+
 function openPosterModal(src) {
     const modal = document.getElementById("modal-poster");
     const img   = document.getElementById("modal-poster-img");

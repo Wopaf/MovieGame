@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="splash-active">
-
-    <div class="layout">
+<div class="cadre"></div>
+    <div class="layout"></div>
         <main class="main">
            <div class="sticky-controls">
                 <span id="unlocked-count" class="hidden"></span>
@@ -72,27 +72,9 @@
                 </div>
                 <div class="sidebar-milestones-label">Succès</div>
                 <div id="milestones" class="milestones"></div>
-                <div class="sidebar-reset-wrap">
-                    <button id="test-secret-reward-btn" class="sidebar-test-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Zm-20 200v-280l200 140-200 140Z"/></svg>
-                        Simuler récompense spéciale
-                    </button>
-                    <button id="sidebar-reset" class="sidebar-reset-btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
-                        Réinitialiser les sauvegardes
-                    </button>
-                    <div class="sidebar-reset-confirm hidden" id="sidebar-reset-confirm">
-                        <span class="sidebar-reset-confirm-label">Confirmer la réinitialisation ?</span>
-                        <div class="sidebar-reset-confirm-btns">
-                            <button id="sidebar-reset-cancel" class="sidebar-confirm-btn sidebar-confirm-cancel">Annuler</button>
-                            <button id="sidebar-reset-ok" class="sidebar-confirm-btn sidebar-confirm-ok">Réinitialiser</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </aside>
     </div>
-
     <!-- Écran succès défi -->
     <div id="success-screen" class="success-screen hidden">
         <div class="success-burst"></div>
@@ -150,7 +132,7 @@
     </div>
 
     <div class="mystery-points-indicator hidden" id="mystery-points-indicator">
-        <span id="mystery-points-text"></span>
+            <span id="mystery-points-text"></span>
     </div>
 
     <div class="filter-bar view-hidden" id="filter-group">
@@ -185,6 +167,38 @@
         <div class="menu">
             <div class="menu-btn-group">
             <div id="menu-indicator" class="menu-indicator"></div>
+            <div id="debug-menu-wrap" class="debug-menu-wrap" style="display:none">
+                <div id="debug-panel" class="debug-panel hidden">
+                    <div id="debug-panel-main">
+                        <button id="debug-cells-toggle-btn" class="debug-btn debug-btn-toggle">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
+                            Afficher boutons valider
+                        </button>
+                        <button id="debug-simulate-btn" class="debug-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Zm-20 200v-280l200 140-200 140Z"/></svg>
+                            Simuler récompense spéciale
+                        </button>
+                        <button id="debug-reset-trigger-btn" class="debug-btn debug-btn-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+                            Réinitialiser les sauvegardes
+                        </button>
+                        <button id="debug-disable-btn" class="debug-btn debug-btn-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                            Désactiver le debug
+                        </button>
+                    </div>
+                    <div id="debug-reset-confirm" class="debug-reset-confirm hidden">
+                        <span class="debug-reset-confirm-label">Confirmer la réinitialisation ?</span>
+                        <div class="debug-reset-confirm-btns">
+                            <button id="debug-reset-cancel-btn" class="debug-confirm-btn debug-confirm-cancel">Annuler</button>
+                            <button id="debug-reset-ok-btn" class="debug-confirm-btn debug-confirm-ok">Réinitialiser</button>
+                        </div>
+                    </div>
+                </div>
+                <button id="debug-menu-btn" class="menu-btn" title="Debug">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
+                </button>
+            </div>
             <button class="menu-btn" data-view="tierlist" title="TierList">
                 <div class="menu-btn-badge hidden" id="tierlist-badge"></div>
                 <svg xmlns="http://www.w3.org/2000/svg" width="28px" height="28px" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><path d="M14 4h7m-7 5h7m-7 6h7m-7 5h7"/></g></svg>
@@ -207,13 +221,22 @@
                     <div id="info-bg"></div>
                     <button class="modal-close modal-close-btn">&times;</button>
                     <div class="modal-icon-row"></div>
+                    <div id="info-validated-badge" class="info-validated-badge hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="m438-452-58-57q-11-11-27.5-11T324-508q-11 11-11 28t11 28l86 86q12 12 28 12t28-12l170-170q12-12 11.5-28T636-592q-12-12-28.5-12.5T579-593L438-452ZM326-90l-58-98-110-24q-15-3-24-15.5t-7-27.5l11-113-75-86q-10-11-10-26t10-26l75-86-11-113q-2-15 7-27.5t24-15.5l110-24 58-98q8-13 22-17.5t28 1.5l104 44 104-44q14-6 28-1.5t22 17.5l58 98 110 24q15 3 24 15.5t7 27.5l-11 113 75 86q10 11 10 26t-10 26l-75 86 11 113q2 15-7 27.5T802-212l-110 24-58 98q-8 13-22 17.5T584-74l-104-44-104 44q-14 6-28 1.5T326-90Zm52-72 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Z"/></svg>
+                        Défi Validé
+                    </div>
                 </div>
                 <div class="modal-body info-body">
-                    <h2 class="modal-title" id="info-title"></h2>
-                    <div class="info-rating-row hidden" id="info-rating-row">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 0 24 24" width="16px" fill="#F5C518"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                        <span class="info-rating-value" id="info-rating-value">7.5</span>
-                        <span class="info-rating-label">/10 — IMDB</span>
+                    <div class="info-title-row">
+                        <div class="info-title-block">
+                            <h2 class="modal-title" id="info-title"></h2>
+                            <p class="info-sous-titre hidden" id="info-sous-titre"></p>
+                        </div>
+                        <div class="info-rating-row hidden" id="info-rating-row">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 0 24 24" width="16px" fill="#F5C518"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <span class="info-rating-value" id="info-rating-value">7.5</span>
+                            <span class="info-rating-label">/10</span>
+                        </div>
                     </div>
                     <div class="info-genres-row hidden" id="info-genres-row"></div>
                     <div class="modal-separator"></div>
@@ -224,6 +247,7 @@
                     <div class="info-section">
                         <span class="info-section-label">Description</span>
                         <p class="info-desc" id="info-desc"></p>
+                        <button class="info-desc-more hidden" id="info-desc-more">Voir plus</button>
                     </div>
 
                     <div class="info-actions-row">
@@ -251,6 +275,18 @@
                     </div>
                 </div>
             </div>
+    </div>
+
+    <!-- Modal Description complète -->
+    <div id="modal-desc" class="modal-desc hidden">
+        <div class="modal-desc-overlay" id="modal-desc-overlay"></div>
+        <div class="modal-desc-sheet">
+            <div class="modal-desc-header">
+                <span class="modal-desc-title" id="modal-desc-title"></span>
+                <button class="modal-desc-close" id="modal-desc-close">&times;</button>
+            </div>
+            <p class="modal-desc-body" id="modal-desc-body"></p>
+        </div>
     </div>
 
     <!-- Modal Affiche plein écran -->
