@@ -77,11 +77,24 @@ function initDebugUI() {
             refValidated.set(null),
             refTierlist.set(null),
             refRevealedMysteries.set(null),
-            refClaimedMilestones.set(null)
+            refClaimedMilestones.set(null),
+            refJokers.set(0)
         ]).catch(err => {
             console.error("Firebase reset error:", err);
             showToast("Erreur reset : " + err.code);
         });
+    });
+
+    document.getElementById("debug-tutorial-reset-btn").addEventListener("click", () => {
+        refTutorialDone.set(null);
+        showToast("Didacticiel réinitialisé !", "error", 1000);
+    });
+
+    document.getElementById("debug-perso-reset-btn").addEventListener("click", () => {
+        localStorage.removeItem("persoCaught");
+        localStorage.removeItem("persoDay");
+        localStorage.removeItem("persoCount");
+        showToast("Petit bonhomme réinitialisé !", "error", 1000);
     });
 
     document.getElementById("debug-disable-btn").addEventListener("click", () => {
@@ -90,7 +103,7 @@ function initDebugUI() {
         localStorage.removeItem('debugMode');
         document.getElementById("debug-menu-wrap").style.display = "none";
         document.body.classList.remove("debug-cells-visible");
-        showToast("Mode debug désactivé");
+        showToast("Mode debug désactivé", "error", 1000);
     });
 }
 
@@ -98,7 +111,7 @@ function enableDebugMode() {
     DEBUG_MODE = true;
     localStorage.setItem('debugMode', 'true');
     initDebugUI();
-    showToast("Mode debug activé 🐛");
+    showToast("Mode debug activé 🐛", "error", 1000);
 }
 
 
@@ -106,41 +119,18 @@ function enableDebugMode() {
 //  PALIERS / OBJECTIFS — Modifier ici facilement
 // ============================================================
 const MILESTONES = [
-    { label: "Néophyte", objectif: "Valider 1 film", 
-    count: 1,  keys: 1, rewards: ["1 🗝️"]},
-
-    { label: "Initié", objectif: "Valider 5 films",
-    count: 5,  keys: 1, rewards: ["2 🗝️"]}, 
-
-    {  label: "Accro aux popcorns", objectif: "Valider 10 films",
-    count: 10, keys: 2, rewards: ["2 🗝️"]},
-
-    {  label: "Amateur éclairé", objectif: "Valider 15 films",
-    count: 15, keys: 2, rewards: ["2 🗝️", "Film secret"], secretFilm: 38},
-
-    {  label: "Cinéphile du dimanche", objectif: "Valider 20 films",
-    count: 20, keys: 3, rewards: ["3 🗝️", "Film secret"], secretFilm: 39},
-
-    {  label: "Passionné", objectif: "Valider 25 films",
-    count: 25, keys: 3, rewards: ["3 🗝️"]},
-
-    {  label: "Critique en herbe", objectif: "Valider 30 films",
-    count: 30, keys: 3, rewards: ["3 🗝️"]},
-
-    {  label: "Fin Connaisseur", objectif: "Valider 35 films",
-    count: 35, keys: 3, rewards: ["3 🗝️"]},
-
-    {  label: "Cinéphile", objectif: "Valider 40 films",
-    count: 40, keys: 3, rewards: ["3 🗝️"]},
-
-    {  label: "Déglingo", objectif: "Valider 45 films",
-    count: 45, keys: 3, rewards: ["3 🗝️"]},
-
-    {  label: "Collectionneur", objectif: "Valider 50 films",
-    count: 50, keys: 0, rewards: ["Film secret"], secretFilm: 51},
-
-    {  label: "???", objectif: "Valider 52 films",
-    count: 52, keys: 0, rewards: ["?"]},
+    { label: "Néophyte",             objectif: "Valider 1 film",   count: 1,  keys: 1 },
+    { label: "Initié",               objectif: "Valider 3 films",  count: 3,  jokers: 1, keys: 1 },
+    { label: "Accro aux popcorns",   objectif: "Valider 10 films", count: 10, keys: 2 },
+    { label: "Amateur éclairé",      objectif: "Valider 15 films", count: 15, keys: 2 },
+    { label: "Cinéphile du dimanche",objectif: "Valider 20 films", count: 20, keys: 3,  jokers: 1 },
+    { label: "Passionné",            objectif: "Valider 25 films", count: 25, keys: 3 },
+    { label: "Critique en herbe",    objectif: "Valider 30 films", count: 30, keys: 3 },
+    { label: "Fin Connaisseur",      objectif: "Valider 35 films", count: 35, keys: 3 },
+    { label: "Cinéphile",            objectif: "Valider 40 films", count: 40, keys: 3 },
+    { label: "Déglingo",             objectif: "Valider 45 films", count: 45, keys: 3, secretFilm: 38},
+    { label: "Collectionneur",       objectif: "Valider 50 films", count: 50, secretFilm: 51 },
+    { label: "???",                  objectif: "Valider 52 films", count: 52, rewards: ["?"] },
 ];
 
 // ============================================================
@@ -231,12 +221,12 @@ const ACHIEVEMENTS = [
     realisateur: "Peter Jackson", description: "L'affrontement final pour la Terre du Milieu commence alors que Frodon approche de la Montagne du Destin.",
     turl: "https://www.youtube.com/watch?v=r5X-hFf6Bwo", genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0167260/", rating: "8.9", verrouille: false },
 
-    { title: "Interstelar", sousTitre: "Interstellar", img: "4.png", password: "4kZ", rebus: "medias/r4.png",
+    { title: "Interstelar", img: "4.png", password: "4kZ", rebus: "medias/r4.png",
     question: "Quel est le nom de famille du scientifique à l'origine de la thérorie de la relativité ?", answer: "Einstein",
     realisateur: "Christopher Nolan", description: "Des astronautes s'aventurent à travers un trou de ver pour trouver une nouvelle planète et sauver l'humanité.",
     turl: "https://www.youtube.com/watch?v=0rDczIsHJn4", genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt0816692/", rating: "8.7", verrouille: false },
 
-    { title: "Forest Gump", sousTitre: "Forrest Gump", img: "5.png", password: "1nS", rebus: "medias/r5.png",
+    { title: "Forest Gump", img: "5.png", password: "1nS", rebus: "medias/r5.png",
     question: "Dans quel sport Forest Gump devient-il un professionnel ?", answer: "Ping Pong",
     realisateur: "Robert Zemeckis", description: "Le destin extraordinaire d'un homme simple qui traverse les événements marquants de l'histoire des États-Unis.",
     turl: "https://www.youtube.com/watch?v=bLvqoHBptjg", genres: ["Drame", "Comédie"], imdb: "https://www.imdb.com/title/tt0109830/", rating: "8.8", verrouille: false },
@@ -479,6 +469,8 @@ const refRevealedMysteries = db.ref("game/revealedMysteries");
 const refClaimedMilestones = db.ref("game/claimedMilestones");
 const refGameEnded         = db.ref("game/ended");
 const refHeartClicks       = db.ref("game/heartClicks");
+const refJokers            = db.ref("game/jokers");
+const refTutorialDone      = db.ref("game/tutorialDone");
 
 // État local (cache synchronisé avec Firebase)
 let cachedUnlocked          = [];
@@ -488,7 +480,7 @@ let cachedRevealedMysteries = [];
 let cachedClaimedMilestones = 0;
 
 // ---- Notifications toast ----
-function showToast(msg, type = "error") {
+function showToast(msg, type = "error", duration = 5000) {
     const container = document.getElementById("toast-container");
     if (!container) return;
     const toast = document.createElement("div");
@@ -498,7 +490,7 @@ function showToast(msg, type = "error") {
     setTimeout(() => {
         toast.classList.add("toast-fadeout");
         setTimeout(() => toast.remove(), 400);
-    }, 5000);
+    }, duration);
 }
 
 // ---- Indicateur de connexion Firebase ----
@@ -597,14 +589,18 @@ function updateMysteryPointsIndicator() {
     const points = getAvailablePoints();
     const el = document.getElementById("mystery-points-indicator");
     if (!el) return;
-    if (points <= 0) {
-        el.classList.add("hidden");
-    } else {
-        el.classList.remove("hidden");
-        el.style.display = (currentView === 'tierlist' || currentView === 'rewards') ? 'none' : '';
-        const KEY_SVG = `<svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70q66 0 121 33t87 87h352q33 0 56.5 23.5T920-520v80q0 33-23.5 56.5T840-360v40q0 33-23.5 56.5T760-240h-80q-33 0-56.5-23.5T600-320v-40H488q-32 54-87 87t-121 33Zm0-80q66 0 106-40.5t48-79.5h246v120h80v-120h80v-80H434q-8-39-48-79.5T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47Zm0-80q33 0 56.5-23.5T360-480q0-33-23.5-56.5T280-560q-33 0-56.5 23.5T200-480q0 33 23.5 56.5T280-400Zm0-80Z"/></svg>`;
-        document.getElementById("mystery-points-text").innerHTML = `<span class="mpi-count">${points} ${KEY_SVG}</span><span class="mpi-label">disponible${points > 1 ? "s" : ""}</span>`;
-    }
+    el.classList.remove("hidden");
+    el.style.display = (currentView === 'tierlist' || currentView === 'rewards') ? 'none' : '';
+    const KEY_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" style="vertical-align:-0.15em;margin-left:4px"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></g></svg>`;
+    document.getElementById("mystery-points-text").innerHTML = `<span class="mpi-count">${points} ${KEY_SVG}</span>`;
+}
+
+function updateJokersIndicator(count) {
+    const el = document.getElementById("jokers-indicator");
+    if (!el) return;
+    el.classList.remove("hidden");
+    const JOKER_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.15em"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 5v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2" /><path d="M8 6h.01" /><path d="M16 18h.01" /><path d="M11.75 14.112l-1.63 .853a.294 .294 0 0 1 -.425 -.307l.31 -1.808l-1.317 -1.28a.292 .292 0 0 1 .163 -.499l1.82 -.264l.815 -1.644a.294 .294 0 0 1 .527 0l.814 1.644l1.82 .264a.292 .292 0 0 1 .164 .499l-1.318 1.28l.31 1.807a.292 .292 0 0 1 -.425 .308l-1.628 -.853" /></svg>`;
+    document.getElementById("jokers-text").innerHTML = `${count} ${JOKER_SVG}`;
 }
 
 function updateRewardsBadge(playNotif = false) {
@@ -651,6 +647,18 @@ refClaimedMilestones.on("value", (snapshot) => {
     updateMysteryPointsIndicator();
 }, (err) => {
     console.error("Firebase read error (claimedMilestones):", err);
+});
+
+refJokers.once("value").then(snapshot => {
+    if (snapshot.val() === null) refJokers.set(0);
+});
+
+refJokers.on("value", (snapshot) => {
+    cachedJokers = snapshot.val() || 0;
+    updateJokersIndicator(cachedJokers);
+    updateJokerUseBar();
+}, (err) => {
+    console.error("Firebase read error (jokers):", err);
 });
 
 function saveTierlist() {
@@ -747,16 +755,15 @@ function updateCounter() {
 }
 
 
-function rewardBadgesHTML(rewards) {
-    return (rewards || []).map(r => {
-        let cls = "reward-badge";
-        if (/clé/i.test(r))     cls += " reward-badge-key";
-        else if (/secret/i.test(r))  cls += " reward-badge-secret";
-        else if (/myst/i.test(r))    cls += " reward-badge-mystery";
-        const keySvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" style="vertical-align:-0.15em;margin-left:4px"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></g></svg>`;
-        const label = r.replace(/🗝️?/g, keySvg);
-        return `<span class="${cls}">${label}</span>`;
-    }).join("");
+function rewardBadgesHTML(m) {
+    const keySvg   = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" style="vertical-align:-0.15em;margin-left:4px"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></g></svg>`;
+    const jokerSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.15em;margin-left:4px"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 5v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2" /><path d="M8 6h.01" /><path d="M16 18h.01" /><path d="M11.75 14.112l-1.63 .853a.294 .294 0 0 1 -.425 -.307l.31 -1.808l-1.317 -1.28a.292 .292 0 0 1 .163 -.499l1.82 -.264l.815 -1.644a.294 .294 0 0 1 .527 0l.814 1.644l1.82 .264a.292 .292 0 0 1 .164 .499l-1.318 1.28l.31 1.807a.292 .292 0 0 1 -.425 .308l-1.628 -.853" /></svg>`;
+    const badges = [];
+    if (m.keys)               badges.push(`<span class="reward-badge reward-badge-key">${m.keys} ${keySvg}</span>`);
+    if (m.jokers)             badges.push(`<span class="reward-badge reward-badge-joker">${m.jokers} ${jokerSvg}</span>`);
+    if (m.secretFilm !== undefined) badges.push(`<span class="reward-badge reward-badge-secret">Film secret</span>`);
+    if (m.rewards && m.rewards.includes("?")) badges.push(`<span class="reward-badge">?</span>`);
+    return badges.join("");
 }
 
 function updatePlayerTitle() {
@@ -825,7 +832,7 @@ function buildMilestones() {
                             </div>` : ""}
                             <div class="milestone-col2">
                                 <span class="milestone-col-label">Récompense</span>
-                                <div class="milestone-reward-box">${rewardBadgesHTML(m.rewards)}</div>
+                                <div class="milestone-reward-box">${rewardBadgesHTML(m)}</div>
                             </div>
                         </div>
                     </div>
@@ -852,10 +859,20 @@ function buildMilestones() {
                     }
                 }
 
+                if (m.jokers) {
+                    refJokers.transaction(val => (val || 0) + m.jokers).catch(err => {
+                        console.error("Firebase joker error:", err);
+                    });
+                }
+
                 const hasSpecial = m.rewards && m.rewards.includes("?");
+                // Chaîne d'animations : clés → joker → film secret → spécial
+                const onAfterJoker = hasSecret ? () => showPosterReveal(m.secretFilm) : hasSpecial ? () => showSecretRewardReveal() : null;
+                const onAfterKeys  = m.jokers ? () => setTimeout(() => showJokerReveal(onAfterJoker, m.jokers), 300) : onAfterJoker;
                 if (m.keys) {
-                    const onNext = hasSecret ? () => showPosterReveal(m.secretFilm) : hasSpecial ? () => showSecretRewardReveal() : null;
-                    setTimeout(() => showKeyReveal(m.keys, onNext), 300);
+                    setTimeout(() => showKeyReveal(m.keys, onAfterKeys), 300);
+                } else if (m.jokers) {
+                    setTimeout(() => showJokerReveal(onAfterJoker, m.jokers), 300);
                 } else if (hasSecret) {
                     setTimeout(() => showPosterReveal(m.secretFilm), 500);
                 } else if (hasSpecial) {
@@ -901,6 +918,7 @@ function buildGrid() {
         const isSecret  = ach.secret     && !isValidated && !revealedMysteries.includes(i);
         const cell = document.createElement("div");
         cell.className = "cell";
+        cell.dataset.index = i;
         if (isValidated) cell.classList.add("validated");
         if (isMystery)   cell.classList.add("mystery");
         if (isSecret)    cell.classList.add("secret");
@@ -913,7 +931,6 @@ function buildGrid() {
             ${isSecret  ? `<div class="cell-lock-overlay cell-secret-overlay">?</div>` : ""}
             <div class="cell-content">
                 <div class="cell-info">
-                    <span class="cell-title">${displayTitle}</span>
                     <span class="cell-number-tag">${i + 1}</span>
                 </div>
             </div>
@@ -1010,7 +1027,7 @@ function updateNextChallengeBanner() {
     }
 
     document.getElementById("nc-poster").onclick       = () => openInfoModal(nextIndex);
-    document.getElementById("nc-challenge-btn").onclick = () => openModal(nextIndex);
+    document.getElementById("nc-challenge-btn").onclick = () => openChallengeDirectly(nextIndex);
 }
 
 // ===== MODALS =====
@@ -1044,6 +1061,7 @@ function openAnimatedModal(modalId, index, forceReveal) {
     modal.classList.remove("hidden", "anim-out");
     modal.classList.add("anim-in");
     activeModal = modal;
+    updateJokerUseBar();
 }
 
 
@@ -1067,6 +1085,7 @@ function closeAnimatedModal(callback) {
         modal.classList.remove("anim-out");
         activeModal = null;
         modal.removeEventListener("animationend", handler);
+        document.getElementById("joker-use-bar").classList.add("hidden");
         if (callback) callback();
         // Réafficher le menu si aucun nouveau modal n'a été ouvert par le callback
         if (!activeModal) setMenuVisible(true);
@@ -1140,6 +1159,7 @@ function openInfoModal(index, mysteryReveal = false) {
         posterBtn.style.display   = "none";
         descEl.style.display      = "block";
         descEl.textContent        = "Ce film se débloque en réclamant un palier de récompenses spécifique.";
+        document.getElementById("info-desc-more").classList.add("hidden");
     } else if (isMystery) {
         dirRow.style.display      = "none";
         trailerEl.style.display   = "none";
@@ -1147,6 +1167,7 @@ function openInfoModal(index, mysteryReveal = false) {
         posterBtn.style.display   = "none";
         descEl.style.display      = "block";
         descEl.textContent        = "Récupère les récompenses des prochains paliers pour débloquer ce film.";
+        document.getElementById("info-desc-more").classList.add("hidden");
     } else {
         dirRow.style.display      = "flex";
         descEl.style.display      = "block";
@@ -1202,7 +1223,7 @@ function openInfoModal(index, mysteryReveal = false) {
         let eggClicks = 0;
         infoBg.onclick = () => {
             eggClicks++;
-            if (eggClicks >= 10) {
+            if (eggClicks >= 5) {
                 infoBg.onclick = null;
                 enableDebugMode();
             }
@@ -1387,8 +1408,30 @@ let keyRevealCallback = null;
 function showKeyReveal(keys, onNext) {
     keyRevealCallback = onNext || null;
     const screen = document.getElementById("key-reveal-screen");
+    const badge  = screen.querySelector(".key-reveal-badge");
+    const icon   = screen.querySelector(".key-reveal-icon");
     const count  = document.getElementById("key-reveal-count");
+
+    badge.textContent = "Récompense débloquée !";
+    icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></g></svg>`;
     count.textContent = `+${keys} Clé${keys > 1 ? "s" : ""}`;
+    setMenuVisible(false);
+    screen.classList.remove("hidden");
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => screen.classList.add("active"));
+    });
+}
+
+function showJokerReveal(onNext, jokers = 1) {
+    keyRevealCallback = onNext || null;
+    const screen = document.getElementById("key-reveal-screen");
+    const badge  = screen.querySelector(".key-reveal-badge");
+    const icon   = screen.querySelector(".key-reveal-icon");
+    const count  = document.getElementById("key-reveal-count");
+
+    badge.textContent = "Joker obtenu !";
+    icon.innerHTML    = `<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 5v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2" /><path d="M8 6h.01" /><path d="M16 18h.01" /><path d="M11.75 14.112l-1.63 .853a.294 .294 0 0 1 -.425 -.307l.31 -1.808l-1.317 -1.28a.292 .292 0 0 1 .163 -.499l1.82 -.264l.815 -1.644a.294 .294 0 0 1 .527 0l.814 1.644l1.82 .264a.292 .292 0 0 1 .164 .499l-1.318 1.28l.31 1.807a.292 .292 0 0 1 -.425 .308l-1.628 -.853" /></svg>`;
+    count.textContent = `+${jokers} Joker${jokers > 1 ? "s" : ""}`;
     setMenuVisible(false);
     screen.classList.remove("hidden");
     requestAnimationFrame(() => {
@@ -1419,10 +1462,18 @@ document.getElementById("key-reveal-next").addEventListener("click", () => {
     setTimeout(cleanup, 600);
 });
 
-function showChallengeIntro(num, title, callback) {
+function showChallengeIntro(index, callback) {
+    const ach   = ACHIEVEMENTS[index];
     const intro = document.getElementById("challenge-intro");
-    document.getElementById("challenge-intro-num").textContent = `Défi #${num}`;
-    document.getElementById("challenge-intro-title").textContent = title;
+    document.getElementById("challenge-intro-num").textContent = `Défi #${index + 1}`;
+    document.getElementById("challenge-intro-title").textContent = ach.title;
+    const subEl = document.getElementById("challenge-intro-subtitle");
+    if (ach.sousTitre) {
+        subEl.textContent = ach.sousTitre;
+        subEl.classList.remove("hidden");
+    } else {
+        subEl.classList.add("hidden");
+    }
 
     intro.classList.remove("hidden", "intro-out");
 
@@ -1492,6 +1543,40 @@ function revealInput(inputGroup) {
     }, { once: true });
 }
 
+function openChallengeDirectly(index) {
+    currentIndex = index;
+    setMenuVisible(false);
+    document.getElementById("answer-input").value = "";
+    document.getElementById("answer-error").classList.add("hidden");
+
+    const ach = ACHIEVEMENTS[index];
+    showChallengeIntro(index, () => {
+        const questionEl = document.getElementById("question-text");
+        const rebusEl    = document.getElementById("question-rebus");
+        if (ach.rebus) {
+            rebusEl.src = ach.rebus;
+            rebusEl.classList.remove("hidden");
+        } else {
+            rebusEl.classList.add("hidden");
+        }
+        if (ach.question) {
+            questionEl.dataset.qtext = ach.question;
+            questionEl.textContent = "";
+            questionEl.classList.remove("hidden");
+        } else {
+            questionEl.dataset.qtext = "";
+            questionEl.classList.add("hidden");
+        }
+        const qSubEl = document.getElementById("q-subtitle");
+        if (ach.sousTitre) { qSubEl.textContent = ach.sousTitre; qSubEl.classList.remove("hidden"); }
+        else { qSubEl.classList.add("hidden"); }
+        const qImgSrc = achImg(index);
+        document.getElementById("modal-question").style.setProperty("--modal-poster", `url(${qImgSrc})`);
+        openAnimatedModal("modal-question", index, true);
+        startQuestionSequence(ach);
+    });
+}
+
 function proceedFromInfo() {
     const index     = currentIndex;
     const validated = getValidated();
@@ -1522,7 +1607,7 @@ function proceedFromInfo() {
     } else {
         closeAnimatedModal(() => {
             const ach = ACHIEVEMENTS[index];
-            showChallengeIntro(index + 1, ach.title, () => {
+            showChallengeIntro(index, () => {
                 const questionEl = document.getElementById("question-text");
                 const rebusEl    = document.getElementById("question-rebus");
                 if (ach.rebus) {
@@ -1539,6 +1624,9 @@ function proceedFromInfo() {
                     questionEl.dataset.qtext = "";
                     questionEl.classList.add("hidden");
                 }
+                const qSubEl = document.getElementById("q-subtitle");
+                if (ach.sousTitre) { qSubEl.textContent = ach.sousTitre; qSubEl.classList.remove("hidden"); }
+                else { qSubEl.classList.add("hidden"); }
                 const qImgSrc = achImg(index);
                 document.getElementById("modal-question").style.setProperty("--modal-poster", `url(${qImgSrc})`);
                 openAnimatedModal("modal-question", index, true);
@@ -1581,6 +1669,32 @@ function isCloseEnough(input, expected, tolerance) {
 // Réponse
 document.getElementById("answer-submit").addEventListener("click", checkAnswer);
 document.getElementById("answer-input").addEventListener("keydown", e => { if (e.key === "Enter") checkAnswer(); });
+
+let cachedJokers = 0;
+
+function updateJokerUseBar() {
+    const bar = document.getElementById("joker-use-bar");
+    if (!bar) return;
+    const questionVisible = !document.getElementById("modal-question").classList.contains("hidden");
+    bar.classList.toggle("hidden", !(questionVisible && cachedJokers > 0));
+}
+
+document.getElementById("joker-use-btn").addEventListener("click", () => {
+    if (cachedJokers <= 0 || currentIndex === null) return;
+    refJokers.transaction(val => Math.max(0, (val || 0) - 1)).catch(err => {
+        console.error("Firebase joker error:", err);
+    });
+    playSound("success");
+    const validated = getValidated();
+    if (!validated.includes(currentIndex)) {
+        validated.push(currentIndex);
+        saveValidated(validated);
+    }
+    const idxForAnim = currentIndex;
+    document.getElementById("joker-use-bar").classList.add("hidden");
+    closeAnimatedModal(() => { currentIndex = null; activeModal = null; buildGrid(); });
+    showSuccessAnimation(idxForAnim);
+});
 
 function checkAnswer() {
     const input = document.getElementById("answer-input").value.trim();
@@ -1713,6 +1827,55 @@ document.querySelectorAll(".menu-btn[data-view]").forEach(btn => {
 
 // Grille fixe à 3 colonnes
 document.getElementById("grid").classList.add("cols-3");
+
+// Infobulles badges clés / jokers
+(function initBadgeTooltips() {
+    function makeTooltipToggle(badgeId, tooltipId) {
+        const badge   = document.getElementById(badgeId);
+        const tooltip = document.getElementById(tooltipId);
+        if (!badge || !tooltip) return;
+
+        function openTooltip() {
+            tooltip.classList.remove("hidden", "closing");
+        }
+
+        function closeTooltip() {
+            tooltip.classList.add("closing");
+            tooltip.addEventListener("animationend", () => {
+                tooltip.classList.add("hidden");
+                tooltip.classList.remove("closing");
+            }, { once: true });
+        }
+
+        badge.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (tooltip.classList.contains("hidden")) {
+                // Close the other tooltip first
+                document.querySelectorAll(".badge-tooltip").forEach(t => {
+                    if (t !== tooltip && !t.classList.contains("hidden")) {
+                        t.classList.add("closing");
+                        t.addEventListener("animationend", () => {
+                            t.classList.add("hidden");
+                            t.classList.remove("closing");
+                        }, { once: true });
+                    }
+                });
+                openTooltip();
+            } else {
+                closeTooltip();
+            }
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!tooltip.classList.contains("hidden") && !tooltip.contains(e.target) && e.target !== badge) {
+                closeTooltip();
+            }
+        });
+    }
+
+    makeTooltipToggle("mystery-points-indicator", "keys-tooltip");
+    makeTooltipToggle("jokers-indicator",          "jokers-tooltip");
+})();
 
 // Bouton toggle filtre
 (function initFilterToggle() {
@@ -1927,31 +2090,206 @@ function openPosterModal(src) {
     });
 })();
 
-function onSplashDone() {
+// ============================================================
+//  DIDACTICIEL
+// ============================================================
+const TUTORIAL_PHASE2_STEPS = [
+    { text: "Ici tu retrouveras tous les films disponibles\net tu pourras accéder à tous les défis !", view: "films" },
+    { text: "Ici tu retrouveras les récompenses et succès\nà débloquer lors de ta progression.", view: "rewards" },
+    { text: "Et ici tu pourras classer tes films\ndans une tierlist !", view: "tierlist" },
+];
+const TUTORIAL_PHASE2_FINAL = "Voilà, tu sais maintenant deux trois trucs sur cette application.\nMaintenant je te laisse la découvrir plus en détail tout seul !\nAmuse-toi bien ! 🎬";
+
+let tutorialPhase2Step = 0;
+
+function showTutorialGuideStep(index) {
+    const step   = TUTORIAL_PHASE2_STEPS[index];
+    const guide  = document.getElementById("tutorial-guide");
+    const textEl = document.getElementById("tutorial-guide-text");
+    const btn    = document.getElementById("tutorial-guide-next");
+
+    btn.textContent = "Suivant →";
+
+    if (guide.classList.contains("hidden")) {
+        // Première apparition
+        textEl.textContent = step.text;
+        guide.classList.remove("hidden", "tuto-guide-out");
+        setView(step.view);
+    } else {
+        // Transition : out → changer → in
+        guide.classList.add("tuto-guide-out");
+        setTimeout(() => {
+            textEl.textContent = step.text;
+            setView(step.view);
+            guide.classList.remove("tuto-guide-out");
+        }, 280);
+    }
+}
+
+function startTutorialPhase2() {
+    tutorialPhase2Step = 0;
+    showTutorialGuideStep(0);
+
+    document.getElementById("tutorial-guide-next").addEventListener("click", function onGuideNext() {
+        tutorialPhase2Step++;
+        if (tutorialPhase2Step < TUTORIAL_PHASE2_STEPS.length) {
+            showTutorialGuideStep(tutorialPhase2Step);
+        } else {
+            // Masquer la barre et afficher l'écran final
+            document.getElementById("tutorial-guide-next").removeEventListener("click", onGuideNext);
+            const guide = document.getElementById("tutorial-guide");
+            guide.classList.add("tuto-guide-out");
+            setTimeout(() => {
+                guide.classList.add("hidden");
+                guide.classList.remove("tuto-guide-out");
+                showTutorialFinal();
+            }, 280);
+        }
+    });
+}
+
+function showTutorialFinal() {
+    const overlay = document.getElementById("tutorial-final");
+    const textEl  = document.getElementById("tutorial-final-text");
+    textEl.textContent = TUTORIAL_PHASE2_FINAL;
+    overlay.classList.remove("hidden");
+    overlay.style.opacity = "0";
+    overlay.offsetWidth;
+    overlay.style.transition = "opacity 0.4s ease";
+    overlay.style.opacity = "1";
+
+    document.getElementById("tutorial-final-next").addEventListener("click", () => {
+        refTutorialDone.set(2).then(() => location.reload());
+    }, { once: true });
+}
+const TUTORIAL_STEPS = [
+    { text: "Bienvenue !\n Comme c'est la première fois que tu utilise cette application je vais te guider !"},
+    { text: "Pour commencer \nj'ai besoin de connaitre ton prénom"},
+    { text: "Entrez votre prénom", fakeInput: true },
+    { text: "Matthias !\n Wow quel beau prénom !" },
+    { text: "Ça tombe super bien\n tu vas découvrir un jeu fantastique !" },
+    { text: "Car ce jeu se nomme\nLe jeu des films de Matthias !" },
+    { text: "Allez, je vais te montrer \ncomment ça marche !", last: true },
+];
+
+let tutorialStep = 0;
+
+function showTutorialStep(index) {
+    const step      = TUTORIAL_STEPS[index];
+    const box       = document.querySelector(".tutorial-box");
+    const textEl    = document.getElementById("tutorial-text");
+    const fakeInput = document.getElementById("tutorial-fake-input");
+    const nextBtn   = document.getElementById("tutorial-next-btn");
+
+    const isFirst = index === 0;
+
+    if (isFirst) {
+        // Premier affichage : slide in depuis le bas
+        box.style.transition = "none";
+        box.style.opacity    = "0";
+        box.style.transform  = "translateY(20px)";
+        box.offsetWidth;
+        box.style.transition = "opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)";
+        box.style.opacity    = "1";
+        box.style.transform  = "translateY(0)";
+        textEl.textContent   = step.text;
+        fakeInput.classList.toggle("hidden", !step.fakeInput);
+        nextBtn.classList.toggle("hidden", !!step.fakeInput);
+        if (!step.fakeInput) nextBtn.textContent = step.last ? "C'est parti !" : "Suivant →";
+    } else {
+        // Slide out vers le haut + fade, puis slide in depuis le bas
+        box.style.transition = "opacity 0.18s ease, transform 0.18s ease";
+        box.style.opacity    = "0";
+        box.style.transform  = "translateY(-10px)";
+
+        setTimeout(() => {
+            textEl.textContent = step.text;
+            fakeInput.classList.toggle("hidden", !step.fakeInput);
+            nextBtn.classList.toggle("hidden", !!step.fakeInput);
+            if (!step.fakeInput) nextBtn.textContent = step.last ? "C'est parti !" : "Suivant →";
+
+            box.style.transition = "none";
+            box.style.transform  = "translateY(14px)";
+            box.offsetWidth;
+            box.style.transition = "opacity 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)";
+            box.style.opacity    = "1";
+            box.style.transform  = "translateY(0)";
+        }, 200);
+    }
+}
+
+function advanceTutorial() {
+    tutorialStep++;
+    if (tutorialStep >= TUTORIAL_STEPS.length) {
+        refTutorialDone.set(1).then(() => location.reload());
+        return;
+    }
+    showTutorialStep(tutorialStep);
+}
+
+function startTutorial() {
+    const overlay = document.getElementById("tutorial-overlay");
+    overlay.classList.remove("hidden", "tuto-out");
+    tutorialStep = 0;
+    showTutorialStep(0);
+
+    document.getElementById("tutorial-fake-input").addEventListener("click", advanceTutorial);
+    document.getElementById("tutorial-next-btn").addEventListener("click", advanceTutorial);
+}
+
+
+function onSplashDone(afterCallback) {
     if (splashDone) return;
     if (!splashCanDismiss) {
-        setTimeout(onSplashDone, 100);
+        setTimeout(() => onSplashDone(afterCallback), 100);
         return;
     }
     splashDone = true;
     const splash = document.getElementById("splash");
     if (splash) splash.remove();
     document.body.classList.remove("splash-active");
-    if (!gridAnimStarted) startGridIntroAnimation();
+    if (!gridAnimStarted && !tutorialActive) startGridIntroAnimation();
+    if (afterCallback) afterCallback();
 }
 
-// Orchestration du splash
-(function initSplash() {
-    const splash = document.getElementById("splash");
-    if (!splash) { splashCanDismiss = true; onSplashDone(); return; }
+// Orchestration du splash — tourne en arrière-plan, le tutoriel passe en premier
+let tutorialActive = false;
 
-    // Durée minimale d'affichage : 800ms, puis fondu de sortie
-    setTimeout(() => {
-        splash.classList.add("splash-fade");
-        splashCanDismiss = true;
-        splash.addEventListener("transitionend", onSplashDone, { once: true });
-        setTimeout(onSplashDone, 600); // fallback
-    }, 800);
+(function initApp() {
+    // 1. Vérifier Firebase pour le tutoriel dès que possible
+    refTutorialDone.once("value").then(snap => {
+        const phase = snap.val() || 0;
+
+        if (phase === 0) {
+            // Phase 1 : intro
+            tutorialActive = true;
+            const splash = document.getElementById("splash");
+            if (splash) splash.style.display = "none";
+            document.body.classList.remove("splash-active");
+            splashCanDismiss = true;
+            splashDone = true;
+            startTutorial();
+
+        } else if (phase === 1) {
+            // Phase 2 : visite guidée — lancer après le splash normal
+            initSplash(() => startTutorialPhase2());
+
+        } else {
+            // Tutoriel terminé → flux normal
+            initSplash();
+        }
+    }).catch(() => initSplash());
+
+    function initSplash(afterCallback) {
+        const splash = document.getElementById("splash");
+        if (!splash) { splashCanDismiss = true; onSplashDone(afterCallback); return; }
+        setTimeout(() => {
+            splash.classList.add("splash-fade");
+            splashCanDismiss = true;
+            splash.addEventListener("transitionend", () => onSplashDone(afterCallback), { once: true });
+            setTimeout(() => onSplashDone(afterCallback), 600);
+        }, 800);
+    }
 })();
 
 // bfcache : si la page est restaurée depuis le cache du navigateur, supprimer le splash
@@ -2140,3 +2478,131 @@ function initTierlist() {
 }
 
 initTierlist();
+
+// ============================================================
+//  PERSONNAGE SURPRISE
+// ============================================================
+(function initPerso() {
+    const wrap = document.getElementById("perso-wrap");
+    let hideTimer = null;
+    let showTimer = null;
+    let activeSide = "left";
+    let popCount = 0;
+    const MAX_POPS = 3;
+
+    // --- Helpers localStorage ---
+    function todayStr() {
+        const d = new Date();
+        return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    }
+    function getPopsToday() {
+        if (localStorage.getItem("persoDay") !== todayStr()) return 0;
+        return parseInt(localStorage.getItem("persoCount") || "0", 10);
+    }
+    function savePop() {
+        localStorage.setItem("persoDay", todayStr());
+        localStorage.setItem("persoCount", String(getPopsToday() + 1));
+    }
+
+    // --- Fenêtre horaire 22h-23h59 ---
+    function msUntilWindow() {
+        const now = new Date();
+        const h = now.getHours();
+        if (h >= 22) return 0; // déjà dans la fenêtre
+        const target = new Date(now);
+        target.setHours(22, 0, 0, 0);
+        return target - now;
+    }
+    function inWindow() {
+        const h = new Date().getHours();
+        return h >= 22; // 22h00 – 23h59
+    }
+
+    // --- Transforms ---
+    function sideRotate(side) {
+        return side === "left" ? "rotate(30deg)" : "scaleX(-1) rotate(30deg)";
+    }
+    function applyTransform(slideIn) {
+        const peek   = activeSide === "left" ? "-38%" : "38%";
+        const hidden = activeSide === "left" ? "-100%" : "100%";
+        const slide  = slideIn ? peek : hidden;
+        wrap.style.transform = `translateX(${slide}) ${sideRotate(activeSide)}`;
+    }
+
+    // --- Cycle ---
+    function show() {
+        if (!inWindow() || popCount >= MAX_POPS) return;
+
+        const side = Math.random() < 0.5 ? "left" : "right";
+        const yPct = 8 + Math.random() * 74;
+        activeSide = side;
+
+        wrap.style.top        = yPct + "vh";
+        wrap.style.left       = side === "left"  ? "0" : "auto";
+        wrap.style.right      = side === "right" ? "0" : "auto";
+        wrap.style.transition = "none";
+        applyTransform(false);
+
+        wrap.classList.remove("perso-hidden");
+        wrap.offsetWidth;
+        wrap.style.transition = "transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.3s ease";
+        wrap.style.opacity    = "1";
+        applyTransform(true);
+
+        popCount++;
+        savePop();
+
+        hideTimer = setTimeout(slideOut, 2000);
+    }
+
+    function slideOut() {
+        wrap.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+        applyTransform(false);
+        wrap.style.opacity = "0";
+
+        if (popCount < MAX_POPS && inWindow()) {
+            showTimer = setTimeout(show, 1300 + Math.random() * 3000);
+        } else {
+            setTimeout(() => wrap.classList.add("perso-hidden"), 400);
+        }
+    }
+
+    function catchPerso() {
+        clearTimeout(hideTimer);
+        clearTimeout(showTimer);
+
+        wrap.style.transition = "transform 0.2s ease, opacity 0.2s ease";
+        wrap.style.transform  = `${sideRotate(activeSide)} scale(0.3)`;
+        wrap.style.opacity    = "0";
+        setTimeout(() => wrap.classList.add("perso-hidden"), 220);
+
+        // Marquer comme attrapé définitivement
+        localStorage.setItem("persoCaught", "true");
+
+        // Récompense Joker
+        refJokers.transaction(val => (val || 0) + 1).catch(err => {
+            console.error("Firebase joker error:", err);
+        });
+        showJokerReveal();
+        // Pas de reprise — le pop a déjà été compté dans show()
+    }
+
+    wrap.addEventListener("click", catchPerso);
+
+    // --- Démarrage ---
+    if (localStorage.getItem("persoCaught") === "true") return; // attrapé une fois, fini pour toujours
+    popCount = getPopsToday();
+    if (popCount >= MAX_POPS) return; // quota épuisé pour aujourd'hui
+
+    const delay = msUntilWindow();
+    if (delay > 0) {
+        // Pas encore 22h — planifier pour l'ouverture de la fenêtre
+        showTimer = setTimeout(() => {
+            popCount = getPopsToday(); // re-vérifier au moment de démarrer
+            if (popCount < MAX_POPS) showTimer = setTimeout(show, 3000 + Math.random() * 4000);
+        }, delay);
+    } else {
+        // Déjà dans la fenêtre — démarrage aléatoire rapide
+        showTimer = setTimeout(show, 3000 + Math.random() * 4000);
+    }
+})();
