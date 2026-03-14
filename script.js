@@ -119,18 +119,17 @@ function enableDebugMode() {
 //  PALIERS / OBJECTIFS — Modifier ici facilement
 // ============================================================
 const MILESTONES = [
-    { label: "Néophyte",             objectif: "Valider 1 film",   count: 1,  keys: 1 },
-    { label: "Initié",               objectif: "Valider 3 films",  count: 3,  jokers: 1, keys: 1 },
-    { label: "Accro aux popcorns",   objectif: "Valider 10 films", count: 10, keys: 2 },
-    { label: "Amateur éclairé",      objectif: "Valider 15 films", count: 15, keys: 2 },
-    { label: "Cinéphile du dimanche",objectif: "Valider 20 films", count: 20, keys: 3,  jokers: 1 },
-    { label: "Passionné",            objectif: "Valider 25 films", count: 25, keys: 3 },
-    { label: "Critique en herbe",    objectif: "Valider 30 films", count: 30, keys: 3 },
-    { label: "Fin Connaisseur",      objectif: "Valider 35 films", count: 35, keys: 3 },
-    { label: "Cinéphile",            objectif: "Valider 40 films", count: 40, keys: 3 },
-    { label: "Déglingo",             objectif: "Valider 45 films", count: 45, keys: 3, secretFilm: 38},
-    { label: "Collectionneur",       objectif: "Valider 50 films", count: 50, secretFilm: 51 },
-    { label: "???",                  objectif: "Valider 52 films", count: 52, rewards: ["?"] },
+    { label: "Initié",               objectif: "Valider 3 films",  count: 1,  keys: 1,             icon: 2 },
+    { label: "Accro aux popcorns",   objectif: "Valider 10 films", count: 3, jokers: 1, keys: 1,  icon: 3 },
+    { label: "Amateur éclairé",      objectif: "Valider 15 films", count: 5, keys: 2,             icon: 4 },
+    { label: "Cinéphile du dimanche",objectif: "Valider 20 films", count: 10, keys: 3,             icon: 5 },
+    { label: "Passionné",            objectif: "Valider 25 films", count: 15, keys: 3,  jokers: 1, icon: 6 },
+    { label: "Critique en herbe",    objectif: "Valider 30 films", count: 20, keys: 3,             icon: 7 },
+    { label: "Fin Connaisseur",      objectif: "Valider 35 films", count: 25, keys: 3,             icon: 8 },
+    { label: "Cinéphile",            objectif: "Valider 40 films", count: 35, keys: 3,             icon: 9 },
+    { label: "Déglingo",             objectif: "Valider 45 films", count: 40, keys: 3, secretFilm: 38, icon: 10 },
+    { label: "Collectionneur",       objectif: "Valider 50 films", count: 45, secretFilm: 51,      icon: 11 },
+    { label: "???",                  objectif: "Valider 52 films", count: 47, rewards: ["?"],      icon: 12 },
 ];
 
 // ============================================================
@@ -226,6 +225,11 @@ const ACHIEVEMENTS = [
     realisateur: "Christopher Nolan", description: "Des astronautes s'aventurent à travers un trou de ver pour trouver une nouvelle planète et sauver l'humanité.",
     turl: "https://www.youtube.com/watch?v=0rDczIsHJn4", genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt0816692/", rating: "8.7", verrouille: false },
 
+    { title: "Le Cinquième élement", img: "38.png", password: "6xM", rebus: "medias/r10.png",
+    question: "Trouve la réponse à ce rébus", answer: "Korben Dallas",
+    realisateur: "Luc Besson", description: "Au XXIIIe siècle, un chauffeur de taxi doit protéger une jeune femme qui est la seule clé du salut de l'humanité.",
+    turl: "https://www.youtube.com/watch?v=1p_BvXpC8oA", genres: ["Science-fiction", "Action", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0119116/", rating: "7.6", verrouille: false },
+
     { title: "Forest Gump", img: "5.png", password: "1nS", rebus: "medias/r5.png",
     question: "Dans quel sport Forest Gump devient-il un professionnel ?", answer: "Ping Pong",
     realisateur: "Robert Zemeckis", description: "Le destin extraordinaire d'un homme simple qui traverse les événements marquants de l'histoire des États-Unis.",
@@ -251,122 +255,93 @@ const ACHIEVEMENTS = [
     realisateur: "Quentin Dupieux", description: "Un caméraman rêve de réaliser un film d'horreur, mais doit d'abord trouver le cri de douleur parfait.",
     turl: "https://www.youtube.com/watch?v=FRzONsDtDFM", genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/title/tt2392672/", rating: "6.2", verrouille: false },
 
-    { title: "Fumer fait tousser", img: "14.png", password: "7mX", rebus: "medias/r10.png",
-    question: "Comment s'appelle le robot dépressif et suicidaire qui accompagne la Tabac Force ?", answer: "Norbert",
+    { title: "Fumer fait tousser", img: "14.png", password: "7mX", rebus: "medias/r11.png",
+    question: "quel est le dernier morceau du corps qu'il reste au neveu du personnage joué par Blanche Gardin dans le film Fumer fait tousser", answer: "la bouche",
     realisateur: "Quentin Dupieux", description: "La 'Tabac Force' part en retraite pour renforcer sa cohésion d'équipe avant d'affronter un maléfique empereur.",
     turl: "https://www.youtube.com/watch?v=y2x9WfC9SjM", genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/title/tt15471560/", rating: "6.1", verrouille: false },
 
-    { title: "Oss 117", sousTitre: "Le Caire, nid d'espions", img: "17.png", password: "3fS", rebus: "medias/r11.png",
-    question: "Quel est le nom de la princesse égyptienne dont Hubert tombe 'presque' amoureux ?", answer: "Al Tarouk",
+    { title: "Oss 117", sousTitre: "Le Caire, nid d'espions", img: "17.png", password: "3fS", rebus: "medias/r12.png",
+    question: "Que ce passe t'il lorsque quelqu'un ou quelque chose meurt... ? ", answer: "Quelqu'un ou quelque chose naît ailleurs",
     realisateur: "Michel Hazanavicius", description: "Hubert Bonisseur de La Bath enquête au Caire en 1955 dans cette parodie culte des films d'espionnage.",
     turl: "https://www.youtube.com/watch?v=yYvHq-O_i1c", genres: ["Comédie", "Espionnage", "J'aime trop ce film"], imdb: "https://www.imdb.com/title/tt0464913/", rating: "7.4", verrouille: false },
 
-    { title: "Oss 117", sousTitre: "Rio ne répond plus", img: "18.png", password: "9pZ", rebus: "medias/r12.png",
-    question: "Comment s'appelle le nazi que recherche Hubert au Brésil ?", answer: "Von Zimmel",
+    { title: "Oss 117", sousTitre: "Rio ne répond plus", img: "18.png", password: "9pZ", rebus: "medias/r13.png",
+    question: "Comment appelez-vous un pays qui a comme dirigeant un militaire avec les pleins pouvoirs, une police secrète, une seule chaîne de télévision et que toute l'information est contrôlée par l'État ?", answer: "La France du general de gaulle",
     realisateur: "Michel Hazanavicius", description: "L'espion français se rend à Rio en 1967 pour mettre la main sur un microfilm compromettant.",
     turl: "https://www.youtube.com/watch?v=5VjI_jA_q7g", genres: ["Comédie", "Espionnage", "Celui ci est tout aussi bien"], imdb: "https://www.imdb.com/title/tt1167660/", rating: "6.8", verrouille: false },
 
-    { title: "La cité de la peur", img: "19.png", password: "2hK", rebus: "medias/r13.png",
-    question: "Quel est le nom de famille de l'ami de Simon Jérémi qui 'est content' ?", answer: "Odile",
+    { title: "La cité de la peur", img: "19.png", password: "2hK", rebus: "medias/r14.png",
+    question: "Quel est le titre du film d'Odile Deray ?", answer: "Red is Dead",
     realisateur: "Alain Berbérian", description: "Un tueur en série terrorise le Festival de Cannes alors qu'une attachée de presse tente de promouvoir son film.",
     turl: "https://www.youtube.com/watch?v=680X_vH_Ias", genres: ["Comédie", "Horreur"], imdb: "https://www.imdb.com/title/tt0109440/", rating: "7.6", verrouille: false },
 
-    { title: "Il y a t'il un pilote dans l'avion", img: "23.png", password: "8dV", rebus: "medias/r14.png",
-    question: "Quel est le problème de boisson récurrent de Ted Striker ?", answer: "Il s'arrose le visage",
-    realisateur: "Zucker, Abrahams et Zucker", description: "Une parodie culte où un ancien pilote traumatisé doit prendre les commandes d'un avion en détresse.",
-    turl: "https://www.youtube.com/watch?v=fP7m_01wJ34", genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/title/tt0080339/", rating: "7.7", verrouille: false },
-
     { title: "Jumanji", img: "24.png", password: "5jN", rebus: "medias/r15.png",
-    question: "Quel est le nom du chasseur qui poursuit Alan Parrish depuis 26 ans ?", answer: "Van Pelt",
+    question: "Trouve la réponse à ce rébus", answer: "Alan Parrish",
     realisateur: "Joe Johnston", description: "Un jeu de société magique libère des dangers de la jungle dans le monde réel à chaque lancer de dés.",
     turl: "https://www.youtube.com/watch?v=9P6TZcCk0MM", genres: ["Aventure", "Fantastique", "Un Classique !"], imdb: "https://www.imdb.com/title/tt0113497/", rating: "7.0", verrouille: false },
 
-    { title: "Ready Player One", img: "25.png", password: "7gM", rebus: "medias/r16.png",
-    question: "Quel est le nom de l'avatar de la rebelle dont Wade tombe amoureux ?", answer: "Art3mis",
-    realisateur: "Steven Spielberg", description: "Dans un futur dystopique, les gens vivent dans l'OASIS, un monde virtuel cachant un immense trésor.",
-    turl: "https://www.youtube.com/watch?v=cSp1dM2Vj48", genres: ["Science-fiction", "Aventure"], imdb: "https://www.imdb.com/title/tt1677720/", rating: "7.4", verrouille: false },
-
-    { title: "Premier Contact", img: "28.png", password: "9kF", rebus: "medias/r17.png",
-    question: "Comment les humains finissent-ils par appeler les deux extraterrestres avec qui ils communiquent ?", answer: "Abbott et Costello",
+    { title: "Premier Contact", img: "28.png", password: "9kF", rebus: "medias/r16.png",
+    question: "Il est bien ce film ?", answer: "Oui",
     realisateur: "Denis Villeneuve", description: "Une linguiste est chargée de communiquer avec des extraterrestres dont les vaisseaux se sont posés sur Terre.",
     turl: "https://www.youtube.com/watch?v=f8mYf5p_f7I", genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt2543164/", rating: "7.9", verrouille: false },
 
-    { title: "RRRrrrrr", img: "30.png", password: "4vS", rebus: "medias/r18.png",
-    question: "Comment la tribu appelle-t-elle l'acte criminel inédit commis dans le film ?", answer: "Un criminu",
-    realisateur: "Alain Chabat", description: "Il y a 35 000 ans, deux tribus s'affrontent pour obtenir le secret du shampooing.",
-    turl: "https://www.youtube.com/watch?v=2rE_S49XqO4", genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/title/tt0357111/", rating: "5.8", verrouille: false },
-
-    { title: "La classe Américaine", img: "31.png", password: "8rD", rebus: "medias/r19.png",
-    question: "Quelle est la dernière phrase (le dernier mot) prononcée par George Abitbol ?", answer: "Monde de merde",
+    { title: "La classe Américaine", img: "31.png", password: "8rD", rebus: "medias/r17.png",
+    question: "Selon Orson Welles, ce flilm est un plagiat d'un autre flilm. Lequel?", answer: "Citizen Kane",
     realisateur: "Michel Hazanavicius et Dominique Mézerette", description: "Un détournement culte de films de la Warner où les dialogues originaux sont remplacés par des répliques absurdes.",
     turl: "https://www.youtube.com/watch?v=jWkCq0Q38E8", genres: ["Comédie", "Absurde", "Je suis désolé"], imdb: "https://www.imdb.com/title/tt0321715/", rating: "7.9", verrouille: false },
 
-    { title: "Dune", sousTitre: "Part. 1", img: "42.png", password: "7mS", rebus: "medias/r20.png",
-    question: "Comment s'appelle le test de douleur infligé à Paul par la Révérende Mère ?", answer: "Le Gom Jabbar",
-    realisateur: "Denis Villeneuve", description: "Un jeune noble doit protéger la ressource la plus précieuse de la galaxie sur la planète désertique Arrakis.",
-    turl: "https://www.youtube.com/watch?v=fOvveuMeos0", genres: ["Science-fiction", "Aventure", "Un grand film !"], imdb: "https://www.imdb.com/title/tt1160419/", rating: "8.0", verrouille: false },
-
-    { title: "Dune", sousTitre: "Part. 2", img: "43.png", password: "3hB", rebus: "medias/r21.png",
-    question: "Comment appelle-t-on le liquide bleu mortel que Paul doit boire pour devenir le Kwisatz Haderach ?", answer: "L'Eau de Vie",
-    realisateur: "Denis Villeneuve", description: "Paul Atréides s'unit aux Fremen pour mener la révolte contre les conspirateurs qui ont détruit sa famille.",
-    turl: "https://www.youtube.com/watch?v=WAY8-M268Xg", genres: ["Science-fiction", "Aventure", "Un grand film !"], imdb: "https://www.imdb.com/title/tt15239678/", rating: "8.5", verrouille: false },
-
-    { title: "Blade Runner 2049", img: "44.png", password: "1vR", rebus: "medias/r22.png",
-    question: "Quel est le nom de l'intelligence artificielle holographique qui partage la vie de K ?", answer: "Joi",
+    { title: "Blade Runner 2049", img: "44.png", password: "1vR", rebus: "medias/r18.png",
+    question: "Comment appelle-t-on les androïdes biologiquement identiques aux humains, fabriqués par la corporation Tyrell ?", answer: "Les Réplicants",
     realisateur: "Denis Villeneuve", description: "Un nouvel officier de police déterre un secret enfoui qui pourrait plonger la société dans le chaos.",
     turl: "https://www.youtube.com/watch?v=WarevDmt_Ug", genres: ["Science-fiction", "Thriller", "Un grand film !"], imdb: "https://www.imdb.com/title/tt1856101/", rating: "8.0", verrouille: false },
 
-    { title: "Gladiator", img: "45.png", password: "4bX", rebus: "medias/r23.png",
-    question: "Quel est le nom de l'ancien gladiateur qui a racheté Maximus et lui donne sa chance à Rome ?", answer: "Proximo",
+    { title: "Gladiator", img: "45.png", password: "4bX", rebus: "medias/r19.png",
+    question: "Qui est nazi et adore ce film ?", answer: "Bertrand",
     realisateur: "Ridley Scott", description: "Un général romain trahi devient gladiateur pour se venger de l'empereur qui a assassiné sa famille.",
     turl: "https://www.youtube.com/watch?v=owK1at_O7_0", genres: ["Action", "Historique", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0172495/", rating: "8.5", verrouille: false },
 
-    { title: "Je suis une légende", img: "46.png", password: "8nN", rebus: "medias/r24.png",
-    question: "Comment s'appelle le mannequin à qui Robert Neville parle tous les jours dans le magasin vidéo ?", answer: "Fred",
+    { title: "Je suis une légende", img: "46.png", password: "8nN", rebus: "medias/r20.png",
+    question: "Dans ce film, le personnage principal Robert Neville joué par Will Smith écoute régulièrement un morceau de Bob Marley, quel est le titre de ce morceau ?", answer: "Three Little Birds",
     realisateur: "Francis Lawrence", description: "Le dernier survivant d'un virus ayant transformé l'humanité en mutants tente de trouver un remède à New York.",
     genres: ["Horreur", "Drame", "Un bon film !"],
     turl: "https://www.youtube.com/watch?v=uYUbLTxJl-A", imdb: "https://www.imdb.com/title/tt0480249/", rating: "7.2", verrouille: false },
 
-    { title: "True man Show", img: "37.png", password: "4qR", rebus: "medias/r25.png",
-    question: "Comment s'appelle le créateur et réalisateur de l'émission qui surveille Truman depuis la lune ?", answer: "Christof",
-    realisateur: "Peter Weir", description: "Un homme découvre que sa vie entière est en réalité une émission de télé-réalité diffusée 24h/24.",
-    turl: "https://www.youtube.com/watch?v=dlnmQbPGuls", genres: ["Drame", "Comédie", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0120382/", rating: "8.1", verrouille: false },
-
-    { title: "Le Cinquième élement", img: "38.png", password: "6xM", rebus: "medias/r26.png",
-    question: "Quelle est la première phrase complète que Leeloo dit à Korben Dallas ?", answer: "Multipass",
-    realisateur: "Luc Besson", description: "Au XXIIIe siècle, un chauffeur de taxi doit protéger une jeune femme qui est la seule clé du salut de l'humanité.",
-    turl: "https://www.youtube.com/watch?v=1p_BvXpC8oA", genres: ["Science-fiction", "Action", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0119116/", rating: "7.6", verrouille: false },
-
-    { title: "Into the Wild", img: "33.png", password: "5kS", rebus: "medias/r27.png",
+    { title: "Into the Wild", img: "33.png", password: "5kS", rebus: "medias/r21.png",
     question: "Quel est le numéro écrit sur le côté du 'Magic Bus' où s'installe Christopher ?", answer: "142",
     realisateur: "Sean Penn", description: "Un jeune diplômé rejette la société de consommation et part vivre en solitaire dans la nature sauvage d'Alaska.",
     turl: "https://www.youtube.com/watch?v=2GWPOPSXGYI", genres: ["Drame", "Aventure", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0758758/", rating: "8.1", verrouille: false },
 
-    { title: "Incassable", img: "34.png", password: "3vH", rebus: "medias/r28.png",
+    { title: "Incassable", img: "34.png", password: "3vH", rebus: "medias/r22.png",
     question: "Quel est le nom de la galerie d'art spécialisée dans les comics tenue par Elijah Price ?", answer: "Limited Edition",
     realisateur: "M. Night Shyamalan", description: "Un homme découvre qu'il est invincible après avoir été le seul survivant d'un terrible accident de train.",
     turl: "https://www.youtube.com/watch?v=AC-LA9QVdmI", genres: ["Fantastique", "Thriller"], imdb: "https://www.imdb.com/title/tt0217869/", rating: "7.3", verrouille: false },
 
-    { title: "Transcendance", img: "21.png", password: "1xQ", rebus: "medias/r29.png",
+    { title: "Bugonia", img: "54.png", password: "1xQ", rebus: "medias/r23.png",
+    question: "De quel espèce extraterrestre parle-t-on dans ce film ?", answer: "les Andromédiens",
+    realisateur: "Yorgos Lanthimos", description: "Deux apiculteurs obsédés par les théories du complot capturent et interrogent une femme d'affaires qu'ils croient être une extraterrestre envahissante menaçant la survie de notre planète.",
+    genres: ["Thriller, Crime"],
+    turl: "https://www.youtube.com/watch?v=nmxP6PU_GGo", imdb: "https://www.imdb.com/fr-ca/title/tt12300742/", rating: "7.4", verrouille: true },
+    
+    { title: "Transcendance", img: "21.png", password: "1xQ", rebus: "medias/r24.png",
     question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
     realisateur: "Wally Pfister", description: "La conscience d'un scientifique mourant est téléchargée dans un ordinateur, créant une intelligence omnipotente.",
     genres: ["Science-fiction", "Thriller", "Sous-coté"],
     turl: "https://www.youtube.com/watch?v=VCTen3-B8GU", imdb: "https://www.imdb.com/title/tt2209764/", rating: "6.2", verrouille: true },
 
-    { title: "Jumper", img: "22.png", password: "4uG", rebus: "medias/r30.png",
+    { title: "Jumper", img: "22.png", password: "4uG", rebus: "medias/r25.png",
     question: "Où se trouve la 'bibliothèque' secrète de Griffin, là où il garde ses preuves sur les Paladins ?", answer: "Dans le Colisée",
     realisateur: "Doug Liman", description: "Un jeune homme découvre qu'il a le pouvoir de se téléporter partout dans le monde.",
     genres: ["Fantastique", "Action", "Tu va peut être pas aimer"],
     turl: "https://www.youtube.com/watch?v=RcMH5sAYc5o", imdb: "https://www.imdb.com/title/tt0489099/", rating: "6.0", verrouille: true },
 
-    { title: "Chappee", img: "27.png", password: "6tW", rebus: "medias/r31.png",
+    { title: "Chappee", img: "27.png", password: "6tW", rebus: "medias/r26.png",
     question: "Quel est le nom du robot massif et lourd piloté à distance par le personnage de Hugh Jackman ?", answer: "Moose",
     realisateur: "Neill Blomkamp", description: "Un robot de police est doté d'une conscience et doit apprendre à vivre dans un monde violent.",
     genres: ["Science-fiction", "Action", "Divertissant", "à voir"],
     turl: "https://www.youtube.com/watch?v=lYpdtB4UKWE", imdb: "https://www.imdb.com/title/tt1823672/", rating: "6.8", verrouille: true },
 
-    { title: "Au Boulot !", img: "51.png", password: "6tW", rebus: "medias/r32.png",
-    question: "", answer: "",
+    { title: "Au Boulot !", img: "51.png", password: "6tW", rebus: "medias/r27.png",
+    question: "Dans ce film documentaire, cette grosse bourgeoise de Sarah Saldamann prend en photo la façade d'un commerce avec un air enjoué mais plein de mépris de classe (la connasse). Quel est le nom de ce commerce ?", answer: "Un PMU",
     realisateur: "Gilles Perret", description: "Peut-on réinsérer les riches ? François Ruffin invite Sarah Saldmann à s'installer pendant un mois avec le SMIC.",
     genres: ["Documentaire", "Gauchiasse !"],
     turl: "https://www.youtube.com/watch?v=lYpdtB4UKWE", imdb: "https://www.imdb.com/title/tt33350039/", rating: "6.9", verrouille: true },
@@ -441,12 +416,12 @@ const ACHIEVEMENTS = [
     question: "", answer: "",
     realisateur: "Timothée Hochet et Lucas Pastor", description: "Un jeune vidéaste au talent douteux fait la rencontre de Stéphane, un ancien cascadeur brut de décoffrage, qui sous couvert d'une grande sympathie se montre de plus en plus étrange. Ils s’engagent alors dans un projet périlleux : réaliser à eux seuls un grand film de guerre.",
     genres: ["Comédie", "Drame"],
-    turl: "https://www.youtube.com/watch?v=wLzyOnYXdCU", imdb: "https://www.imdb.com/fr/title/tt22180542/", rating: "6.4", verrouille: false },
+    turl: "https://www.youtube.com/watch?v=wLzyOnYXdCU", imdb: "https://www.imdb.com/fr/title/tt22180542/", rating: "6.4", secret: true },
 
     { title: "Le Seigneur des anneaux l'animé de 1979", img: "26.png", password: "3bK", rebus: "medias/r44.png",
     question: "Quel personnage majeur des livres est totalement absent de cette version de Bakshi ?", answer: "Tom Bombadil",
     realisateur: "Ralph Bakshi", description: "Une adaptation expérimentale du premier tome de Tolkien utilisant la technique de la rotoscopie.",
-    genres: ["Fantastique", "Animation", "Surement le film le plus dur à visionner"],
+    genres: ["Fantastique", "Animation"],
     turl: "https://www.youtube.com/watch?v=6Yt-R70_R0Y", imdb: "https://www.imdb.com/title/tt0077869/", rating: "6.2", secret: true },
 
 ];
@@ -471,6 +446,7 @@ const refGameEnded         = db.ref("game/ended");
 const refHeartClicks       = db.ref("game/heartClicks");
 const refJokers            = db.ref("game/jokers");
 const refTutorialDone      = db.ref("game/tutorialDone");
+const refAccentColor       = db.ref("game/accentColor");
 
 // État local (cache synchronisé avec Firebase)
 let cachedUnlocked          = [];
@@ -583,6 +559,59 @@ function getAvailablePoints() {
     // Ne compter que les films verrouillés débloqués (pas les films secrets, gratuits)
     const revealedVerrouille = getRevealedMysteries().filter(i => ACHIEVEMENTS[i] && ACHIEVEMENTS[i].verrouille);
     return Math.max(0, totalKeys - revealedVerrouille.length);
+}
+
+// ============================================================
+//  COULEUR ACCENT
+// ============================================================
+const ACCENT_COLORS = [
+    { label: "Rouge",   value: "#e82929" },
+    { label: "Orange",  value: "#ff8c00" },
+    { label: "Jaune",   value: "#ffd500" },
+    { label: "Vert",    value: "#50ab0b" },
+    { label: "Teal",    value: "#07b497" },
+    { label: "Bleu",    value: "#3590ea" },
+    { label: "Violet",  value: "#9b59ff" },
+    { label: "Rose",    value: "#fe4a98" },
+];
+
+function applyAccentColor(hex) {
+    document.documentElement.style.setProperty("--color-accent", hex);
+}
+
+refAccentColor.on("value", snap => {
+    const hex = snap.val();
+    if (hex) applyAccentColor(hex);
+    // Met à jour la swatch active si la modal est ouverte
+    document.querySelectorAll(".accent-swatch").forEach(sw => {
+        sw.classList.toggle("active", sw.dataset.color === (hex || ACCENT_COLORS[0].value));
+    });
+});
+
+function initAccentColorModal() {
+    const btn     = document.getElementById("accent-color-btn");
+    const modal   = document.getElementById("modal-accent");
+    const overlay = document.getElementById("accent-modal-overlay");
+    const closeBtn = document.getElementById("accent-modal-close");
+    const grid    = document.getElementById("accent-color-swatches");
+    if (!btn || !modal || !grid) return;
+
+    // Construire les swatches
+    ACCENT_COLORS.forEach(({ label, value }) => {
+        const sw = document.createElement("button");
+        sw.className = "accent-swatch";
+        sw.title = label;
+        sw.dataset.color = value;
+        sw.style.background = value;
+        sw.addEventListener("click", () => {
+            refAccentColor.set(value);
+        });
+        grid.appendChild(sw);
+    });
+
+    btn.addEventListener("click", () => modal.classList.remove("hidden"));
+    overlay.addEventListener("click", () => modal.classList.add("hidden"));
+    closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
 }
 
 function updateMysteryPointsIndicator() {
@@ -774,12 +803,12 @@ function updatePlayerTitle() {
     if (claimedCount > 0) {
         const last = MILESTONES[claimedCount - 1];
         el.textContent = last.label || `${last.count} succès`;
-        if (iconEl) { iconEl.src = `medias/s${claimedCount}.png`; iconEl.alt = last.label || ""; }
+        if (iconEl) { iconEl.src = `medias/s${last.icon || claimedCount}.png`; iconEl.alt = last.label || ""; }
         document.getElementById("sidebar-title-wrap").classList.remove("no-title");
     } else {
-        el.textContent = "—";
-        if (iconEl) { iconEl.src = ""; iconEl.alt = ""; }
-        document.getElementById("sidebar-title-wrap").classList.add("no-title");
+        el.textContent = "Néophyte";
+        if (iconEl) { iconEl.src = "medias/s1.png"; iconEl.alt = "Néophyte"; }
+        document.getElementById("sidebar-title-wrap").classList.remove("no-title");
     }
 }
 
@@ -806,7 +835,7 @@ function buildMilestones() {
         const missingLabel = missing + " film" + (missing > 1 ? "s" : "") + " restant" + (missing > 1 ? "s" : "");
         const progressHTML = isNext ? `
             <div class="mpi-bar-row">
-                <div class="mpi-track"><div class="mpi-fill" style="width:${pct}%"></div></div>
+                <div class="mpi-track"><div class="mpi-fill" data-pct="${pct}" style="width:0%"></div></div>
                 <span class="mpi-label">${missingLabel}</span>
             </div>
         ` : "";
@@ -818,12 +847,30 @@ function buildMilestones() {
         if (claimable) div.classList.add("claimable");
         if (isNext)   div.classList.add("next");
 
-        div.innerHTML = `
-            <div class="milestone-content">
-                <div class="milestone-main-row">
-                    <img src="medias/s${index + 1}.png" class="milestone-icon" alt="Palier ${m.count}">
-                    <div class="milestone-body">
-                        <span class="milestone-title">${m.label || `${m.count} succès`}</span>
+        if (claimed) {
+            div.innerHTML = `
+                <div class="milestone-content">
+                    <div class="milestone-main-row">
+                        <img src="medias/s${m.icon || index + 1}.png" class="milestone-icon" alt="Palier ${m.count}">
+                        <div class="milestone-body">
+                            <span class="milestone-title">${m.label || `${m.count} succès`}</span>
+                        </div>
+                        <div class="milestone-status">
+                            <span class="milestone-check">&#10003;</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else {
+            const headerClass = (isNext || claimable) ? "milestone-header-accent" : "milestone-header-muted";
+            div.innerHTML = `
+                <div class="milestone-header ${headerClass}">
+                    <span class="milestone-title">${m.label || `${m.count} succès`}</span>
+                    ${claimable ? `<button class="milestone-claim-btn">Récupérer la Récompense</button>` : ""}
+                </div>
+                <div class="milestone-content">
+                    <div class="milestone-main-row">
+                        <img src="medias/s${m.icon || index + 1}.png" class="milestone-icon" alt="Palier ${m.count}">
                         <div class="milestone-details">
                             ${m.objectif ? `
                             <div class="milestone-col">
@@ -836,14 +883,10 @@ function buildMilestones() {
                             </div>
                         </div>
                     </div>
-                    <div class="milestone-status">
-                        <span class="milestone-check">&#10003;</span>
-                        ${claimable ? `<button class="milestone-claim-btn">Récupérer la Récompense</button>` : ""}
-                    </div>
+                    ${progressHTML}
                 </div>
-                ${progressHTML}
-            </div>
-        `;
+            `;
+        }
 
         if (claimable) {
             div.querySelector(".milestone-claim-btn").addEventListener("click", () => {
@@ -866,22 +909,32 @@ function buildMilestones() {
                 }
 
                 const hasSpecial = m.rewards && m.rewards.includes("?");
-                // Chaîne d'animations : clés → joker → film secret → spécial
+                // Chaîne d'animations : palier → clés → joker → film secret → spécial
                 const onAfterJoker = hasSecret ? () => showPosterReveal(m.secretFilm) : hasSpecial ? () => showSecretRewardReveal() : null;
                 const onAfterKeys  = m.jokers ? () => setTimeout(() => showJokerReveal(onAfterJoker, m.jokers), 300) : onAfterJoker;
-                if (m.keys) {
-                    setTimeout(() => showKeyReveal(m.keys, onAfterKeys), 300);
-                } else if (m.jokers) {
-                    setTimeout(() => showJokerReveal(onAfterJoker, m.jokers), 300);
-                } else if (hasSecret) {
-                    setTimeout(() => showPosterReveal(m.secretFilm), 500);
-                } else if (hasSpecial) {
-                    setTimeout(() => showSecretRewardReveal(), 300);
-                }
+                const startRewards = () => {
+                    if (m.keys) {
+                        setTimeout(() => showKeyReveal(m.keys, onAfterKeys), 300);
+                    } else if (m.jokers) {
+                        setTimeout(() => showJokerReveal(onAfterJoker, m.jokers), 300);
+                    } else if (hasSecret) {
+                        setTimeout(() => showPosterReveal(m.secretFilm), 300);
+                    } else if (hasSpecial) {
+                        setTimeout(() => showSecretRewardReveal(), 300);
+                    }
+                };
+                setTimeout(() => showMilestoneReveal(m, index, startRewards), 300);
             });
         }
 
         container.appendChild(div);
+    });
+
+    // Anime les barres de progression après insertion dans le DOM
+    requestAnimationFrame(() => {
+        container.querySelectorAll(".mpi-fill[data-pct]").forEach(el => {
+            el.style.width = el.dataset.pct + "%";
+        });
     });
 }
 
@@ -1048,7 +1101,7 @@ function fillModal(modal, index, forceReveal) {
 
     const icon = modal.querySelector(".modal-icon");
     if (isLocked) {
-        icon.src = "medias/Myst.png";
+        icon.src = "medias/b5.png";
     } else {
         icon.src = achImg(index);
     }
@@ -1121,7 +1174,7 @@ function openInfoModal(index, mysteryReveal = false) {
     const isLocked  = isMystery || isSecret;
 
     // Fond
-    const imgSrc = isLocked ? "medias/Myst.png" : achImg(index);
+    const imgSrc = isLocked ? "medias/b5.png" : achImg(index);
     document.getElementById("info-bg").style.backgroundImage = `url(${imgSrc})`;
     document.getElementById("modal-info").style.setProperty("--modal-poster", `url(${imgSrc})`);
     document.getElementById("info-validated-badge").classList.toggle("hidden", !isValidated);
@@ -1438,6 +1491,41 @@ function showJokerReveal(onNext, jokers = 1) {
         requestAnimationFrame(() => screen.classList.add("active"));
     });
 }
+
+let milestoneUnlockCallback = null;
+
+function showMilestoneReveal(m, milestoneIndex, onNext) {
+    milestoneUnlockCallback = onNext || null;
+    const screen = document.getElementById("milestone-unlock-screen");
+    document.getElementById("milestone-unlock-img").src = `medias/s${m.icon || milestoneIndex + 1}.png`;
+    document.getElementById("milestone-unlock-name").textContent = m.label || `${m.count} succès`;
+    setMenuVisible(false);
+    screen.classList.remove("hidden");
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => screen.classList.add("active"));
+    });
+}
+
+document.getElementById("milestone-unlock-next").addEventListener("click", () => {
+    const screen = document.getElementById("milestone-unlock-screen");
+    screen.classList.remove("active");
+    let done = false;
+    const cleanup = () => {
+        if (done) return;
+        done = true;
+        screen.classList.add("hidden");
+        if (milestoneUnlockCallback) {
+            const cb = milestoneUnlockCallback;
+            milestoneUnlockCallback = null;
+            cb();
+        }
+    };
+    screen.addEventListener("transitionend", function handler() {
+        screen.removeEventListener("transitionend", handler);
+        cleanup();
+    });
+    setTimeout(cleanup, 500);
+});
 
 document.getElementById("key-reveal-next").addEventListener("click", () => {
     const screen = document.getElementById("key-reveal-screen");
@@ -2094,13 +2182,19 @@ function openPosterModal(src) {
 //  DIDACTICIEL
 // ============================================================
 const TUTORIAL_PHASE2_STEPS = [
-    { text: "Ici tu retrouveras tous les films disponibles\net tu pourras accéder à tous les défis !", view: "films" },
+    { text: "Ici tu retrouveras tous les films disponibles et tu pourras accéder à tous les défis !", view: "films" },
     { text: "Ici tu retrouveras les récompenses et succès\nà débloquer lors de ta progression.", view: "rewards" },
-    { text: "Et ici tu pourras classer tes films\ndans une tierlist !", view: "tierlist" },
+    { text: "Et ici tu pourras classer tes films\ndans une tierlist ! Trop bien !", view: "tierlist" },
 ];
-const TUTORIAL_PHASE2_FINAL = "Voilà, tu sais maintenant deux trois trucs sur cette application.\nMaintenant je te laisse la découvrir plus en détail tout seul !\nAmuse-toi bien ! 🎬";
+const TUTORIAL_PHASE2_FINAL = [
+    { text: "Voilà, tu sais maintenant deux trois trucs sur cette application.", img: "medias/p2.png" },
+    { text: "Mais tu n'a pas encore tous découvert.", img: "medias/p2.png" },
+    { text: "Maintenant je te laisse la explorer le reste plus en détail !", img: "medias/p2.png" },
+    { text: "Amuse-toi bien !", img: "medias/p1.png" },
+];
 
 let tutorialPhase2Step = 0;
+let tutorialFinalStep  = 0;
 
 function showTutorialGuideStep(index) {
     const step   = TUTORIAL_PHASE2_STEPS[index];
@@ -2108,7 +2202,7 @@ function showTutorialGuideStep(index) {
     const textEl = document.getElementById("tutorial-guide-text");
     const btn    = document.getElementById("tutorial-guide-next");
 
-    btn.textContent = "Suivant →";
+    btn.textContent = "Suivant";
 
     if (guide.classList.contains("hidden")) {
         // Première apparition
@@ -2149,35 +2243,117 @@ function startTutorialPhase2() {
 }
 
 function showTutorialFinal() {
+    tutorialFinalStep = 0;
     const overlay = document.getElementById("tutorial-final");
     const textEl  = document.getElementById("tutorial-final-text");
-    textEl.textContent = TUTORIAL_PHASE2_FINAL;
+    const imgEl   = document.getElementById("tutorial-final-img");
+    const btn     = document.getElementById("tutorial-final-next");
+    const box     = overlay.querySelector(".tutorial-box");
+
     overlay.classList.remove("hidden");
     overlay.style.opacity = "0";
     overlay.offsetWidth;
-    overlay.style.transition = "opacity 0.4s ease";
+    overlay.style.transition = "opacity 0.6s ease";
     overlay.style.opacity = "1";
 
-    document.getElementById("tutorial-final-next").addEventListener("click", () => {
-        refTutorialDone.set(2).then(() => location.reload());
-    }, { once: true });
+    const showFinalStep = (first = false) => {
+        const step   = TUTORIAL_PHASE2_FINAL[tutorialFinalStep];
+        const isLast = tutorialFinalStep >= TUTORIAL_PHASE2_FINAL.length - 1;
+        btn.textContent = isLast ? "Terminer !" : "Suivant";
+        applyTutorialImg(imgEl, step.img);
+
+        if (first) {
+            box.style.transition = "none";
+            box.style.opacity    = "0";
+            box.style.transform  = "translateY(20px)";
+            box.offsetWidth;
+            box.style.transition = "opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)";
+            box.style.opacity    = "1";
+            box.style.transform  = "translateY(0)";
+            setTimeout(() => typewrite(textEl, step.text), 200);
+        } else {
+            box.style.transition = "opacity 0.18s ease, transform 0.18s ease";
+            box.style.opacity    = "0";
+            box.style.transform  = "translateY(-10px)";
+            setTimeout(() => {
+                textEl.textContent = "";
+                box.style.transition = "none";
+                box.style.transform  = "translateY(14px)";
+                box.offsetWidth;
+                box.style.transition = "opacity 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)";
+                box.style.opacity    = "1";
+                box.style.transform  = "translateY(0)";
+                setTimeout(() => typewrite(textEl, step.text), 150);
+            }, 200);
+        }
+    };
+
+    showFinalStep(true);
+
+    btn.addEventListener("click", function onFinalNext() {
+        tutorialFinalStep++;
+        if (tutorialFinalStep < TUTORIAL_PHASE2_FINAL.length) {
+            showFinalStep();
+        } else {
+            btn.removeEventListener("click", onFinalNext);
+            refTutorialDone.set(2).then(() => location.reload());
+        }
+    });
 }
 const TUTORIAL_STEPS = [
-    { text: "Bienvenue !\n Comme c'est la première fois que tu utilise cette application je vais te guider !"},
-    { text: "Pour commencer \nj'ai besoin de connaitre ton prénom"},
-    { text: "Entrez votre prénom", fakeInput: true },
-    { text: "Matthias !\n Wow quel beau prénom !" },
-    { text: "Ça tombe super bien\n tu vas découvrir un jeu fantastique !" },
-    { text: "Car ce jeu se nomme\nLe jeu des films de Matthias !" },
-    { text: "Allez, je vais te montrer \ncomment ça marche !", last: true },
+    { text: "Bienvenue !\n Comme c'est la première fois que tu utilises cette application je vais te guider !", img: "medias/p1.png" },
+    { text: "Pour commencer \nj'ai besoin de connaitre ton prénom", img: "medias/p2.png" },
+    { text: "Entrez votre prénom", fakeInput: true, img: "medias/p2.png" },
+    { text: "Matthias !\n Wow quel beau prénom !", img: "medias/p2.png" },
+    { text: "Ça tombe super bien\n tu vas découvrir un jeu fantastique !", img: "medias/p2.png" },
+    { text: "Car ce jeu se nomme\nLe jeu des films de Matthias !", img: "medias/p2.png" },
+    { text: "Allez, je vais te montrer \ncomment ça marche !", last: true, img: "medias/p1.png" },
 ];
 
 let tutorialStep = 0;
 
+let _typewriterTimer = null;
+function typewrite(el, text, speed = 10) {
+    if (_typewriterTimer) clearInterval(_typewriterTimer);
+    el.textContent = "";
+    let i = 0;
+    _typewriterTimer = setInterval(() => {
+        el.textContent += text[i++];
+        if (i >= text.length) clearInterval(_typewriterTimer);
+    }, speed);
+}
+
+function applyTutorialImg(imgEl, src) {
+    const show = () => {
+        imgEl.src = src;
+        imgEl.classList.remove("hidden");
+        imgEl.style.transition = "opacity 0.2s ease";
+        imgEl.style.opacity = "1";
+    };
+
+    if (!src) {
+        imgEl.style.transition = "opacity 0.2s ease";
+        imgEl.style.opacity = "0";
+        setTimeout(() => {
+            imgEl.classList.add("hidden");
+            imgEl.src = "";
+        }, 200);
+    } else if (imgEl.classList.contains("hidden") || !imgEl.src) {
+        imgEl.style.opacity = "0";
+        show();
+    } else {
+        // image déjà visible → fondu sortant puis entrant
+        imgEl.style.transition = "opacity 0.2s ease";
+        imgEl.style.opacity = "0";
+        setTimeout(() => show(), 200);
+    }
+}
+
 function showTutorialStep(index) {
     const step      = TUTORIAL_STEPS[index];
-    const box       = document.querySelector(".tutorial-box");
+    const box       = document.querySelector("#tutorial-overlay .tutorial-box");
     const textEl    = document.getElementById("tutorial-text");
+    const imgEl     = document.getElementById("tutorial-img");
     const fakeInput = document.getElementById("tutorial-fake-input");
     const nextBtn   = document.getElementById("tutorial-next-btn");
 
@@ -2192,10 +2368,11 @@ function showTutorialStep(index) {
         box.style.transition = "opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)";
         box.style.opacity    = "1";
         box.style.transform  = "translateY(0)";
-        textEl.textContent   = step.text;
+        applyTutorialImg(imgEl, step.img);
+        setTimeout(() => typewrite(textEl, step.text), 200);
         fakeInput.classList.toggle("hidden", !step.fakeInput);
         nextBtn.classList.toggle("hidden", !!step.fakeInput);
-        if (!step.fakeInput) nextBtn.textContent = step.last ? "C'est parti !" : "Suivant →";
+        if (!step.fakeInput) nextBtn.textContent = step.last ? "C'est parti !" : "Suivant";
     } else {
         // Slide out vers le haut + fade, puis slide in depuis le bas
         box.style.transition = "opacity 0.18s ease, transform 0.18s ease";
@@ -2203,10 +2380,11 @@ function showTutorialStep(index) {
         box.style.transform  = "translateY(-10px)";
 
         setTimeout(() => {
-            textEl.textContent = step.text;
+            textEl.textContent = "";
+            applyTutorialImg(imgEl, step.img);
             fakeInput.classList.toggle("hidden", !step.fakeInput);
             nextBtn.classList.toggle("hidden", !!step.fakeInput);
-            if (!step.fakeInput) nextBtn.textContent = step.last ? "C'est parti !" : "Suivant →";
+            if (!step.fakeInput) nextBtn.textContent = step.last ? "C'est parti !" : "Suivant";
 
             box.style.transition = "none";
             box.style.transform  = "translateY(14px)";
@@ -2214,6 +2392,7 @@ function showTutorialStep(index) {
             box.style.transition = "opacity 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)";
             box.style.opacity    = "1";
             box.style.transform  = "translateY(0)";
+            setTimeout(() => typewrite(textEl, step.text), 150);
         }, 200);
     }
 }
@@ -2225,6 +2404,40 @@ function advanceTutorial() {
         return;
     }
     showTutorialStep(tutorialStep);
+}
+
+function showQrIntro(onDone) {
+    const screen  = document.getElementById("qr-intro-screen");
+    const img     = document.getElementById("qr-intro-img");
+    const barWrap = screen.querySelector(".qr-intro-bar-wrap");
+    const bar     = document.getElementById("qr-intro-bar");
+
+    screen.classList.remove("hidden");
+
+    // Image apparaît en fondu après 200ms
+    setTimeout(() => {
+        img.classList.add("visible");
+    }, 200);
+
+    // Barre apparaît puis démarre sa progression
+    setTimeout(() => {
+        barWrap.classList.add("visible");
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            bar.style.width = "100%";
+        }));
+    }, 600);
+
+    // Après 5s + 600ms : fondu sortant du contenu sur 3s, fond reste
+    setTimeout(() => {
+        img.style.transition = "opacity 3s ease";
+        img.style.opacity = "0";
+        barWrap.style.transition = "opacity 3s ease";
+        barWrap.style.opacity = "0";
+        setTimeout(() => {
+            screen.classList.add("hidden");
+            onDone();
+        }, 3000);
+    }, 5600);
 }
 
 function startTutorial() {
@@ -2261,14 +2474,14 @@ let tutorialActive = false;
         const phase = snap.val() || 0;
 
         if (phase === 0) {
-            // Phase 1 : intro
+            // Phase 1 : intro — QR code d'abord
             tutorialActive = true;
             const splash = document.getElementById("splash");
             if (splash) splash.style.display = "none";
             document.body.classList.remove("splash-active");
             splashCanDismiss = true;
             splashDone = true;
-            startTutorial();
+            showQrIntro(startTutorial);
 
         } else if (phase === 1) {
             // Phase 2 : visite guidée — lancer après le splash normal
@@ -2308,6 +2521,9 @@ document.addEventListener("visibilitychange", () => {
 
 // Init : afficher la grille immédiatement, Firebase la mettra à jour ensuite
 buildGrid();
+
+// Init modal couleur accent
+initAccentColorModal();
 
 // Init indicateur de menu
 requestAnimationFrame(() => updateMenuIndicator(currentView));
@@ -2465,7 +2681,7 @@ function buildTierlistUI() {
     if (unplaced.length === 0) {
         const empty = document.createElement("div");
         empty.className  = "tl-bank-empty";
-        empty.textContent = "Tous les films sont classés !";
+        empty.textContent = "";
         bank.appendChild(empty);
     } else {
         unplaced.forEach(i => bank.appendChild(makeTlCard(i)));
@@ -2504,18 +2720,18 @@ initTierlist();
         localStorage.setItem("persoCount", String(getPopsToday() + 1));
     }
 
-    // --- Fenêtre horaire 22h-23h59 ---
+    // --- Fenêtre horaire 22h00-23h30 ---
     function msUntilWindow() {
-        const now = new Date();
-        const h = now.getHours();
-        if (h >= 22) return 0; // déjà dans la fenêtre
+        const now  = new Date();
+        const mins = now.getHours() * 60 + now.getMinutes();
+        if (mins >= 22 * 60) return 0;
         const target = new Date(now);
         target.setHours(22, 0, 0, 0);
         return target - now;
     }
     function inWindow() {
-        const h = new Date().getHours();
-        return h >= 22; // 22h00 – 23h59
+        const mins = new Date().getHours() * 60 + new Date().getMinutes();
+        return mins >= 22 * 60 && mins < 23 * 60 + 30; // 22h00 – 23h30
     }
 
     // --- Transforms ---

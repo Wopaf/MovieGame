@@ -54,6 +54,10 @@
 
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-inner">
+                <div class="sidebar-header-frame">
+                <button class="accent-color-btn" id="accent-color-btn" title="Personnaliser la couleur">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor"><path d="M480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 32.5-156t88-127Q256-817 330-848.5T488-880q80 0 151 27.5t124.5 76q53.5 48.5 85 115T880-518q0 115-70 176.5T640-280h-74q-9 0-12.5 5t-3.5 11q0 12 15 34.5t15 51.5q0 50-27.5 74T480-80Zm0-400Zm-177 23q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Zm120-160q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Zm200 0q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Zm120 160q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17ZM480-160q9 0 14.5-5t5.5-13q0-14-15-33t-15-57q0-42 29-67t71-25h70q66 0 113-38.5T800-518q0-121-92.5-201.5T488-800q-136 0-232 93t-96 227q0 133 93.5 226.5T480-160Z"/></svg>
+                </button>
                 <div class="sidebar-title-wrap" id="sidebar-title-wrap">
                     <img id="sidebar-title-icon" class="sidebar-title-icon" src="" alt="">
                     <div class="sidebar-title-text">
@@ -75,6 +79,7 @@
                         <span class="sidebar-prog-pct" id="sp-pct">0%</span>
                     </div>
                 </div>
+                </div><!-- /.sidebar-header-frame -->
                 <div class="sidebar-milestones-label">Succès</div>
                 <div id="milestones" class="milestones"></div>
             </div>
@@ -103,7 +108,6 @@
             <div class="secret-reward-lines" id="secret-reward-lines"></div>
             <button id="secret-reward-next" class="poster-reveal-next-btn">
                 <span class="secret-reward-btn-label">Suivant</span>
-                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
             </button>
         </div>
     </div>
@@ -116,7 +120,18 @@
             <h2 class="poster-reveal-title" id="poster-reveal-title"></h2>
             <button id="poster-reveal-next" class="poster-reveal-next-btn">
                 Suivant
-                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Écran déverrouillage palier -->
+    <div id="milestone-unlock-screen" class="key-reveal-screen hidden">
+        <div class="key-reveal-inner">
+            <div class="key-reveal-badge" id="milestone-unlock-badge">Palier atteint !</div>
+            <img id="milestone-unlock-img" class="milestone-unlock-img" src="" alt="">
+            <div class="key-reveal-count" id="milestone-unlock-name"></div>
+            <button id="milestone-unlock-next" class="poster-reveal-next-btn">
+                Suivant
             </button>
         </div>
     </div>
@@ -131,7 +146,6 @@
             <div class="key-reveal-count" id="key-reveal-count">+1 Clé</div>
             <button id="key-reveal-next" class="poster-reveal-next-btn">
                 Suivant
-                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/></svg>
             </button>
         </div>
     </div>
@@ -143,7 +157,7 @@
                     <span id="mystery-points-text"></span>
                 </div>
                 <div class="badge-tooltip hidden" id="keys-tooltip">
-                    <p class="badge-tooltip-title">Clés disponibles</p>
+                    <p class="badge-tooltip-title">Clés</p>
                     <p class="badge-tooltip-body">Les clés permettent de déverrouiller les films verrouillés. Obtenez-en en atteignant des paliers de récompense.</p>
                 </div>
             </div>
@@ -152,7 +166,7 @@
                     <span id="jokers-text"></span>
                 </div>
                 <div class="badge-tooltip hidden" id="jokers-tooltip">
-                    <p class="badge-tooltip-title">Jokers disponibles</p>
+                    <p class="badge-tooltip-title">Jokers</p>
                     <p class="badge-tooltip-body">Les jokers permettent de valider un film sans répondre à la question. Obtenez-en en atteignant des paliers de récompense.</p>
                 </div>
             </div>
@@ -392,6 +406,18 @@
         <div class="splash-spinner"></div>
     </div>
 
+    <!-- Modal couleur accent -->
+    <div id="modal-accent" class="accent-modal hidden">
+        <div class="accent-modal-overlay" id="accent-modal-overlay"></div>
+        <div class="accent-modal-box">
+            <div class="accent-modal-header">
+                <span class="accent-modal-title">Couleur d'accentuation</span>
+                <button class="accent-modal-close" id="accent-modal-close">&times;</button>
+            </div>
+            <div class="accent-color-swatches" id="accent-color-swatches"></div>
+        </div>
+    </div>
+
     <!-- Toast notifications -->
     <div id="toast-container"></div>
 
@@ -404,26 +430,40 @@
     <!-- Didacticiel phase 2 — barre guide -->
     <div id="tutorial-guide" class="tutorial-guide hidden">
         <p class="tutorial-guide-text" id="tutorial-guide-text"></p>
-        <button id="tutorial-guide-next" class="tutorial-next-btn">Suivant →</button>
+        <button id="tutorial-guide-next" class="tutorial-guide-btn">Suivant</button>
     </div>
 
     <!-- Didacticiel phase 2 — écran final opaque -->
     <div id="tutorial-final" class="tutorial-overlay hidden">
+        <img id="tutorial-final-img" class="tutorial-img hidden" src="" alt="">
         <div class="tutorial-box">
-            <p class="tutorial-text" id="tutorial-final-text"></p>
-            <button id="tutorial-final-next" class="tutorial-next-btn">Terminer !</button>
+            <div class="tutorial-box-bottom">
+                <p class="tutorial-text" id="tutorial-final-text"></p>
+            </div>
+        </div>
+        <button id="tutorial-final-next" class="tutorial-next-btn">Terminer !</button>
+    </div>
+
+    <!-- Écran QR code pré-tutoriel -->
+    <div id="qr-intro-screen" class="qr-intro-screen hidden">
+        <img id="qr-intro-img" class="qr-intro-img" src="medias/qrcode.png" alt="QR Code">
+        <div class="qr-intro-bar-wrap">
+            <div id="qr-intro-bar" class="qr-intro-bar"></div>
         </div>
     </div>
 
     <!-- Didacticiel phase 1 -->
     <div id="tutorial-overlay" class="tutorial-overlay hidden">
+        <img id="tutorial-img" class="tutorial-img hidden" src="" alt="">
         <div class="tutorial-box">
-            <p class="tutorial-text" id="tutorial-text"></p>
-            <div id="tutorial-fake-input" class="tutorial-fake-input hidden">
-                <span class="tutorial-fake-cursor"></span>
+            <div class="tutorial-box-bottom">
+                <p class="tutorial-text" id="tutorial-text"></p>
+                <div id="tutorial-fake-input" class="tutorial-fake-input hidden">
+                    <span class="tutorial-fake-cursor"></span>
+                </div>
             </div>
-            <button id="tutorial-next-btn" class="tutorial-next-btn hidden">Suivant →</button>
         </div>
+        <button id="tutorial-next-btn" class="tutorial-next-btn hidden">Suivant</button>
     </div>
 
     <!-- Intro défi -->
