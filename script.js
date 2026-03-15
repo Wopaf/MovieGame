@@ -16,6 +16,9 @@ const FIREBASE_CONFIG = {
 // ============================================================
 let DEBUG_MODE = localStorage.getItem('debugMode') === 'true';
 
+const KEY_ICON   = `<img src="medias/key.png"   class="icon-key">`;
+const JOKER_ICON = `<img src="medias/joker.png" class="icon-joker">`;
+
 let _debugUIReady = false;
 function initDebugUI() {
     if (_debugUIReady) return;
@@ -85,16 +88,31 @@ function initDebugUI() {
         });
     });
 
+    document.getElementById("debug-add-key-btn").addEventListener("click", () => {
+        refClaimedMilestones.transaction(v => (v || 0) + 1);
+        showToast("+1 clé ajoutée", "error", 1000);
+    });
+
+    document.getElementById("debug-add-joker-btn").addEventListener("click", () => {
+        refJokers.transaction(v => (v || 0) + 1);
+        showToast("+1 joker ajouté", "error", 1000);
+    });
+
     document.getElementById("debug-tutorial-reset-btn").addEventListener("click", () => {
         refTutorialDone.set(null);
         showToast("Didacticiel réinitialisé !", "error", 1000);
+    });
+
+    document.getElementById("debug-show-fairy-btn").addEventListener("click", () => {
+        closeDebugPanel();
+        window._debugShowFairy?.();
     });
 
     document.getElementById("debug-perso-reset-btn").addEventListener("click", () => {
         localStorage.removeItem("persoCaught");
         localStorage.removeItem("persoDay");
         localStorage.removeItem("persoCount");
-        showToast("Petit bonhomme réinitialisé !", "error", 1000);
+        showToast("Fée réinitialisée !", "error", 1000);
     });
 
     document.getElementById("debug-disable-btn").addEventListener("click", () => {
@@ -119,17 +137,17 @@ function enableDebugMode() {
 //  PALIERS / OBJECTIFS — Modifier ici facilement
 // ============================================================
 const MILESTONES = [
-    { label: "Initié",               objectif: "Valider 3 films",  count: 1,  keys: 1,             icon: 2 },
-    { label: "Accro aux popcorns",   objectif: "Valider 10 films", count: 3, jokers: 1, keys: 1,  icon: 3 },
-    { label: "Amateur éclairé",      objectif: "Valider 15 films", count: 5, keys: 2,             icon: 4 },
-    { label: "Cinéphile du dimanche",objectif: "Valider 20 films", count: 10, keys: 3,             icon: 5 },
-    { label: "Passionné",            objectif: "Valider 25 films", count: 15, keys: 3,  jokers: 1, icon: 6 },
-    { label: "Critique en herbe",    objectif: "Valider 30 films", count: 20, keys: 3,             icon: 7 },
-    { label: "Fin Connaisseur",      objectif: "Valider 35 films", count: 25, keys: 3,             icon: 8 },
-    { label: "Cinéphile",            objectif: "Valider 40 films", count: 35, keys: 3,             icon: 9 },
-    { label: "Déglingo",             objectif: "Valider 45 films", count: 40, keys: 3, secretFilm: 38, icon: 10 },
-    { label: "Collectionneur",       objectif: "Valider 50 films", count: 45, secretFilm: 51,      icon: 11 },
-    { label: "???",                  objectif: "Valider 52 films", count: 47, rewards: ["?"],      icon: 12 },
+    { label: "Initié",               objectif: "Valider 1 films",  count: 1,  keys: 1,             icon: 2 },
+    { label: "Accro aux popcorns",   objectif: "Valider 3 films",  count: 3,  jokers: 1,           icon: 3 },
+    { label: "Amateur éclairé",      objectif: "Valider 10 films", count: 10, keys: 1,             icon: 4 },
+    { label: "Cinéphile du dimanche",objectif: "Valider 20 films", count: 20, keys: 2, jokers: 1,  icon: 5 },
+    { label: "Passionné",            objectif: "Valider 24 films", count: 24, keys: 3,             icon: 6 },
+    { label: "Critique en herbe",    objectif: "Valider 27 films", count: 27, keys: 3, jokers: 1,  icon: 7 },
+    { label: "Fin Connaisseur",      objectif: "Valider 30 films", count: 30, keys: 3,             icon: 8 },
+    { label: "Cinéphile",            objectif: "Valider 33 films", count: 33, keys: 3,             icon: 9 },
+    { label: "Déglingo",             objectif: "Valider 36 films", count: 36, keys: 3, secretFilm: 38, icon: 10 },
+    { label: "Collectionneur",       objectif: "Valider 39 films", count: 39, secretFilm: 51,      icon: 11 },
+    { label: "???",                  objectif: "Valider 40 films", count: 40, rewards: ["?"],      icon: 12 },
 ];
 
 // ============================================================
@@ -314,7 +332,7 @@ const ACHIEVEMENTS = [
     { title: "Incassable", img: "34.png", password: "3vH", rebus: "medias/r22.png",
     question: "Quel est le nom de la galerie d'art spécialisée dans les comics tenue par Elijah Price ?", answer: "Limited Edition",
     realisateur: "M. Night Shyamalan", description: "Un homme découvre qu'il est invincible après avoir été le seul survivant d'un terrible accident de train.",
-    turl: "https://www.youtube.com/watch?v=AC-LA9QVdmI", genres: ["Fantastique", "Thriller"], imdb: "https://www.imdb.com/title/tt0217869/", rating: "7.3", verrouille: false },
+    turl: "https://www.youtube.com/watch?v=AC-LA9QVdmI", genres: ["Fantastique", "Thriller"], imdb: "https://www.imdb.com/title/tt0217869/", rating: "7.3", verrouille: true },
 
     { title: "Bugonia", img: "54.png", password: "1xQ", rebus: "medias/r23.png",
     question: "De quel espèce extraterrestre parle-t-on dans ce film ?", answer: "les Andromédiens",
@@ -605,6 +623,7 @@ function initAccentColorModal() {
         sw.style.background = value;
         sw.addEventListener("click", () => {
             refAccentColor.set(value);
+            modal.classList.add("hidden");
         });
         grid.appendChild(sw);
     });
@@ -620,16 +639,14 @@ function updateMysteryPointsIndicator() {
     if (!el) return;
     el.classList.remove("hidden");
     el.style.display = (currentView === 'tierlist' || currentView === 'rewards') ? 'none' : '';
-    const KEY_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" style="vertical-align:-0.15em;margin-left:4px"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></g></svg>`;
-    document.getElementById("mystery-points-text").innerHTML = `<span class="mpi-count">${points} ${KEY_SVG}</span>`;
+    document.getElementById("mystery-points-text").innerHTML = `<span class="mpi-count">${points} ${KEY_ICON}</span>`;
 }
 
 function updateJokersIndicator(count) {
     const el = document.getElementById("jokers-indicator");
     if (!el) return;
     el.classList.remove("hidden");
-    const JOKER_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.15em"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 5v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2" /><path d="M8 6h.01" /><path d="M16 18h.01" /><path d="M11.75 14.112l-1.63 .853a.294 .294 0 0 1 -.425 -.307l.31 -1.808l-1.317 -1.28a.292 .292 0 0 1 .163 -.499l1.82 -.264l.815 -1.644a.294 .294 0 0 1 .527 0l.814 1.644l1.82 .264a.292 .292 0 0 1 .164 .499l-1.318 1.28l.31 1.807a.292 .292 0 0 1 -.425 .308l-1.628 -.853" /></svg>`;
-    document.getElementById("jokers-text").innerHTML = `${count} ${JOKER_SVG}`;
+    document.getElementById("jokers-text").innerHTML = `${count} ${JOKER_ICON}`;
 }
 
 function updateRewardsBadge(playNotif = false) {
@@ -785,11 +802,9 @@ function updateCounter() {
 
 
 function rewardBadgesHTML(m) {
-    const keySvg   = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" style="vertical-align:-0.15em;margin-left:4px"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></g></svg>`;
-    const jokerSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.15em;margin-left:4px"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 5v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2" /><path d="M8 6h.01" /><path d="M16 18h.01" /><path d="M11.75 14.112l-1.63 .853a.294 .294 0 0 1 -.425 -.307l.31 -1.808l-1.317 -1.28a.292 .292 0 0 1 .163 -.499l1.82 -.264l.815 -1.644a.294 .294 0 0 1 .527 0l.814 1.644l1.82 .264a.292 .292 0 0 1 .164 .499l-1.318 1.28l.31 1.807a.292 .292 0 0 1 -.425 .308l-1.628 -.853" /></svg>`;
     const badges = [];
-    if (m.keys)               badges.push(`<span class="reward-badge reward-badge-key">${m.keys} ${keySvg}</span>`);
-    if (m.jokers)             badges.push(`<span class="reward-badge reward-badge-joker">${m.jokers} ${jokerSvg}</span>`);
+    if (m.keys)               badges.push(`<span class="reward-badge reward-badge-key">${m.keys} ${KEY_ICON}</span>`);
+    if (m.jokers)             badges.push(`<span class="reward-badge reward-badge-joker">${m.jokers} ${JOKER_ICON}</span>`);
     if (m.secretFilm !== undefined) badges.push(`<span class="reward-badge reward-badge-secret">Film secret</span>`);
     if (m.rewards && m.rewards.includes("?")) badges.push(`<span class="reward-badge">?</span>`);
     return badges.join("");
@@ -823,11 +838,15 @@ function buildMilestones() {
     // Index du premier palier pas encore atteint → reçoit la barre de progression
     const nextIndex = MILESTONES.findIndex(m => count < m.count);
 
+    // Seul le plus vieux palier claimable (index le plus bas) montre le bouton
+    const firstClaimableIndex = MILESTONES.findIndex((m, i) => count >= m.count && i >= claimedCount);
+
     MILESTONES.forEach((m, index) => {
         const reached   = count >= m.count;
         const claimed   = index < claimedCount;
         const claimable = reached && !claimed;
         const isNext    = index === nextIndex;
+        const showClaimBtn = claimable && index === firstClaimableIndex;
 
         // Barre de progression intégrée dans la carte du prochain palier
         const missing = m.count - count;
@@ -866,7 +885,7 @@ function buildMilestones() {
             div.innerHTML = `
                 <div class="milestone-header ${headerClass}">
                     <span class="milestone-title">${m.label || `${m.count} succès`}</span>
-                    ${claimable ? `<button class="milestone-claim-btn">Récupérer la Récompense</button>` : ""}
+                    ${showClaimBtn ? `<button class="milestone-claim-btn"><img src="medias/gift.gif" class="milestone-claim-icon"> Récupérer la Récompense</button>` : ""}
                 </div>
                 <div class="milestone-content">
                     <div class="milestone-main-row">
@@ -888,7 +907,7 @@ function buildMilestones() {
             `;
         }
 
-        if (claimable) {
+        if (showClaimBtn) {
             div.querySelector(".milestone-claim-btn").addEventListener("click", () => {
                 playSound("takeReward");
                 saveClaimedMilestones(getClaimedMilestones() + 1);
@@ -911,12 +930,12 @@ function buildMilestones() {
                 const hasSpecial = m.rewards && m.rewards.includes("?");
                 // Chaîne d'animations : palier → clés → joker → film secret → spécial
                 const onAfterJoker = hasSecret ? () => showPosterReveal(m.secretFilm) : hasSpecial ? () => showSecretRewardReveal() : null;
-                const onAfterKeys  = m.jokers ? () => setTimeout(() => showJokerReveal(onAfterJoker, m.jokers), 300) : onAfterJoker;
+                const onAfterKeys  = m.jokers ? () => setTimeout(() => showJokerReveal(onAfterJoker, m.jokers), 120) : onAfterJoker;
                 const startRewards = () => {
                     if (m.keys) {
-                        setTimeout(() => showKeyReveal(m.keys, onAfterKeys), 300);
+                        setTimeout(() => showKeyReveal(m.keys, onAfterKeys), 120);
                     } else if (m.jokers) {
-                        setTimeout(() => showJokerReveal(onAfterJoker, m.jokers), 300);
+                        setTimeout(() => showJokerReveal(onAfterJoker, m.jokers), 120);
                     } else if (hasSecret) {
                         setTimeout(() => showPosterReveal(m.secretFilm), 300);
                     } else if (hasSpecial) {
@@ -962,7 +981,6 @@ function buildGrid() {
     updateFilterCounts();
     grid.innerHTML = "";
 
-    const SVG_LOCKED = `<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm296.5-143.5Q560-327 560-360t-23.5-56.5Q513-440 480-440t-56.5 23.5Q400-393 400-360t23.5 56.5Q447-280 480-280t56.5-23.5ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/></svg>`;
 
     getSortedIndices().forEach(i => {
         const ach = ACHIEVEMENTS[i];
@@ -979,9 +997,9 @@ function buildGrid() {
         const displayTitle = isMystery ? "Film verrouillé" : isSecret ? "Film secret" : ach.title;
 
         cell.innerHTML = `
-            ${!(isMystery || isSecret) ? `<img class="cell-icon" src="${achImg(i)}" alt="${displayTitle}" loading="lazy">` : ""}
-            ${isMystery ? `<div class="cell-lock-overlay">${SVG_LOCKED}</div>` : ""}
-            ${isSecret  ? `<div class="cell-lock-overlay cell-secret-overlay">?</div>` : ""}
+            <img class="cell-icon${isMystery || isSecret ? " cell-icon-locked" : ""}" src="${achImg(i)}" alt="${displayTitle}" loading="lazy">
+            ${isMystery ? `<div class="cell-lock-overlay"><img src="medias/lock.png" class="cell-overlay-icon"></div>` : ""}
+            ${isSecret  ? `<div class="cell-lock-overlay cell-secret-overlay"><img src="medias/question.png" class="cell-overlay-icon"></div>` : ""}
             <div class="cell-content">
                 <div class="cell-info">
                     <span class="cell-number-tag">${i + 1}</span>
@@ -990,7 +1008,7 @@ function buildGrid() {
             <div class="cell-status">
             <div class="cell-background">
                 <span class="cell-status-label cell-lock-label">${isSecret ? "Secret" : "Verrouillé"}</span>
-                <span class="cell-lock-icon">${SVG_LOCKED}</span>
+                <img src="medias/lock.png" class="cell-lock-icon cell-overlay-icon" style="width:16px;height:16px">
             </div>
             <div class="cell-background cell-background-valid">
                 <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor"><path d="m438-452-58-57q-11-11-27.5-11T324-508q-11 11-11 28t11 28l86 86q12 12 28 12t28-12l170-170q12-12 11.5-28T636-592q-12-12-28.5-12.5T579-593L438-452ZM326-90l-58-98-110-24q-15-3-24-15.5t-7-27.5l11-113-75-86q-10-11-10-26t10-26l75-86-11-113q-2-15 7-27.5t24-15.5l110-24 58-98q8-13 22-17.5t28 1.5l104 44 104-44q14-6 28-1.5t22 17.5l58 98 110 24q15 3 24 15.5t7 27.5l-11 113 75 86q10 11 10 26t-10 26l-75 86 11 113q2 15-7 27.5T802-212l-110 24-58 98q-8 13-22 17.5T584-74l-104-44-104 44q-14 6-28 1.5T326-90Zm52-72 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Z"/></svg>
@@ -1100,12 +1118,9 @@ function fillModal(modal, index, forceReveal) {
     modal.querySelector(".modal-title").textContent = isLocked ? lockLabel : ach.title;
 
     const icon = modal.querySelector(".modal-icon");
-    if (isLocked) {
-        icon.src = "medias/b5.png";
-    } else {
-        icon.src = achImg(index);
-    }
+    icon.src = achImg(index);
     icon.alt = isLocked ? lockLabel : ach.title;
+    icon.classList.toggle("modal-icon-locked", isLocked);
 }
 
 function openAnimatedModal(modalId, index, forceReveal) {
@@ -1174,13 +1189,22 @@ function openInfoModal(index, mysteryReveal = false) {
     const isLocked  = isMystery || isSecret;
 
     // Fond
-    const imgSrc = isLocked ? "medias/b5.png" : achImg(index);
-    document.getElementById("info-bg").style.backgroundImage = `url(${imgSrc})`;
+    const imgSrc = achImg(index);
+    const infoBgEl = document.getElementById("info-bg");
+    infoBgEl.style.backgroundImage = `url(${imgSrc})`;
+    infoBgEl.style.filter = isLocked ? "blur(25px) brightness(0.35) saturate(0.6)" : "";
     document.getElementById("modal-info").style.setProperty("--modal-poster", `url(${imgSrc})`);
     document.getElementById("info-validated-badge").classList.toggle("hidden", !isValidated);
 
     // Titre + sous-titre
-    document.getElementById("info-title").textContent = isMystery ? "Film verrouillé" : isSecret ? "Film secret" : ach.title;
+    const titleEl = document.getElementById("info-title");
+    if (isMystery) {
+        titleEl.innerHTML = `<img src="medias/lock.png" class="info-title-icon"> Film verrouillé`;
+    } else if (isSecret) {
+        titleEl.innerHTML = `<img src="medias/question.png" class="info-title-icon"> Film secret`;
+    } else {
+        titleEl.textContent = ach.title;
+    }
     const sousTitreEl = document.getElementById("info-sous-titre");
     if (!isLocked && ach.sousTitre) {
         sousTitreEl.textContent = ach.sousTitre;
@@ -1261,7 +1285,7 @@ function openInfoModal(index, mysteryReveal = false) {
         const points = getAvailablePoints();
         if (points > 0) {
             cta.classList.add("cta-unlock");
-            cta.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor"><path d="M280-240q-100 0-170-70T40-480q0-100 70-170t170-70q66 0 121 33t87 87h352q33 0 56.5 23.5T920-520v80q0 33-23.5 56.5T840-360v40q0 33-23.5 56.5T760-240h-80q-33 0-56.5-23.5T600-320v-40H488q-32 54-87 87t-121 33Zm0-80q66 0 106-40.5t48-79.5h246v120h80v-120h80v-80H434q-8-39-48-79.5T280-640q-66 0-113 47t-47 113q0 66 47 113t113 47Zm0-80q33 0 56.5-23.5T360-480q0-33-23.5-56.5T280-560q-33 0-56.5 23.5T200-480q0 33 23.5 56.5T280-400Zm0-80Z"/></svg> Débloquer ce film (1 clé)`;
+            cta.innerHTML = `<img src="medias/delock.png" class="cta-icon"> Débloquer ce film`;
         } else {
             cta.style.display = "none";
         }
@@ -1466,7 +1490,7 @@ function showKeyReveal(keys, onNext) {
     const count  = document.getElementById("key-reveal-count");
 
     badge.textContent = "Récompense débloquée !";
-    icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></g></svg>`;
+    icon.innerHTML = `<img src="medias/key.png" class="icon-key icon-key-reveal">`;
     count.textContent = `+${keys} Clé${keys > 1 ? "s" : ""}`;
     setMenuVisible(false);
     screen.classList.remove("hidden");
@@ -1483,7 +1507,7 @@ function showJokerReveal(onNext, jokers = 1) {
     const count  = document.getElementById("key-reveal-count");
 
     badge.textContent = "Joker obtenu !";
-    icon.innerHTML    = `<svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 5v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2" /><path d="M8 6h.01" /><path d="M16 18h.01" /><path d="M11.75 14.112l-1.63 .853a.294 .294 0 0 1 -.425 -.307l.31 -1.808l-1.317 -1.28a.292 .292 0 0 1 .163 -.499l1.82 -.264l.815 -1.644a.294 .294 0 0 1 .527 0l.814 1.644l1.82 .264a.292 .292 0 0 1 .164 .499l-1.318 1.28l.31 1.807a.292 .292 0 0 1 -.425 .308l-1.628 -.853" /></svg>`;
+    icon.innerHTML    = `<img src="medias/joker.png" class="icon-joker icon-key-reveal">`;
     count.textContent = `+${jokers} Joker${jokers > 1 ? "s" : ""}`;
     setMenuVisible(false);
     screen.classList.remove("hidden");
@@ -1589,7 +1613,7 @@ function typewriterEffect(el, text, speed, callback) {
     next();
 }
 
-function startQuestionSequence(ach) {
+function startQuestionSequence() {
     const questionEl  = document.getElementById("question-text");
     const rebusEl     = document.getElementById("question-rebus");
     const inputGroup  = document.querySelector("#modal-question .input-group");
@@ -1661,7 +1685,7 @@ function openChallengeDirectly(index) {
         const qImgSrc = achImg(index);
         document.getElementById("modal-question").style.setProperty("--modal-poster", `url(${qImgSrc})`);
         openAnimatedModal("modal-question", index, true);
-        startQuestionSequence(ach);
+        startQuestionSequence();
     });
 }
 
@@ -1718,7 +1742,7 @@ function proceedFromInfo() {
                 const qImgSrc = achImg(index);
                 document.getElementById("modal-question").style.setProperty("--modal-poster", `url(${qImgSrc})`);
                 openAnimatedModal("modal-question", index, true);
-                startQuestionSequence(ach);
+                startQuestionSequence();
             });
         });
     }
@@ -2187,10 +2211,10 @@ const TUTORIAL_PHASE2_STEPS = [
     { text: "Et ici tu pourras classer tes films\ndans une tierlist ! Trop bien !", view: "tierlist" },
 ];
 const TUTORIAL_PHASE2_FINAL = [
-    { text: "Voilà, tu sais maintenant deux trois trucs sur cette application.", img: "medias/p2.png" },
-    { text: "Mais tu n'a pas encore tous découvert.", img: "medias/p2.png" },
-    { text: "Maintenant je te laisse la explorer le reste plus en détail !", img: "medias/p2.png" },
-    { text: "Amuse-toi bien !", img: "medias/p1.png" },
+    { text: "Voilà, tu sais maintenant deux trois trucs sur cette application.", img: "medias/mage.gif"  },
+    { text: "Mais tu n'a pas encore tous découvert.", img: "medias/mage.gif" },
+    { text: "Maintenant je te laisse la explorer le reste plus en détail !",  img: "medias/mage.gif"  },
+    { text: "Amuse-toi bien !",  img: "medias/mage.gif"  },
 ];
 
 let tutorialPhase2Step = 0;
@@ -2301,13 +2325,15 @@ function showTutorialFinal() {
     });
 }
 const TUTORIAL_STEPS = [
-    { text: "Bienvenue !\n Comme c'est la première fois que tu utilises cette application je vais te guider !", img: "medias/p1.png" },
-    { text: "Pour commencer \nj'ai besoin de connaitre ton prénom", img: "medias/p2.png" },
-    { text: "Entrez votre prénom", fakeInput: true, img: "medias/p2.png" },
-    { text: "Matthias !\n Wow quel beau prénom !", img: "medias/p2.png" },
-    { text: "Ça tombe super bien\n tu vas découvrir un jeu fantastique !", img: "medias/p2.png" },
-    { text: "Car ce jeu se nomme\nLe jeu des films de Matthias !", img: "medias/p2.png" },
-    { text: "Allez, je vais te montrer \ncomment ça marche !", last: true, img: "medias/p1.png" },
+    { text: "Bienvenue !\n mon nom est Gimijimotolototolopov", img: "medias/mage.gif" },
+    { text: "C'est un long prénom", img: "medias/mage.gif" },
+    { text: "Comme c'est la première fois que tu utilises cette application je vais te guider !", img: "medias/mage.gif" },
+    { text: "Pour commencer \nj'ai besoin de connaitre ton prénom", img: "medias/mage.gif" },
+    { text: "Entrez votre prénom", fakeInput: true, img: "medias/idcard.png" },
+    { text: "Matthias !\n Wow quel beau prénom !", img: "medias/mage.gif" },
+    { text: "Ça tombe super bien\n car tu es sur le point de découvrir un jeu fantastique ..", img: "medias/mage.gif" },
+    { text: "Le jeu des films de Matthias !", img: "medias/mage.gif" },
+    { text: "Allez, je vais te montrer \ncomment ça marche !", last: true, img: "medias/mage.gif" },
 ];
 
 let tutorialStep = 0;
@@ -2546,6 +2572,24 @@ let lastDecisionY = window.scrollY;
 let tlDragIdx    = null;  // index du film en cours de drag
 let tlSelectedIdx = null; // index sélectionné (mode tap mobile)
 
+function tlBankSetVisible(visible) {
+    const bankArea = document.querySelector(".tl-bank-area");
+    if (!bankArea) return;
+    if (visible) {
+        bankArea.classList.remove("hidden", "leaving");
+        void bankArea.offsetWidth; // reflow
+        bankArea.classList.add("entering");
+        bankArea.addEventListener("animationend", () => bankArea.classList.remove("entering"), { once: true });
+    } else {
+        bankArea.classList.remove("entering");
+        bankArea.classList.add("leaving");
+        bankArea.addEventListener("animationend", () => {
+            bankArea.classList.remove("leaving");
+            bankArea.classList.add("hidden");
+        }, { once: true });
+    }
+}
+
 function openTierlist() {
     const modal = document.getElementById("modal-tierlist");
     modal.classList.remove("hidden");
@@ -2576,20 +2620,21 @@ function makeTlCard(idx) {
         tlDragIdx = idx;
         card.classList.add("tl-dragging");
         e.dataTransfer.effectAllowed = "move";
+        const ba = document.querySelector(".tl-bank-area");
+        if (ba && ba.classList.contains("hidden")) tlBankSetVisible(true);
     });
     card.addEventListener("dragend", () => {
         tlDragIdx = null;
         card.classList.remove("tl-dragging");
         document.querySelectorAll(".tl-drag-over").forEach(el => el.classList.remove("tl-drag-over"));
+        if (document.getElementById("tl-bank").children.length === 0) {
+            tlBankSetVisible(false);
+        }
     });
 
     // ---- Double-clic : retirer du tier ----
     card.addEventListener("dblclick", () => {
-        if (idx in cachedTierlist) {
-            delete cachedTierlist[idx];
-            saveTierlist();
-            buildTierlistUI();
-        }
+        if (idx in cachedTierlist) placeTlFilm(idx, 0);
     });
 
     // ---- Tap mobile : sélectionner puis placer ----
@@ -2611,6 +2656,27 @@ function makeTlCard(idx) {
     return card;
 }
 
+// LOTR : tout film dont le titre contient "Seigneur" doit être au moins en A (num 2)
+const LOTR_MIN_TIER = 2;
+function isLotrFilm(idx) {
+    return ACHIEVEMENTS[idx]?.title?.toLowerCase().includes("seigneur") ?? false;
+}
+function placeTlFilm(idx, requestedTier) {
+    const effectiveTier = (isLotrFilm(idx) && requestedTier > LOTR_MIN_TIER) ? LOTR_MIN_TIER : requestedTier;
+    if (effectiveTier === 0) delete cachedTierlist[idx];
+    else cachedTierlist[idx] = effectiveTier;
+    saveTierlist();
+    buildTierlistUI();
+    if (effectiveTier !== requestedTier) {
+        // Animer la carte qui a été redirigée vers A
+        const card = document.querySelector(`.tl-card[data-idx="${idx}"]`);
+        if (card) {
+            card.classList.add("lotr-redirect");
+            card.addEventListener("animationend", () => card.classList.remove("lotr-redirect"), { once: true });
+        }
+    }
+}
+
 // Attache les événements drag/drop et tap sur une zone de dépôt
 function setupTlDropZone(el, tierNum) {
     el.addEventListener("dragover", (e) => {
@@ -2625,20 +2691,15 @@ function setupTlDropZone(el, tierNum) {
         e.preventDefault();
         el.classList.remove("tl-drag-over");
         if (tlDragIdx === null) return;
-        if (tierNum === 0) delete cachedTierlist[tlDragIdx];
-        else               cachedTierlist[tlDragIdx] = tierNum;
-        saveTierlist();
-        buildTierlistUI();
+        placeTlFilm(tlDragIdx, tierNum);
     });
     // Tap mobile : placer la carte sélectionnée
     el.addEventListener("click", () => {
         if (tlSelectedIdx === null) return;
-        if (tierNum === 0) delete cachedTierlist[tlSelectedIdx];
-        else               cachedTierlist[tlSelectedIdx] = tierNum;
+        const idx = tlSelectedIdx;
         tlSelectedIdx = null;
         document.querySelectorAll(".tl-row-drop").forEach(z => z.classList.remove("tl-drop-ready"));
-        saveTierlist();
-        buildTierlistUI();
+        placeTlFilm(idx, tierNum);
     });
 }
 
@@ -2675,17 +2736,17 @@ function buildTierlistUI() {
 
     // — Banque de films —
     const bank     = document.getElementById("tl-bank");
+    const bankArea = bank.closest(".tl-bank-area");
     bank.innerHTML = "";
     const unplaced = ACHIEVEMENTS.map((_, i) => i).filter(i => validated.has(i) && !placed.has(i));
 
-    if (unplaced.length === 0) {
-        const empty = document.createElement("div");
-        empty.className  = "tl-bank-empty";
-        empty.textContent = "";
-        bank.appendChild(empty);
-    } else {
-        unplaced.forEach(i => bank.appendChild(makeTlCard(i)));
-    }
+    const wasHidden = bankArea.classList.contains("hidden");
+    const shouldShow = unplaced.length > 0;
+    if (shouldShow && wasHidden) tlBankSetVisible(true);
+    else if (!shouldShow && !wasHidden) tlBankSetVisible(false);
+    else if (!shouldShow) bankArea.classList.add("hidden");
+
+    unplaced.forEach(i => bank.appendChild(makeTlCard(i)));
 }
 
 // Init (appelé une fois — les drop zones permanentes et listeners)
@@ -2696,7 +2757,7 @@ function initTierlist() {
 initTierlist();
 
 // ============================================================
-//  PERSONNAGE SURPRISE
+//  FÉE SURPRISE
 // ============================================================
 (function initPerso() {
     const wrap = document.getElementById("perso-wrap");
@@ -2746,8 +2807,8 @@ initTierlist();
     }
 
     // --- Cycle ---
-    function show() {
-        if (!inWindow() || popCount >= MAX_POPS) return;
+    function show(force = false) {
+        if (!force && (!inWindow() || popCount >= MAX_POPS)) return;
 
         const side = Math.random() < 0.5 ? "left" : "right";
         const yPct = 8 + Math.random() * 74;
@@ -2768,7 +2829,7 @@ initTierlist();
         popCount++;
         savePop();
 
-        hideTimer = setTimeout(slideOut, 2000);
+        hideTimer = setTimeout(slideOut, 3000);
     }
 
     function slideOut() {
@@ -2821,4 +2882,7 @@ initTierlist();
         // Déjà dans la fenêtre — démarrage aléatoire rapide
         showTimer = setTimeout(show, 3000 + Math.random() * 4000);
     }
+
+    // Exposé pour le debug
+    window._debugShowFairy = () => show(true);
 })();

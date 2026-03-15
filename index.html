@@ -21,23 +21,23 @@
             </div>
 
             <div id="next-challenge" class="next-challenge hidden">
-                <div class="nc-bg" id="nc-bg"></div>
-                <img id="nc-poster" class="nc-poster" src="" alt="">
-                <div class="nc-content">
-                    <div class="nc-top">
-                        <span class="nc-label">Prochain défi</span>
-                        <h2 class="nc-title" id="nc-title"></h2>
-                        <div class="nc-rating" id="nc-rating">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#F5C518"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                            <span id="nc-rating-value"></span>
-                            <span class="nc-rating-label">/10 — IMDb</span>
+                    <div class="nc-bg" id="nc-bg"></div>
+                    <img id="nc-poster" class="nc-poster" src="" alt="">
+                    <div class="nc-content">
+                        <div class="nc-top">
+                            <span class="nc-label">Prochain défi</span>
+                            <h2 class="nc-title" id="nc-title"></h2>
+                            <div class="nc-rating" id="nc-rating">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#F5C518"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                                <span id="nc-rating-value"></span>
+                                <span class="nc-rating-label">/10 — IMDb</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="nc-actions">
-                        <button class="nc-btn nc-btn-challenge" id="nc-challenge-btn">
-                            Accéder au défi
-                        </button>
-                    </div>
+                        <div class="nc-actions">
+                            <button class="nc-btn nc-btn-challenge" id="nc-challenge-btn">
+                                Accéder au défi
+                            </button>
+                        </div>
                 </div>
             </div>
 
@@ -47,16 +47,22 @@
         </main>
 
 
-        <!-- Personnage surprise -->
+        <!-- Fée surprise -->
         <div id="perso-wrap" class="perso-wrap perso-hidden">
-            <img id="perso-img" src="medias/perso.png" class="perso-img" alt="" draggable="false">
+            <img id="perso-img" src="medias/fairy.gif" class="perso-img" alt="" draggable="false">
         </div>
 
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-inner">
                 <div class="sidebar-header-frame">
                 <button class="accent-color-btn" id="accent-color-btn" title="Personnaliser la couleur">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor"><path d="M480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 32.5-156t88-127Q256-817 330-848.5T488-880q80 0 151 27.5t124.5 76q53.5 48.5 85 115T880-518q0 115-70 176.5T640-280h-74q-9 0-12.5 5t-3.5 11q0 12 15 34.5t15 51.5q0 50-27.5 74T480-80Zm0-400Zm-177 23q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Zm120-160q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Zm200 0q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Zm120 160q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17ZM480-160q9 0 14.5-5t5.5-13q0-14-15-33t-15-57q0-42 29-67t71-25h70q66 0 113-38.5T800-518q0-121-92.5-201.5T488-800q-136 0-232 93t-96 227q0 133 93.5 226.5T480-160Z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px">
+                        <path fill="currentColor" fill-rule="evenodd" d="M480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 32.5-156t88-127Q256-817 330-848.5T488-880q80 0 151 27.5t124.5 76q53.5 48.5 85 115T880-518q0 115-70 176.5T640-280h-74q-9 0-12.5 5t-3.5 11q0 12 15 34.5t15 51.5q0 50-27.5 74T480-80ZM480-160q9 0 14.5-5t5.5-13q0-14-15-33t-15-57q0-42 29-67t71-25h70q66 0 113-38.5T800-518q0-121-92.5-201.5T488-800q-136 0-232 93t-96 227q0 133 93.5 226.5T480-160Z"/>
+                        <path fill="#FF5252" d="M303-457q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Z"/>
+                        <path fill="#448AFF" d="M423-617q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Z"/>
+                        <path fill="#4CAF50" d="M623-617q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Z"/>
+                        <path fill="#FFD740" d="M743-457q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Z"/>
+                    </svg>
                 </button>
                 <div class="sidebar-title-wrap" id="sidebar-title-wrap">
                     <img id="sidebar-title-icon" class="sidebar-title-icon" src="" alt="">
@@ -98,7 +104,7 @@
 
     <!-- Écran fin de jeu -->
     <div id="game-over-screen" class="game-over-screen hidden">
-        <div id="game-over-heart" class="game-over-heart">♥</div>
+        <div id="game-over-heart" class="game-over-heart"><img src="medias/heart.png" alt="♥"></div>
     </div>
 
     <!-- Écran récompense spéciale (palier ?) -->
@@ -221,9 +227,21 @@
                             <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M480-120q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-480q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-840q82 0 155.5 35T760-706v-94h80v240H600v-80h110q-41-56-101-88t-129-32q-117 0-198.5 81.5T200-480q0 117 81.5 198.5T480-200q105 0 183.5-68T756-440h82q-15 137-117.5 228.5T480-120Z"/></svg>
                             Reset Didacticiel
                         </button>
+                        <button id="debug-add-key-btn" class="debug-btn">
+                            <img src="medias/key.png" style="width:14px;height:14px;vertical-align:-0.1em">
+                            +1 Clé
+                        </button>
+                        <button id="debug-add-joker-btn" class="debug-btn">
+                            <img src="medias/joker.png" style="width:14px;height:14px;vertical-align:-0.1em">
+                            +1 Joker
+                        </button>
+                        <button id="debug-show-fairy-btn" class="debug-btn">
+                            <img src="medias/fairy.gif" style="width:14px;height:14px;vertical-align:-0.1em">
+                            Faire apparaître la fée
+                        </button>
                         <button id="debug-perso-reset-btn" class="debug-btn">
                             <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="M440-122q-121-15-200.5-105.5T160-440q0-66 26-126t72-107l57 57q-38 34-56.5 79T240-440q0 88 56 152t144 78v68Zm80 0v-68q87-14 143.5-78.5T720-440q0-100-70-170t-170-70h-3l44 44-56 56-140-140 140-140 56 56-44 44h3q134 0 227 93t93 227q0 122-79.5 212T520-122Z"/></svg>
-                            Reset Petit Bonhomme
+                            Reset Fée
                         </button>
                         <button id="debug-disable-btn" class="debug-btn debug-btn-danger">
                             <svg xmlns="http://www.w3.org/2000/svg" height="14px" viewBox="0 -960 960 960" width="14px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
