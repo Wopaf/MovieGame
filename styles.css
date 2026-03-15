@@ -3316,6 +3316,13 @@ body {
 }
 
 .key-reveal-badge {
+    position: absolute;
+    top: 36px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: fit-content;
+    white-space: nowrap;
     font-family: var(--font-main);
     font-size: 0.68rem;
     font-weight: 700;
@@ -3327,6 +3334,15 @@ body {
     border-radius: 20px;
     padding: 5px 16px;
     animation: revealFadeUp 0.3s 0.08s ease both;
+}
+
+.key-reveal-screen .poster-reveal-next-btn {
+    position: absolute;
+    bottom: 44px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: fit-content;
 }
 
 @keyframes keyPop {
@@ -3393,32 +3409,23 @@ body {
 /* ============================================================
    ÉCRAN SUCCÈS DÉFI
    ============================================================ */
-@keyframes successBurst {
-    0%   { transform: scale(0); opacity: 1; }
-    60%  { transform: scale(1.6); opacity: 0.6; }
-    100% { transform: scale(2.4); opacity: 0; }
+@keyframes successGiftPop {
+    0%   { opacity: 0; transform: scale(0.4); }
+    60%  { transform: scale(1.1); }
+    80%  { transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
 }
-@keyframes successCheckPop {
-    0%   { opacity: 0; transform: scale(0) rotate(-20deg); }
-    55%  { opacity: 1; transform: scale(1.18) rotate(4deg); }
-    75%  { transform: scale(0.93) rotate(-2deg); }
-    100% { transform: scale(1) rotate(0deg); }
-}
-@keyframes successLabelIn {
-    from { opacity: 0; transform: translateY(18px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes successTitleIn {
+@keyframes successFadeUp {
     from { opacity: 0; transform: translateY(14px); }
     to   { opacity: 1; transform: translateY(0); }
 }
-@keyframes successConfetti {
-    0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(180px) rotate(720deg); opacity: 0; }
+@keyframes successContentIn {
+    from { opacity: 0; transform: scale(0.92) translateY(12px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 @keyframes successScreenOut {
     0%   { opacity: 1; }
-    80%  { opacity: 1; }
+    75%  { opacity: 1; }
     100% { opacity: 0; }
 }
 
@@ -3429,40 +3436,32 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(8, 12, 8, 0.88);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    background: rgba(8, 12, 14, 0.82);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     pointer-events: none;
-    animation: successScreenOut 4s ease forwards;
+    animation: successScreenOut 3.5s ease forwards;
 }
 .success-screen.hidden { display: none; }
 
-.success-burst {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 60%, white) 0%, transparent 70%);
-    animation: successBurst 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    pointer-events: none;
-}
-
 .success-content {
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 14px;
+    gap: 18px;
     text-align: center;
-    padding: 0 32px;
+    padding: 40px 48px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 28px;
+    animation: successContentIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.success-check {
-    font-size: 5rem;
-    line-height: 1;
-    color: var(--color-accent);
-    filter: drop-shadow(0 0 24px color-mix(in srgb, var(--color-accent) 80%, transparent));
-    animation: successCheckPop 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+.success-gift {
+    width: 96px;
+    height: 96px;
+    object-fit: contain;
+    animation: successGiftPop 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
 }
 
 .success-label {
@@ -3472,33 +3471,17 @@ body {
     letter-spacing: 2.5px;
     text-transform: uppercase;
     color: var(--color-accent);
-    animation: successLabelIn 0.5s ease 0.45s both;
+    animation: successFadeUp 0.4s ease 0.35s both;
 }
 
 .success-title {
     font-family: var(--font-main);
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-text);
-    line-height: 1.35;
-    max-width: 280px;
-    animation: successTitleIn 0.5s ease 0.6s both;
-}
-
-.success-confetti {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-}
-
-.success-confetti-piece {
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    border-radius: 2px;
-    animation: successConfetti 1.4s ease-out forwards;
-    top: 50%;
+    line-height: 1.4;
+    max-width: 260px;
+    animation: successFadeUp 0.4s ease 0.5s both;
 }
 
 /* ============================================================

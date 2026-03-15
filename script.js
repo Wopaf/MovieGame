@@ -225,184 +225,184 @@ function buildGenreTags(genres) {
 const ACHIEVEMENTS = [
     { title: "Le Seigneur des anneaux", sousTitre: "La communauté de l'anneau", img: "1.png", password: "X8q",
     question: "Trouve la réponse à ce rébus", rebus: "medias/r1.png", answer: "Le Poney Fringant",
-    realisateur: "Peter Jackson", description: "Un jeune Hobbit nommé Frodon hérite d'un anneau magique et doit entreprendre un périlleux voyage pour le détruire.",
+    realisateur: "Peter Jackson", description: "Le jeune Frodon hérite d'un Anneau maléfique convoité par le Seigneur des Ténèbres. Une Communauté se forme pour l'accompagner vers le Mordor et le détruire.",
     turl: "https://www.youtube.com/watch?v=V75dMMIW2B4", genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0120737/", rating: "8.8", verrouille: false },
 
     { title: "Le Seigneur des anneaux", sousTitre: "Les deux tours", img: "2.png", password: "v2M",
     question: "Comment se nomme cette forteresse", rebus: "medias/r2.png", answer: "Gouffre de Helm",
-    realisateur: "Peter Jackson", description: "Frodon et Sam continuent vers le Mordor tandis que leurs amis défendent le Rohan contre les armées de Saroumane.",
+    realisateur: "Peter Jackson", description: "La Communauté brisée, Frodon et Sam poursuivent vers le Mordor guidés par Gollum. Leurs compagnons défendent le Rohan lors de la bataille du Gouffre de Helm.",
     turl: "https://www.youtube.com/watch?v=LbfMDwc4azU", genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0167261/", rating: "8.7", verrouille: false },
 
     { title: "Le Seigneur des anneaux", sousTitre: "Le retour du roi", img: "3.png", password: "7pL",
     question: "Qui fut la dernière personne à détenir l'anneau unique ?", rebus: "medias/r3.png", answer: "Gollum",
-    realisateur: "Peter Jackson", description: "L'affrontement final pour la Terre du Milieu commence alors que Frodon approche de la Montagne du Destin.",
+    realisateur: "Peter Jackson", description: "La guerre pour la Terre du Milieu atteint son paroxysme. Frodon approche seul de la Montagne du Destin pendant qu'Aragorn mène les armées libres face à Sauron.",
     turl: "https://www.youtube.com/watch?v=r5X-hFf6Bwo", genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0167260/", rating: "8.9", verrouille: false },
 
     { title: "Interstelar", img: "4.png", password: "4kZ", rebus: "medias/r4.png",
     question: "Quel est le nom de famille du scientifique à l'origine de la thérorie de la relativité ?", answer: "Einstein",
-    realisateur: "Christopher Nolan", description: "Des astronautes s'aventurent à travers un trou de ver pour trouver une nouvelle planète et sauver l'humanité.",
+    realisateur: "Christopher Nolan", description: "La Terre est mourante. Un pilote de la NASA s'engage dans un voyage à travers un trou de ver pour trouver une planète habitable, au prix de tout ce qu'il aime.",
     turl: "https://www.youtube.com/watch?v=0rDczIsHJn4", genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt0816692/", rating: "8.7", verrouille: false },
 
     { title: "Le Cinquième élement", img: "38.png", password: "6xM", rebus: "medias/r10.png",
     question: "Trouve la réponse à ce rébus", answer: "Korben Dallas",
-    realisateur: "Luc Besson", description: "Au XXIIIe siècle, un chauffeur de taxi doit protéger une jeune femme qui est la seule clé du salut de l'humanité.",
+    realisateur: "Luc Besson", description: "Au XXIIIe siècle, une force du Mal menace la Terre tous les cinq mille ans. Korben Dallas, chauffeur de taxi, doit protéger Leeloo, le mystérieux Cinquième Élément.",
     turl: "https://www.youtube.com/watch?v=1p_BvXpC8oA", genres: ["Science-fiction", "Action", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0119116/", rating: "7.6", verrouille: false },
 
     { title: "Forest Gump", img: "5.png", password: "1nS", rebus: "medias/r5.png",
     question: "Dans quel sport Forest Gump devient-il un professionnel ?", answer: "Ping Pong",
-    realisateur: "Robert Zemeckis", description: "Le destin extraordinaire d'un homme simple qui traverse les événements marquants de l'histoire des États-Unis.",
+    realisateur: "Robert Zemeckis", description: "Forrest Gump, homme simple au grand cœur, traverse sans le vouloir les plus grands événements de l'Amérique des années 60 à 80, toujours guidé par son amour pour Jenny.",
     turl: "https://www.youtube.com/watch?v=bLvqoHBptjg", genres: ["Drame", "Comédie"], imdb: "https://www.imdb.com/title/tt0109830/", rating: "8.8", verrouille: false },
 
     { title: "Her", img: "6.png", password: "8bY", rebus: "medias/r6.png",
     question: "Quel est le nom du système d'exploitation qu'achete Théodore au début du film ?", answer: "OS ONE",
-    realisateur: "Spike Jonze", description: "Dans un futur proche, un homme solitaire tombe amoureux d'une intelligence artificielle avancée.",
+    realisateur: "Spike Jonze", description: "Theodore, un homme solitaire qui écrit des lettres d'amour pour les autres, tombe amoureux de Samantha, un système d'exploitation doté d'une intelligence artificielle.",
     turl: "https://www.youtube.com/watch?v=fAs4qKLnRZI", genres: ["Science-fiction", "Romance"], imdb: "https://www.imdb.com/title/tt1798709/", rating: "8.0", verrouille: false },
 
     { title: "Persepolis", img: "50.png", password: "4vC", rebus: "medias/r7.png",
     question: "Quelle fleur mettait la grand-mère de Marjane dans son soutien-gorge ?", answer: "Jasmin",
-    realisateur: "Vincent Paronnaud et Marjane Satrapi", description: "Une journaliste tente de réaliser une interview avec Salvador Dalí, qui se transforme en un voyage absurde.",
+    realisateur: "Vincent Paronnaud et Marjane Satrapi", description: "La petite Marjane grandit à Téhéran tandis que la révolution islamique bascule l'Iran. Adulte, elle sera contrainte de fuir et trouver sa place entre deux cultures.",
     turl: "https://www.youtube.com/watch?v=MLILb_JnFx4", genres: ["Animation", "Drame", "Très beau film !"], imdb: "https://www.imdb.com/title/tt0808417/", rating: "7.9", verrouille: false },
 
     { title: "Tenacious D", sousTitre: "et le médiator du destin", img: "48.png", password: "2fP", rebus: "medias/r8.png",
     question: "Dans le morceau Master Exploder, complète les paroles suivantes: I do not need, He does not need , a ...", answer: "microphone",
-    realisateur: "Liam Lynch", description: "Deux musiciens partent en quête d'un médiator aux pouvoirs surnaturels pour devenir le plus grand groupe de rock.",
+    realisateur: "Liam Lynch", description: "JB et KG, duo rock déjanté, apprennent l'existence du Médiator du Destin, un artefact légendaire capable de les propulser au sommet du rock mondial. La quête commence.",
     turl: "https://www.youtube.com/watch?v=TXxH7H0KQWI", genres: ["Comédie", "Musical"], imdb: "https://www.imdb.com/title/tt0365830/", rating: "6.7", verrouille: false },
 
     { title: "Réalité", img: "49.png", password: "7xL", rebus: "medias/r9.png",
     question: "Dans le film que veut réaliser Jason, quels objets tue toute la population ?", answer: "Télévisions",
-    realisateur: "Quentin Dupieux", description: "Un caméraman rêve de réaliser un film d'horreur, mais doit d'abord trouver le cri de douleur parfait.",
+    realisateur: "Quentin Dupieux", description: "Jason rêve de réaliser un film d'horreur. Son producteur exige le meilleur gémissement jamais enregistré. La réalité et la fiction finissent par se confondre.",
     turl: "https://www.youtube.com/watch?v=FRzONsDtDFM", genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/title/tt2392672/", rating: "6.2", verrouille: false },
 
     { title: "Fumer fait tousser", img: "14.png", password: "7mX", rebus: "medias/r11.png",
     question: "quel est le dernier morceau du corps qu'il reste au neveu du personnage joué par Blanche Gardin dans le film Fumer fait tousser", answer: "la bouche",
-    realisateur: "Quentin Dupieux", description: "La 'Tabac Force' part en retraite pour renforcer sa cohésion d'équipe avant d'affronter un maléfique empereur.",
+    realisateur: "Quentin Dupieux", description: "Les membres de la Tabac Force, super-héros anti-tabac, partent en retraite dans un chalet pour se ressouder. Une terrible menace plane sur la planète entière.",
     turl: "https://www.youtube.com/watch?v=y2x9WfC9SjM", genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/title/tt15471560/", rating: "6.1", verrouille: false },
 
     { title: "Oss 117", sousTitre: "Le Caire, nid d'espions", img: "17.png", password: "3fS", rebus: "medias/r12.png",
     question: "Que ce passe t'il lorsque quelqu'un ou quelque chose meurt... ? ", answer: "Quelqu'un ou quelque chose naît ailleurs",
-    realisateur: "Michel Hazanavicius", description: "Hubert Bonisseur de La Bath enquête au Caire en 1955 dans cette parodie culte des films d'espionnage.",
+    realisateur: "Michel Hazanavicius", description: "En 1955, l'espion OSS 117 est envoyé au Caire pour élucider la disparition d'un agent. Dragueur, arrogant et inadapté, il sème joyeusement la pagaille.",
     turl: "https://www.youtube.com/watch?v=yYvHq-O_i1c", genres: ["Comédie", "Espionnage", "J'aime trop ce film"], imdb: "https://www.imdb.com/title/tt0464913/", rating: "7.4", verrouille: false },
 
     { title: "Oss 117", sousTitre: "Rio ne répond plus", img: "18.png", password: "9pZ", rebus: "medias/r13.png",
     question: "Comment appelez-vous un pays qui a comme dirigeant un militaire avec les pleins pouvoirs, une police secrète, une seule chaîne de télévision et que toute l'information est contrôlée par l'État ?", answer: "La France du general de gaulle",
-    realisateur: "Michel Hazanavicius", description: "L'espion français se rend à Rio en 1967 pour mettre la main sur un microfilm compromettant.",
+    realisateur: "Michel Hazanavicius", description: "En 1967, OSS 117 est envoyé au Brésil pour récupérer un microfilm compromettant sur des anciens nazis, tout en semant le chaos comme à son habitude.",
     turl: "https://www.youtube.com/watch?v=5VjI_jA_q7g", genres: ["Comédie", "Espionnage", "Celui ci est tout aussi bien"], imdb: "https://www.imdb.com/title/tt1167660/", rating: "6.8", verrouille: false },
 
     { title: "La cité de la peur", img: "19.png", password: "2hK", rebus: "medias/r14.png",
     question: "Quel est le titre du film d'Odile Deray ?", answer: "Red is Dead",
-    realisateur: "Alain Berbérian", description: "Un tueur en série terrorise le Festival de Cannes alors qu'une attachée de presse tente de promouvoir son film.",
+    realisateur: "Alain Berbérian", description: "Un tueur en série assassine les projectionnistes au Festival de Cannes. Simon Jérémi, garde du corps raté des Nuls, est chargé de protéger la maladroite Odile Deray.",
     turl: "https://www.youtube.com/watch?v=680X_vH_Ias", genres: ["Comédie", "Horreur"], imdb: "https://www.imdb.com/title/tt0109440/", rating: "7.6", verrouille: false },
 
     { title: "Jumanji", img: "24.png", password: "5jN", rebus: "medias/r15.png",
     question: "Trouve la réponse à ce rébus", answer: "Alan Parrish",
-    realisateur: "Joe Johnston", description: "Un jeu de société magique libère des dangers de la jungle dans le monde réel à chaque lancer de dés.",
+    realisateur: "Joe Johnston", description: "En 1969, Alan est aspiré dans un jeu de société magique. Vingt-six ans plus tard, deux enfants reprennent la partie et libèrent des dangers de jungle dans leur ville.",
     turl: "https://www.youtube.com/watch?v=9P6TZcCk0MM", genres: ["Aventure", "Fantastique", "Un Classique !"], imdb: "https://www.imdb.com/title/tt0113497/", rating: "7.0", verrouille: false },
 
     { title: "Premier Contact", img: "28.png", password: "9kF", rebus: "medias/r16.png",
     question: "Il est bien ce film ?", answer: "Oui",
-    realisateur: "Denis Villeneuve", description: "Une linguiste est chargée de communiquer avec des extraterrestres dont les vaisseaux se sont posés sur Terre.",
+    realisateur: "Denis Villeneuve", description: "Douze vaisseaux extraterrestres se posent sur Terre. La linguiste Louise Banks tente de déchiffrer leur langage mystérieux avant que la panique mondiale ne déclenche la guerre.",
     turl: "https://www.youtube.com/watch?v=f8mYf5p_f7I", genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt2543164/", rating: "7.9", verrouille: false },
 
     { title: "La classe Américaine", img: "31.png", password: "8rD", rebus: "medias/r17.png",
     question: "Selon Orson Welles, ce flilm est un plagiat d'un autre flilm. Lequel?", answer: "Citizen Kane",
-    realisateur: "Michel Hazanavicius et Dominique Mézerette", description: "Un détournement culte de films de la Warner où les dialogues originaux sont remplacés par des répliques absurdes.",
+    realisateur: "Michel Hazanavicius et Dominique Mézerette", description: "George Abitbol, l'homme le plus classe du monde, part en quête de la classe perdue. Un détournement culte de films Warner où tout le monde est con sauf lui.",
     turl: "https://www.youtube.com/watch?v=jWkCq0Q38E8", genres: ["Comédie", "Absurde", "Je suis désolé"], imdb: "https://www.imdb.com/title/tt0321715/", rating: "7.9", verrouille: false },
 
     { title: "Blade Runner 2049", img: "44.png", password: "1vR", rebus: "medias/r18.png",
     question: "Comment appelle-t-on les androïdes biologiquement identiques aux humains, fabriqués par la corporation Tyrell ?", answer: "Les Réplicants",
-    realisateur: "Denis Villeneuve", description: "Un nouvel officier de police déterre un secret enfoui qui pourrait plonger la société dans le chaos.",
+    realisateur: "Denis Villeneuve", description: "En 2049, l'agent K, blade runner chargé de traquer les réplicants, découvre un secret vieux de trente ans qui pourrait bouleverser l'ordre entre humains et androïdes.",
     turl: "https://www.youtube.com/watch?v=WarevDmt_Ug", genres: ["Science-fiction", "Thriller", "Un grand film !"], imdb: "https://www.imdb.com/title/tt1856101/", rating: "8.0", verrouille: false },
 
     { title: "Gladiator", img: "45.png", password: "4bX", rebus: "medias/r19.png",
     question: "Qui est nazi et adore ce film ?", answer: "Bertrand",
-    realisateur: "Ridley Scott", description: "Un général romain trahi devient gladiateur pour se venger de l'empereur qui a assassiné sa famille.",
+    realisateur: "Ridley Scott", description: "Maximus, grand général de Rome trahi par Commode, est réduit en esclavage. Devenu gladiateur, il traverse l'Empire pour se venger de l'homme qui a assassiné sa famille.",
     turl: "https://www.youtube.com/watch?v=owK1at_O7_0", genres: ["Action", "Historique", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0172495/", rating: "8.5", verrouille: false },
 
     { title: "Je suis une légende", img: "46.png", password: "8nN", rebus: "medias/r20.png",
     question: "Dans ce film, le personnage principal Robert Neville joué par Will Smith écoute régulièrement un morceau de Bob Marley, quel est le titre de ce morceau ?", answer: "Three Little Birds",
-    realisateur: "Francis Lawrence", description: "Le dernier survivant d'un virus ayant transformé l'humanité en mutants tente de trouver un remède à New York.",
+    realisateur: "Francis Lawrence", description: "Robert Neville survit seul à New York après qu'un virus a transformé l'humanité en créatures nocturnes sanguinaires. Militaire et chercheur, il tente de trouver un remède.",
     genres: ["Horreur", "Drame", "Un bon film !"],
     turl: "https://www.youtube.com/watch?v=uYUbLTxJl-A", imdb: "https://www.imdb.com/title/tt0480249/", rating: "7.2", verrouille: false },
 
     { title: "Into the Wild", img: "33.png", password: "5kS", rebus: "medias/r21.png",
     question: "Quel est le numéro écrit sur le côté du 'Magic Bus' où s'installe Christopher ?", answer: "142",
-    realisateur: "Sean Penn", description: "Un jeune diplômé rejette la société de consommation et part vivre en solitaire dans la nature sauvage d'Alaska.",
+    realisateur: "Sean Penn", description: "Christopher McCandless, jeune diplômé idéaliste, abandonne tout — argent, famille, identité — pour partir seul à l'aventure vers les étendues sauvages de l'Alaska.",
     turl: "https://www.youtube.com/watch?v=2GWPOPSXGYI", genres: ["Drame", "Aventure", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0758758/", rating: "8.1", verrouille: false },
 
     { title: "Incassable", img: "34.png", password: "3vH", rebus: "medias/r22.png",
     question: "Quel est le nom de la galerie d'art spécialisée dans les comics tenue par Elijah Price ?", answer: "Limited Edition",
-    realisateur: "M. Night Shyamalan", description: "Un homme découvre qu'il est invincible après avoir été le seul survivant d'un terrible accident de train.",
+    realisateur: "M. Night Shyamalan", description: "David Dunn, unique survivant indemne d'un accident de train ayant tué 131 personnes, est contacté par Elijah Price, un homme mystérieux qui lui révèle une vérité bouleversante.",
     turl: "https://www.youtube.com/watch?v=AC-LA9QVdmI", genres: ["Fantastique", "Thriller"], imdb: "https://www.imdb.com/title/tt0217869/", rating: "7.3", verrouille: true },
 
     { title: "Bugonia", img: "54.png", password: "1xQ", rebus: "medias/r23.png",
     question: "De quel espèce extraterrestre parle-t-on dans ce film ?", answer: "les Andromédiens",
-    realisateur: "Yorgos Lanthimos", description: "Deux apiculteurs obsédés par les théories du complot capturent et interrogent une femme d'affaires qu'ils croient être une extraterrestre envahissante menaçant la survie de notre planète.",
+    realisateur: "Yorgos Lanthimos", description: "Deux employés persuadés d'une invasion extraterrestre enlèvent une puissante PDG, convaincus qu'elle est une alien venue anéantir l'humanité. Absurde et glaçant.",
     genres: ["Thriller, Crime"],
     turl: "https://www.youtube.com/watch?v=nmxP6PU_GGo", imdb: "https://www.imdb.com/fr-ca/title/tt12300742/", rating: "7.4", verrouille: true },
     
     { title: "Transcendance", img: "21.png", password: "1xQ", rebus: "medias/r24.png",
     question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
-    realisateur: "Wally Pfister", description: "La conscience d'un scientifique mourant est téléchargée dans un ordinateur, créant une intelligence omnipotente.",
+    realisateur: "Wally Pfister", description: "Will Caster, brillant chercheur en IA, se retrouve mourant après un attentat. Sa conscience est téléchargée dans un ordinateur, créant une entité omnisciente et omnipotente.",
     genres: ["Science-fiction", "Thriller", "Sous-coté"],
     turl: "https://www.youtube.com/watch?v=VCTen3-B8GU", imdb: "https://www.imdb.com/title/tt2209764/", rating: "6.2", verrouille: true },
 
     { title: "Jumper", img: "22.png", password: "4uG", rebus: "medias/r25.png",
     question: "Où se trouve la 'bibliothèque' secrète de Griffin, là où il garde ses preuves sur les Paladins ?", answer: "Dans le Colisée",
-    realisateur: "Doug Liman", description: "Un jeune homme découvre qu'il a le pouvoir de se téléporter partout dans le monde.",
+    realisateur: "Doug Liman", description: "David Rice peut se téléporter instantanément n'importe où. Cette liberté absolue prend fin quand les Paladins, une organisation secrète qui traque les Jumpers, se lance à ses trousses.",
     genres: ["Fantastique", "Action", "Tu va peut être pas aimer"],
     turl: "https://www.youtube.com/watch?v=RcMH5sAYc5o", imdb: "https://www.imdb.com/title/tt0489099/", rating: "6.0", verrouille: true },
 
     { title: "Chappee", img: "27.png", password: "6tW", rebus: "medias/r26.png",
     question: "Quel est le nom du robot massif et lourd piloté à distance par le personnage de Hugh Jackman ?", answer: "Moose",
-    realisateur: "Neill Blomkamp", description: "Un robot de police est doté d'une conscience et doit apprendre à vivre dans un monde violent.",
+    realisateur: "Neill Blomkamp", description: "À Johannesburg, Chappie est le premier robot à posséder une vraie conscience. Volé par des gangsters, il apprend la dureté du monde tout en cherchant à comprendre ce qu'il est.",
     genres: ["Science-fiction", "Action", "Divertissant", "à voir"],
     turl: "https://www.youtube.com/watch?v=lYpdtB4UKWE", imdb: "https://www.imdb.com/title/tt1823672/", rating: "6.8", verrouille: true },
 
     { title: "Au Boulot !", img: "51.png", password: "6tW", rebus: "medias/r27.png",
     question: "Dans ce film documentaire, cette grosse bourgeoise de Sarah Saldamann prend en photo la façade d'un commerce avec un air enjoué mais plein de mépris de classe (la connasse). Quel est le nom de ce commerce ?", answer: "Un PMU",
-    realisateur: "Gilles Perret", description: "Peut-on réinsérer les riches ? François Ruffin invite Sarah Saldmann à s'installer pendant un mois avec le SMIC.",
+    realisateur: "Gilles Perret", description: "François Ruffin, député, propose à Sarah Saldmann de vivre un mois avec le SMIC et d'exercer des métiers précaires pour comprendre la réalité des travailleurs modestes.",
     genres: ["Documentaire", "Gauchiasse !"],
     turl: "https://www.youtube.com/watch?v=lYpdtB4UKWE", imdb: "https://www.imdb.com/title/tt33350039/", rating: "6.9", verrouille: true },
 
     { title: "Ill Manors", img: "32.png", password: "2pT", rebus: "medias/r33.png",
     question: "Quel est le prénom du bébé abandonné dans le sac que les dealers trouvent ?", answer: "Michelle",
-    realisateur: "Ben Drew", description: "Une plongée violente dans les rues de Londres à travers les destins croisés de plusieurs personnages.",
+    realisateur: "Ben Drew", description: "Dans les rues de Forest Gate, à l'est de Londres, plusieurs destins marginaux se croisent dans une spirale de violence, de trafics et de misère sociale, sans issue apparente.",
     genres: ["Drame", "Crime", "Film vraiment pas drôle"],
     turl: "https://www.youtube.com/watch?v=MT44ch0FFEU", imdb: "https://www.imdb.com/title/tt1760967/", rating: "6.6", verrouille: true },
 
     { title: "Looper", img: "36.png", password: "1zL", rebus: "medias/r34.png",
     question: "Quel est le surnom du futur chef de la pègre qui envoie les victimes dans le passé ?", answer: "Le Maître des Pluies",
-    realisateur: "Rian Johnson", description: "Des tueurs à gages sont chargés d'éliminer des victimes envoyées du futur par un syndicat du crime.",
+    realisateur: "Rian Johnson", description: "En 2044, Joe est un Looper : il élimine des victimes envoyées du futur par un syndicat du crime. Sa vie bascule quand sa prochaine cible est sa propre version vieillie.",
     genres: ["Action", "Science-fiction", "Un bon film !"],
     turl: "https://www.youtube.com/watch?v=2iQuoxZ9dfc", imdb: "https://www.imdb.com/title/tt1276104/", rating: "7.4", verrouille: true },
 
     { title: "Tarzan", img: "41.png", password: "5vW", rebus: "medias/r35.png",
     question: "Quel est le nom de l'explorateur qui veut capturer les gorilles pour les vendre ?", answer: "Clayton",
-    realisateur: "Kevin Lima et Chris Buck", description: "Un homme élevé par des gorilles dans la jungle découvre la civilisation lors d'une expédition humaine.",
+    realisateur: "Kevin Lima et Chris Buck", description: "Orphelin recueilli et élevé par des gorilles, Tarzan découvre ses origines humaines à l'arrivée d'une expédition dans la jungle africaine. Il doit choisir son monde.",
     genres: ["Animation", "Aventure", "Une belle histoire", "Une belle bande original"],
     turl: "https://www.youtube.com/watch?v=2Wv_2UIdYtY", imdb: "https://www.imdb.com/title/tt0120855/", rating: "7.1", verrouille: true },
 
     { title: "Abysse", img: "15.png", password: "8rA", rebus: "medias/r36.png",
     question: "Quel message Bud écrit-il sur son ardoise à sa femme alors qu'il manque d'oxygène au fond ?", answer: "Je t'aime",
-    realisateur: "James Cameron", description: "Une équipe de forage sous-marin découvre des formes de vie mystérieuses au fond des abysses.",
+    realisateur: "James Cameron", description: "Une équipe de plongeurs est envoyée chercher un sous-marin nucléaire naufragé dans les abysses. Leur mission prend une dimension inattendue lors d'une rencontre avec une vie extraterrestre.",
     genres: ["Science-fiction", "Aventure", "Un bon film !"],
     turl: "https://www.youtube.com/watch?v=9oR-B6S7oY0", imdb: "https://www.imdb.com/title/tt0096754/", rating: "7.5", verrouille: true },
 
     { title: "L'amour Ouf", img: "20.png", password: "6lD", rebus: "medias/r37.png",
     question: "Sur quelle chanson de The Cure les deux protagonistes dansent-ils dans la cour d'école ?", answer: "A Forest",
-    realisateur: "Gilles Lellouche", description: "Une histoire d'amour passionnelle entre deux adolescents que tout oppose, sur plusieurs décennies.",
+    realisateur: "Gilles Lellouche", description: "Clotaire et Jackie se rencontrent adolescents dans les années 80. Leur amour passionnel résistera aux années, à la violence et à des chemins de vie radicalement différents.",
     genres: ["Drame", "Romance", "J'ai bien aimé mais je sais pas si c'est ta came"],
     turl: "https://www.youtube.com/watch?v=C7mS-TbeI8M", imdb: "https://www.imdb.com/title/tt27490099/", rating: "7.0", verrouille: true },
 
     { title: "Le Guide du Voyageur galactique", img: "16.png", password: "5wK", rebus: "medias/r38.png",
     question: "En quoi le moteur à improbabilité infinie transforme-t-il les deux missiles nucléaires ?", answer: "Un pétunia et une baleine",
-    realisateur: "Garth Jennings", description: "Arthur Dent échappe à la destruction de la Terre et commence un voyage déjanté à travers la galaxie.",
+    realisateur: "Garth Jennings", description: "Arthur Dent échappe de justesse à la démolition de la Terre pour une autoroute galactique. Il parcourt l'univers avec son ami Ford Prefect, un extraterrestre guide intergalactique.",
     genres: ["Science-fiction", "Comédie", "à voir absolument !"],
     turl: "https://www.youtube.com/watch?v=asS9G_HIdjI", imdb: "https://www.imdb.com/title/tt0371724/", rating: "6.8", verrouille: true },
     
     { title: "Kaamelott 2 part.1", img: "52.png", password: "6tW", rebus: "medias/r39.png",
     question: "", answer: "",
-    realisateur: "Alexandre Astier", description: "Les Dieux sont en colère contre Arthur ! Après la destruction de Kaamelott, son refus obstiné de tuer Lancelot précipite le Royaume de Logres à sa perte. Il réunit ses Chevaliers, novices téméraires et vétérans désabusés, autour de la Nouvelle Table Ronde et les envoie prouver leur valeur aux quatre coins du Monde, des Marais Orcaniens aux terres glacées du Dragon Opalescent.",
+    realisateur: "Alexandre Astier", description: "Le roi Arthur revient d'exil pour reprendre Kaamelott des mains de Lancelot. Il rassemble ses chevaliers pour une reconquère contre Arthur ! Après la destruction de Kaamelott, son refus obstiné de tuer Lancelot précipite le Royaume de Logres à sa perte. Il réunit ses Chevaliers, novices téméraires et vétérans désabusés, autour de la Nouvelle Table Ronde et les envoie prouver leur valeur aux quatre coins du Monde, des Marais Orcaniens aux terres glacées du DRAGON_END_PLACEHOLDER",
     genres: ["Aventure", "Fantastique", "L'excelente suite d'un film moyen"],
     turl: "https://www.youtube.com/watch?v=lYpdtB4UKWE", imdb: "https://www.imdb.com/title/tt9844322/", rating: "7.2", verrouille: true },
 
@@ -1400,37 +1400,21 @@ function renderSecretRewardStep(step) {
 }
 
 function showSuccessAnimation(_index) {
-    const screen = document.getElementById("success-screen");
-    const confettiEl = document.getElementById("success-confetti");
+    const screen  = document.getElementById("success-screen");
     const titleEl = document.getElementById("success-title");
 
     titleEl.textContent = "Défi réussi !";
 
-    // Confetti
-    confettiEl.innerHTML = "";
-    const colors = ["var(--color-accent)", "#fff", "#ffd700", "#a4d007", "#66c0f4", "#e94560"];
-    for (let i = 0; i < 22; i++) {
-        const p = document.createElement("div");
-        p.className = "success-confetti-piece";
-        p.style.left = (20 + Math.random() * 60) + "%";
-        p.style.background = colors[Math.floor(Math.random() * colors.length)];
-        p.style.animationDelay = (Math.random() * 0.5) + "s";
-        p.style.animationDuration = (1.0 + Math.random() * 0.7) + "s";
-        p.style.transform = `rotate(${Math.random() * 360}deg)`;
-        confettiEl.appendChild(p);
-    }
-
     screen.classList.remove("hidden");
-    // Force reflow then restart animation
     void screen.offsetWidth;
     screen.style.animation = "none";
     void screen.offsetWidth;
-    screen.style.animation = "successScreenOut 4s ease forwards";
+    screen.style.animation = "successScreenOut 3.5s ease forwards";
 
     setTimeout(() => {
         screen.classList.add("hidden");
         screen.style.animation = "";
-    }, 4050);
+    }, 3550);
 }
 
 function showSecretRewardReveal() {
