@@ -145,8 +145,8 @@ const MILESTONES = [
     { label: "Critique en herbe",    objectif: "Valider 27 films", count: 27, keys: 3, jokers: 1,  icon: 7 },
     { label: "Fin Connaisseur",      objectif: "Valider 30 films", count: 30, keys: 3,             icon: 8 },
     { label: "Cinéphile",            objectif: "Valider 33 films", count: 33, keys: 3,             icon: 9 },
-    { label: "Déglingo",             objectif: "Valider 36 films", count: 36, keys: 3, secretFilm: 38, icon: 10 },
-    { label: "Collectionneur",       objectif: "Valider 39 films", count: 39, secretFilm: 51,      icon: 11 },
+    { label: "Déglingo",             objectif: "Valider 36 films", count: 36, keys: 3, secretFilm: 39, icon: 10 },
+    { label: "Collectionneur",       objectif: "Valider 39 films", count: 39, secretFilm: 40,      icon: 11 },
     { label: "???",                  objectif: "Valider 40 films", count: 40, rewards: ["?"],      icon: 12 },
 ];
 
@@ -216,8 +216,7 @@ function buildGenreTags(genres) {
     const row = document.getElementById("info-genres-row");
     if (!genres || genres.length === 0) { row.classList.add("hidden"); return; }
     row.innerHTML = genres.map(g => {
-        const color = GENRES[g] || GENRE_DEFAULT_COLOR;
-        return `<span class="genre-tag" style="color:${color};border-color:${color}50;background:${color}35">${g}</span>`;
+        return `<span class="genre-tag" style="color:${GENRE_DEFAULT_COLOR};border-color:${GENRE_DEFAULT_COLOR}50;background:${GENRE_DEFAULT_COLOR}25">${g}</span>`;
     }).join("");
     row.classList.remove("hidden");
 }
@@ -226,221 +225,221 @@ const ACHIEVEMENTS = [
     { title: "Le Seigneur des anneaux", sousTitre: "La communauté de l'anneau", img: "1.png", password: "X8q",
     question: "Trouve la réponse à ce rébus", rebus: "medias/r1.png", answer: "Le Poney Fringant",
     realisateur: "Peter Jackson", description: "Le jeune Frodon hérite d'un Anneau maléfique convoité par le Seigneur des Ténèbres. Une Communauté se forme pour l'accompagner vers le Mordor et le détruire.",
-    turl: "https://www.youtube.com/watch?v=V75dMMIW2B4", genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0120737/", rating: "8.8", verrouille: false },
+    genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0120737/", rating: "8.8", verrouille: false },
 
     { title: "Le Seigneur des anneaux", sousTitre: "Les deux tours", img: "2.png", password: "v2M",
     question: "Comment se nomme cette forteresse", rebus: "medias/r2.png", answer: "Gouffre de Helm",
     realisateur: "Peter Jackson", description: "La Communauté brisée, Frodon et Sam poursuivent vers le Mordor guidés par Gollum. Leurs compagnons défendent le Rohan lors de la bataille du Gouffre de Helm.",
-    turl: "https://www.youtube.com/watch?v=LbfMDwc4azU", genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0167261/", rating: "8.7", verrouille: false },
+    genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0167261/", rating: "8.7", verrouille: false },
 
     { title: "Le Seigneur des anneaux", sousTitre: "Le retour du roi", img: "3.png", password: "7pL",
     question: "Qui fut la dernière personne à détenir l'anneau unique ?", rebus: "medias/r3.png", answer: "Gollum",
     realisateur: "Peter Jackson", description: "La guerre pour la Terre du Milieu atteint son paroxysme. Frodon approche seul de la Montagne du Destin pendant qu'Aragorn mène les armées libres face à Sauron.",
-    turl: "https://www.youtube.com/watch?v=r5X-hFf6Bwo", genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0167260/", rating: "8.9", verrouille: false },
+    genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0167260/", rating: "8.9", verrouille: false },
 
     { title: "Interstelar", img: "4.png", password: "4kZ", rebus: "medias/r4.png",
     question: "Quel est le nom de famille du scientifique à l'origine de la thérorie de la relativité ?", answer: "Einstein",
     realisateur: "Christopher Nolan", description: "La Terre est mourante. Un pilote de la NASA s'engage dans un voyage à travers un trou de ver pour trouver une planète habitable, au prix de tout ce qu'il aime.",
-    turl: "https://www.youtube.com/watch?v=0rDczIsHJn4", genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt0816692/", rating: "8.7", verrouille: false },
+    genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt0816692/", rating: "8.7", verrouille: false },
 
     { title: "Le Cinquième élement", img: "38.png", password: "6xM", rebus: "medias/r10.png",
     question: "Trouve la réponse à ce rébus", answer: "Korben Dallas",
     realisateur: "Luc Besson", description: "Au XXIIIe siècle, une force du Mal menace la Terre tous les cinq mille ans. Korben Dallas, chauffeur de taxi, doit protéger Leeloo, le mystérieux Cinquième Élément.",
-    turl: "https://www.youtube.com/watch?v=1p_BvXpC8oA", genres: ["Science-fiction", "Action", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0119116/", rating: "7.6", verrouille: false },
+    genres: ["Science-fiction", "Action", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0119116/", rating: "7.6", verrouille: false },
 
     { title: "Forest Gump", img: "5.png", password: "1nS", rebus: "medias/r5.png",
     question: "Dans quel sport Forest Gump devient-il un professionnel ?", answer: "Ping Pong",
     realisateur: "Robert Zemeckis", description: "Forrest Gump, homme simple au grand cœur, traverse sans le vouloir les plus grands événements de l'Amérique des années 60 à 80, toujours guidé par son amour pour Jenny.",
-    turl: "https://www.youtube.com/watch?v=bLvqoHBptjg", genres: ["Drame", "Comédie"], imdb: "https://www.imdb.com/title/tt0109830/", rating: "8.8", verrouille: false },
+    genres: ["Drame", "Comédie"], imdb: "https://www.imdb.com/title/tt0109830/", rating: "8.8", verrouille: false },
 
     { title: "Her", img: "6.png", password: "8bY", rebus: "medias/r6.png",
     question: "Quel est le nom du système d'exploitation qu'achete Théodore au début du film ?", answer: "OS ONE",
     realisateur: "Spike Jonze", description: "Theodore, un homme solitaire qui écrit des lettres d'amour pour les autres, tombe amoureux de Samantha, un système d'exploitation doté d'une intelligence artificielle.",
-    turl: "https://www.youtube.com/watch?v=fAs4qKLnRZI", genres: ["Science-fiction", "Romance"], imdb: "https://www.imdb.com/title/tt1798709/", rating: "8.0", verrouille: false },
+    genres: ["Science-fiction", "Romance"], imdb: "https://www.imdb.com/title/tt1798709/", rating: "8.0", verrouille: false },
 
     { title: "Persepolis", img: "50.png", password: "4vC", rebus: "medias/r7.png",
     question: "Quelle fleur mettait la grand-mère de Marjane dans son soutien-gorge ?", answer: "Jasmin",
     realisateur: "Vincent Paronnaud et Marjane Satrapi", description: "La petite Marjane grandit à Téhéran tandis que la révolution islamique bascule l'Iran. Adulte, elle sera contrainte de fuir et trouver sa place entre deux cultures.",
-    turl: "https://www.youtube.com/watch?v=MLILb_JnFx4", genres: ["Animation", "Drame", "Très beau film !"], imdb: "https://www.imdb.com/title/tt0808417/", rating: "7.9", verrouille: false },
+    genres: ["Animation", "Drame", "Très beau film !"], imdb: "https://www.imdb.com/title/tt0808417/", rating: "7.9", verrouille: false },
 
     { title: "Tenacious D", sousTitre: "et le médiator du destin", img: "48.png", password: "2fP", rebus: "medias/r8.png",
     question: "Dans le morceau Master Exploder, complète les paroles suivantes: I do not need, He does not need , a ...", answer: "microphone",
     realisateur: "Liam Lynch", description: "JB et KG, duo rock déjanté, apprennent l'existence du Médiator du Destin, un artefact légendaire capable de les propulser au sommet du rock mondial. La quête commence.",
-    turl: "https://www.youtube.com/watch?v=TXxH7H0KQWI", genres: ["Comédie", "Musical"], imdb: "https://www.imdb.com/title/tt0365830/", rating: "6.7", verrouille: false },
+    genres: ["Comédie", "Musical"], imdb: "https://www.imdb.com/title/tt0365830/", rating: "6.7", verrouille: false },
 
     { title: "Réalité", img: "49.png", password: "7xL", rebus: "medias/r9.png",
     question: "Dans le film que veut réaliser Jason, quels objets tue toute la population ?", answer: "Télévisions",
     realisateur: "Quentin Dupieux", description: "Jason rêve de réaliser un film d'horreur. Son producteur exige le meilleur gémissement jamais enregistré. La réalité et la fiction finissent par se confondre.",
-    turl: "https://www.youtube.com/watch?v=FRzONsDtDFM", genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/title/tt2392672/", rating: "6.2", verrouille: false },
+    genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/title/tt2392672/", rating: "6.2", verrouille: false },
 
     { title: "Fumer fait tousser", img: "14.png", password: "7mX", rebus: "medias/r11.png",
     question: "quel est le dernier morceau du corps qu'il reste au neveu du personnage joué par Blanche Gardin dans le film Fumer fait tousser", answer: "la bouche",
     realisateur: "Quentin Dupieux", description: "Les membres de la Tabac Force, super-héros anti-tabac, partent en retraite dans un chalet pour se ressouder. Une terrible menace plane sur la planète entière.",
-    turl: "https://www.youtube.com/watch?v=y2x9WfC9SjM", genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/title/tt15471560/", rating: "6.1", verrouille: false },
+    genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/title/tt15471560/", rating: "6.1", verrouille: false },
 
     { title: "Oss 117", sousTitre: "Le Caire, nid d'espions", img: "17.png", password: "3fS", rebus: "medias/r12.png",
     question: "Que ce passe t'il lorsque quelqu'un ou quelque chose meurt... ? ", answer: "Quelqu'un ou quelque chose naît ailleurs",
     realisateur: "Michel Hazanavicius", description: "En 1955, l'espion OSS 117 est envoyé au Caire pour élucider la disparition d'un agent. Dragueur, arrogant et inadapté, il sème joyeusement la pagaille.",
-    turl: "https://www.youtube.com/watch?v=yYvHq-O_i1c", genres: ["Comédie", "Espionnage", "J'aime trop ce film"], imdb: "https://www.imdb.com/title/tt0464913/", rating: "7.4", verrouille: false },
+    genres: ["Comédie", "Espionnage", "J'aime trop ce film"], imdb: "https://www.imdb.com/title/tt0464913/", rating: "7.4", verrouille: false },
 
     { title: "Oss 117", sousTitre: "Rio ne répond plus", img: "18.png", password: "9pZ", rebus: "medias/r13.png",
     question: "Comment appelez-vous un pays qui a comme dirigeant un militaire avec les pleins pouvoirs, une police secrète, une seule chaîne de télévision et que toute l'information est contrôlée par l'État ?", answer: "La France du general de gaulle",
     realisateur: "Michel Hazanavicius", description: "En 1967, OSS 117 est envoyé au Brésil pour récupérer un microfilm compromettant sur des anciens nazis, tout en semant le chaos comme à son habitude.",
-    turl: "https://www.youtube.com/watch?v=5VjI_jA_q7g", genres: ["Comédie", "Espionnage", "Celui ci est tout aussi bien"], imdb: "https://www.imdb.com/title/tt1167660/", rating: "6.8", verrouille: false },
+    genres: ["Comédie", "Espionnage", "Celui ci est tout aussi bien"], imdb: "https://www.imdb.com/title/tt1167660/", rating: "6.8", verrouille: false },
 
     { title: "La cité de la peur", img: "19.png", password: "2hK", rebus: "medias/r14.png",
     question: "Quel est le titre du film d'Odile Deray ?", answer: "Red is Dead",
     realisateur: "Alain Berbérian", description: "Un tueur en série assassine les projectionnistes au Festival de Cannes. Simon Jérémi, garde du corps raté des Nuls, est chargé de protéger la maladroite Odile Deray.",
-    turl: "https://www.youtube.com/watch?v=680X_vH_Ias", genres: ["Comédie", "Horreur"], imdb: "https://www.imdb.com/title/tt0109440/", rating: "7.6", verrouille: false },
+    genres: ["Comédie", "Horreur"], imdb: "https://www.imdb.com/title/tt0109440/", rating: "7.6", verrouille: false },
 
     { title: "Jumanji", img: "24.png", password: "5jN", rebus: "medias/r15.png",
     question: "Trouve la réponse à ce rébus", answer: "Alan Parrish",
     realisateur: "Joe Johnston", description: "En 1969, Alan est aspiré dans un jeu de société magique. Vingt-six ans plus tard, deux enfants reprennent la partie et libèrent des dangers de jungle dans leur ville.",
-    turl: "https://www.youtube.com/watch?v=9P6TZcCk0MM", genres: ["Aventure", "Fantastique", "Un Classique !"], imdb: "https://www.imdb.com/title/tt0113497/", rating: "7.0", verrouille: false },
+    genres: ["Aventure", "Fantastique", "Un Classique !"], imdb: "https://www.imdb.com/title/tt0113497/", rating: "7.0", verrouille: false },
 
     { title: "Premier Contact", img: "28.png", password: "9kF", rebus: "medias/r16.png",
     question: "Il est bien ce film ?", answer: "Oui",
     realisateur: "Denis Villeneuve", description: "Douze vaisseaux extraterrestres se posent sur Terre. La linguiste Louise Banks tente de déchiffrer leur langage mystérieux avant que la panique mondiale ne déclenche la guerre.",
-    turl: "https://www.youtube.com/watch?v=f8mYf5p_f7I", genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt2543164/", rating: "7.9", verrouille: false },
+    genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt2543164/", rating: "7.9", verrouille: false },
 
     { title: "La classe Américaine", img: "31.png", password: "8rD", rebus: "medias/r17.png",
     question: "Selon Orson Welles, ce flilm est un plagiat d'un autre flilm. Lequel?", answer: "Citizen Kane",
     realisateur: "Michel Hazanavicius et Dominique Mézerette", description: "George Abitbol, l'homme le plus classe du monde, part en quête de la classe perdue. Un détournement culte de films Warner où tout le monde est con sauf lui.",
-    turl: "https://www.youtube.com/watch?v=jWkCq0Q38E8", genres: ["Comédie", "Absurde", "Je suis désolé"], imdb: "https://www.imdb.com/title/tt0321715/", rating: "7.9", verrouille: false },
+    genres: ["Comédie", "Absurde", "Je suis désolé"], imdb: "https://www.imdb.com/title/tt0321715/", rating: "7.9", verrouille: false },
 
     { title: "Blade Runner 2049", img: "44.png", password: "1vR", rebus: "medias/r18.png",
     question: "Comment appelle-t-on les androïdes biologiquement identiques aux humains, fabriqués par la corporation Tyrell ?", answer: "Les Réplicants",
     realisateur: "Denis Villeneuve", description: "En 2049, l'agent K, blade runner chargé de traquer les réplicants, découvre un secret vieux de trente ans qui pourrait bouleverser l'ordre entre humains et androïdes.",
-    turl: "https://www.youtube.com/watch?v=WarevDmt_Ug", genres: ["Science-fiction", "Thriller", "Un grand film !"], imdb: "https://www.imdb.com/title/tt1856101/", rating: "8.0", verrouille: false },
+    genres: ["Science-fiction", "Thriller", "Un grand film !"], imdb: "https://www.imdb.com/title/tt1856101/", rating: "8.0", verrouille: false },
 
     { title: "Gladiator", img: "45.png", password: "4bX", rebus: "medias/r19.png",
     question: "Qui est nazi et adore ce film ?", answer: "Bertrand",
     realisateur: "Ridley Scott", description: "Maximus, grand général de Rome trahi par Commode, est réduit en esclavage. Devenu gladiateur, il traverse l'Empire pour se venger de l'homme qui a assassiné sa famille.",
-    turl: "https://www.youtube.com/watch?v=owK1at_O7_0", genres: ["Action", "Historique", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0172495/", rating: "8.5", verrouille: false },
+    genres: ["Action", "Historique", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0172495/", rating: "8.5", verrouille: false },
 
     { title: "Je suis une légende", img: "46.png", password: "8nN", rebus: "medias/r20.png",
     question: "Dans ce film, le personnage principal Robert Neville joué par Will Smith écoute régulièrement un morceau de Bob Marley, quel est le titre de ce morceau ?", answer: "Three Little Birds",
     realisateur: "Francis Lawrence", description: "Robert Neville survit seul à New York après qu'un virus a transformé l'humanité en créatures nocturnes sanguinaires. Militaire et chercheur, il tente de trouver un remède.",
     genres: ["Horreur", "Drame", "Un bon film !"],
-    turl: "https://www.youtube.com/watch?v=uYUbLTxJl-A", imdb: "https://www.imdb.com/title/tt0480249/", rating: "7.2", verrouille: false },
+    imdb: "https://www.imdb.com/title/tt0480249/", rating: "7.2", verrouille: false },
 
     { title: "Into the Wild", img: "33.png", password: "5kS", rebus: "medias/r21.png",
     question: "Quel est le numéro écrit sur le côté du 'Magic Bus' où s'installe Christopher ?", answer: "142",
     realisateur: "Sean Penn", description: "Christopher McCandless, jeune diplômé idéaliste, abandonne tout — argent, famille, identité — pour partir seul à l'aventure vers les étendues sauvages de l'Alaska.",
-    turl: "https://www.youtube.com/watch?v=2GWPOPSXGYI", genres: ["Drame", "Aventure", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0758758/", rating: "8.1", verrouille: false },
+    genres: ["Drame", "Aventure", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0758758/", rating: "8.1", verrouille: false },
 
     { title: "Incassable", img: "34.png", password: "3vH", rebus: "medias/r22.png",
     question: "Quel est le nom de la galerie d'art spécialisée dans les comics tenue par Elijah Price ?", answer: "Limited Edition",
     realisateur: "M. Night Shyamalan", description: "David Dunn, unique survivant indemne d'un accident de train ayant tué 131 personnes, est contacté par Elijah Price, un homme mystérieux qui lui révèle une vérité bouleversante.",
-    turl: "https://www.youtube.com/watch?v=AC-LA9QVdmI", genres: ["Fantastique", "Thriller"], imdb: "https://www.imdb.com/title/tt0217869/", rating: "7.3", verrouille: true },
+    genres: ["Fantastique", "Thriller"], imdb: "https://www.imdb.com/title/tt0217869/", rating: "7.3", verrouille: true },
 
     { title: "Bugonia", img: "54.png", password: "1xQ", rebus: "medias/r23.png",
     question: "De quel espèce extraterrestre parle-t-on dans ce film ?", answer: "les Andromédiens",
     realisateur: "Yorgos Lanthimos", description: "Deux employés persuadés d'une invasion extraterrestre enlèvent une puissante PDG, convaincus qu'elle est une alien venue anéantir l'humanité. Absurde et glaçant.",
-    genres: ["Thriller, Crime"],
-    turl: "https://www.youtube.com/watch?v=nmxP6PU_GGo", imdb: "https://www.imdb.com/fr-ca/title/tt12300742/", rating: "7.4", verrouille: true },
+    genres: ["Thriller", "Crime"],
+    imdb: "https://www.imdb.com/fr-ca/title/tt12300742/", rating: "7.4", verrouille: true },
     
     { title: "Transcendance", img: "21.png", password: "1xQ", rebus: "medias/r24.png",
     question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
     realisateur: "Wally Pfister", description: "Will Caster, brillant chercheur en IA, se retrouve mourant après un attentat. Sa conscience est téléchargée dans un ordinateur, créant une entité omnisciente et omnipotente.",
     genres: ["Science-fiction", "Thriller", "Sous-coté"],
-    turl: "https://www.youtube.com/watch?v=VCTen3-B8GU", imdb: "https://www.imdb.com/title/tt2209764/", rating: "6.2", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt2209764/", rating: "6.2", verrouille: true },
 
     { title: "Jumper", img: "22.png", password: "4uG", rebus: "medias/r25.png",
     question: "Où se trouve la 'bibliothèque' secrète de Griffin, là où il garde ses preuves sur les Paladins ?", answer: "Dans le Colisée",
     realisateur: "Doug Liman", description: "David Rice peut se téléporter instantanément n'importe où. Cette liberté absolue prend fin quand les Paladins, une organisation secrète qui traque les Jumpers, se lance à ses trousses.",
     genres: ["Fantastique", "Action", "Tu va peut être pas aimer"],
-    turl: "https://www.youtube.com/watch?v=RcMH5sAYc5o", imdb: "https://www.imdb.com/title/tt0489099/", rating: "6.0", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt0489099/", rating: "6.0", verrouille: true },
 
     { title: "Chappee", img: "27.png", password: "6tW", rebus: "medias/r26.png",
     question: "Quel est le nom du robot massif et lourd piloté à distance par le personnage de Hugh Jackman ?", answer: "Moose",
     realisateur: "Neill Blomkamp", description: "À Johannesburg, Chappie est le premier robot à posséder une vraie conscience. Volé par des gangsters, il apprend la dureté du monde tout en cherchant à comprendre ce qu'il est.",
     genres: ["Science-fiction", "Action", "Divertissant", "à voir"],
-    turl: "https://www.youtube.com/watch?v=lYpdtB4UKWE", imdb: "https://www.imdb.com/title/tt1823672/", rating: "6.8", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt1823672/", rating: "6.8", verrouille: true },
 
     { title: "Au Boulot !", img: "51.png", password: "6tW", rebus: "medias/r27.png",
     question: "Dans ce film documentaire, cette grosse bourgeoise de Sarah Saldamann prend en photo la façade d'un commerce avec un air enjoué mais plein de mépris de classe (la connasse). Quel est le nom de ce commerce ?", answer: "Un PMU",
     realisateur: "Gilles Perret", description: "François Ruffin, député, propose à Sarah Saldmann de vivre un mois avec le SMIC et d'exercer des métiers précaires pour comprendre la réalité des travailleurs modestes.",
     genres: ["Documentaire", "Gauchiasse !"],
-    turl: "https://www.youtube.com/watch?v=lYpdtB4UKWE", imdb: "https://www.imdb.com/title/tt33350039/", rating: "6.9", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt33350039/", rating: "6.9", verrouille: true },
 
     { title: "Ill Manors", img: "32.png", password: "2pT", rebus: "medias/r33.png",
     question: "Quel est le prénom du bébé abandonné dans le sac que les dealers trouvent ?", answer: "Michelle",
     realisateur: "Ben Drew", description: "Dans les rues de Forest Gate, à l'est de Londres, plusieurs destins marginaux se croisent dans une spirale de violence, de trafics et de misère sociale, sans issue apparente.",
     genres: ["Drame", "Crime", "Film vraiment pas drôle"],
-    turl: "https://www.youtube.com/watch?v=MT44ch0FFEU", imdb: "https://www.imdb.com/title/tt1760967/", rating: "6.6", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt1760967/", rating: "6.6", verrouille: true },
 
     { title: "Looper", img: "36.png", password: "1zL", rebus: "medias/r34.png",
     question: "Quel est le surnom du futur chef de la pègre qui envoie les victimes dans le passé ?", answer: "Le Maître des Pluies",
     realisateur: "Rian Johnson", description: "En 2044, Joe est un Looper : il élimine des victimes envoyées du futur par un syndicat du crime. Sa vie bascule quand sa prochaine cible est sa propre version vieillie.",
     genres: ["Action", "Science-fiction", "Un bon film !"],
-    turl: "https://www.youtube.com/watch?v=2iQuoxZ9dfc", imdb: "https://www.imdb.com/title/tt1276104/", rating: "7.4", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt1276104/", rating: "7.4", verrouille: true },
 
     { title: "Tarzan", img: "41.png", password: "5vW", rebus: "medias/r35.png",
     question: "Quel est le nom de l'explorateur qui veut capturer les gorilles pour les vendre ?", answer: "Clayton",
     realisateur: "Kevin Lima et Chris Buck", description: "Orphelin recueilli et élevé par des gorilles, Tarzan découvre ses origines humaines à l'arrivée d'une expédition dans la jungle africaine. Il doit choisir son monde.",
     genres: ["Animation", "Aventure", "Une belle histoire", "Une belle bande original"],
-    turl: "https://www.youtube.com/watch?v=2Wv_2UIdYtY", imdb: "https://www.imdb.com/title/tt0120855/", rating: "7.1", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt0120855/", rating: "7.1", verrouille: true },
 
     { title: "Abysse", img: "15.png", password: "8rA", rebus: "medias/r36.png",
     question: "Quel message Bud écrit-il sur son ardoise à sa femme alors qu'il manque d'oxygène au fond ?", answer: "Je t'aime",
     realisateur: "James Cameron", description: "Une équipe de plongeurs est envoyée chercher un sous-marin nucléaire naufragé dans les abysses. Leur mission prend une dimension inattendue lors d'une rencontre avec une vie extraterrestre.",
     genres: ["Science-fiction", "Aventure", "Un bon film !"],
-    turl: "https://www.youtube.com/watch?v=9oR-B6S7oY0", imdb: "https://www.imdb.com/title/tt0096754/", rating: "7.5", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt0096754/", rating: "7.5", verrouille: true },
 
     { title: "L'amour Ouf", img: "20.png", password: "6lD", rebus: "medias/r37.png",
     question: "Sur quelle chanson de The Cure les deux protagonistes dansent-ils dans la cour d'école ?", answer: "A Forest",
     realisateur: "Gilles Lellouche", description: "Clotaire et Jackie se rencontrent adolescents dans les années 80. Leur amour passionnel résistera aux années, à la violence et à des chemins de vie radicalement différents.",
     genres: ["Drame", "Romance", "J'ai bien aimé mais je sais pas si c'est ta came"],
-    turl: "https://www.youtube.com/watch?v=C7mS-TbeI8M", imdb: "https://www.imdb.com/title/tt27490099/", rating: "7.0", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt27490099/", rating: "7.0", verrouille: true },
 
     { title: "Le Guide du Voyageur galactique", img: "16.png", password: "5wK", rebus: "medias/r38.png",
     question: "En quoi le moteur à improbabilité infinie transforme-t-il les deux missiles nucléaires ?", answer: "Un pétunia et une baleine",
     realisateur: "Garth Jennings", description: "Arthur Dent échappe de justesse à la démolition de la Terre pour une autoroute galactique. Il parcourt l'univers avec son ami Ford Prefect, un extraterrestre guide intergalactique.",
     genres: ["Science-fiction", "Comédie", "à voir absolument !"],
-    turl: "https://www.youtube.com/watch?v=asS9G_HIdjI", imdb: "https://www.imdb.com/title/tt0371724/", rating: "6.8", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt0371724/", rating: "6.8", verrouille: true },
     
     { title: "Kaamelott 2 part.1", img: "52.png", password: "6tW", rebus: "medias/r39.png",
     question: "", answer: "",
     realisateur: "Alexandre Astier", description: "Le roi Arthur revient d'exil pour reprendre Kaamelott des mains de Lancelot. Il rassemble ses chevaliers pour une reconquère contre Arthur ! Après la destruction de Kaamelott, son refus obstiné de tuer Lancelot précipite le Royaume de Logres à sa perte. Il réunit ses Chevaliers, novices téméraires et vétérans désabusés, autour de la Nouvelle Table Ronde et les envoie prouver leur valeur aux quatre coins du Monde, des Marais Orcaniens aux terres glacées du DRAGON_END_PLACEHOLDER",
     genres: ["Aventure", "Fantastique", "L'excelente suite d'un film moyen"],
-    turl: "https://www.youtube.com/watch?v=lYpdtB4UKWE", imdb: "https://www.imdb.com/title/tt9844322/", rating: "7.2", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt9844322/", rating: "7.2", verrouille: true },
 
     { title: "10 Cloverfield Lane", img: "10.png", password: "9jN", rebus: "medias/r40.png",
     question: "À quel jeu de société Howard, Emmett et Michelle jouent-ils dans le bunker ?", answer: "Le jeu de la vie",
     realisateur: "Dan Trachtenberg", description: "Une femme se réveille dans un bunker après un accident, son hôte affirmant que l'extérieur est contaminé.",
     genres: ["Thriller", "Science-fiction", "Un bon film !"],
-    turl: "https://www.youtube.com/watch?v=z-mFf4gytQI", imdb: "https://www.imdb.com/title/tt1179933/", rating: "7.2", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt1179933/", rating: "7.2", verrouille: true },
 
     { title: "Stargate", img: "11.png", password: "2tX", rebus: "medias/r41.png",
     question: "Comment s'appelle le minéral instable utilisé pour faire fonctionner la porte ?", answer: "Naquadah",
     realisateur: "Roland Emmerich", description: "Une équipe de militaires et un archéologue franchissent une porte stellaire menant à une autre planète.",
     genres: ["Science-fiction", "Aventure", "Un classique de la science-fiction"],
-    turl: "https://www.youtube.com/watch?v=uK8n_V2EaH8", imdb: "https://www.imdb.com/title/tt0111282/", rating: "7.1", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt0111282/", rating: "7.1", verrouille: true },
 
     { title: "Scary Movie 3", img: "12.png", password: "1pB", rebus: "medias/r42.png",
     question: "Comment s'appelle la petite fille terrifiante qui sort du puits (parodie du Cercle) ?", answer: "Tabitha",
     realisateur: "David Zucker", description: "Une parodie déjantée des films d'horreur et de science-fiction les plus célèbres des années 2000.",
     genres: ["Comédie", "Absurde", "Un classique de l'humour"],
-    turl: "https://www.youtube.com/watch?v=XvK_E6t5F4Y", imdb: "https://www.imdb.com/title/tt0306047/", rating: "6.1", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt0306047/", rating: "6.1", verrouille: true },
 
     { title: "Daaaaaalie", img: "13.png", password: "4vC", rebus: "medias/r43.png",
     question: "Quel objet insolite Dalí veut-il absolument filmer lors de l'interview ?", answer: "Une fontaine",
     realisateur: "Quentin Dupieux", description: "Une journaliste tente de réaliser une interview avec Salvador Dalí, qui se transforme en un voyage absurde.",
     genres: ["Comédie", "Absurde", "Pas mal non ?! C'est français"],
-    turl: "https://www.youtube.com/watch?v=MLILb_JnFx4", imdb: "https://www.imdb.com/title/tt23476446/", rating: "6.5", verrouille: true },
+    imdb: "https://www.imdb.com/title/tt23476446/", rating: "6.5", verrouille: true },
 
     { title: "Stéphane", img: "53.png", password: "4vC", rebus: "medias/r43.png",
     question: "", answer: "",
     realisateur: "Timothée Hochet et Lucas Pastor", description: "Un jeune vidéaste au talent douteux fait la rencontre de Stéphane, un ancien cascadeur brut de décoffrage, qui sous couvert d'une grande sympathie se montre de plus en plus étrange. Ils s’engagent alors dans un projet périlleux : réaliser à eux seuls un grand film de guerre.",
     genres: ["Comédie", "Drame"],
-    turl: "https://www.youtube.com/watch?v=wLzyOnYXdCU", imdb: "https://www.imdb.com/fr/title/tt22180542/", rating: "6.4", secret: true },
+    imdb: "https://www.imdb.com/fr/title/tt22180542/", rating: "6.4", secret: true },
 
     { title: "Le Seigneur des anneaux l'animé de 1979", img: "26.png", password: "3bK", rebus: "medias/r44.png",
     question: "Quel personnage majeur des livres est totalement absent de cette version de Bakshi ?", answer: "Tom Bombadil",
     realisateur: "Ralph Bakshi", description: "Une adaptation expérimentale du premier tome de Tolkien utilisant la technique de la rotoscopie.",
     genres: ["Fantastique", "Animation"],
-    turl: "https://www.youtube.com/watch?v=6Yt-R70_R0Y", imdb: "https://www.imdb.com/title/tt0077869/", rating: "6.2", secret: true },
+    imdb: "https://www.imdb.com/title/tt0077869/", rating: "6.2", secret: true },
 
 ];
 
@@ -743,7 +742,7 @@ function playSound(_name) {
 //  FILTRE
 // ============================================================
 
-let currentFilter = "all";
+let currentFilter = localStorage.getItem("mg_filter") || "all";
 
 function getSortedIndices() {
     const validated = getValidated();
@@ -817,8 +816,11 @@ function updatePlayerTitle() {
     const claimedCount = getClaimedMilestones();
     if (claimedCount > 0) {
         const last = MILESTONES[claimedCount - 1];
-        el.textContent = last.label || `${last.count} succès`;
-        if (iconEl) { iconEl.src = `medias/s${last.icon || claimedCount}.png`; iconEl.alt = last.label || ""; }
+        const isSpecial = last.rewards && last.rewards.includes("?");
+        const titleText = isSpecial ? "Roi du Game" : (last.label || `${last.count} succès`);
+        const iconNum   = isSpecial ? 13 : (last.icon || claimedCount);
+        el.textContent = titleText;
+        if (iconEl) { iconEl.src = `medias/s${iconNum}.png`; iconEl.alt = titleText; }
         document.getElementById("sidebar-title-wrap").classList.remove("no-title");
     } else {
         el.textContent = "Néophyte";
@@ -875,7 +877,7 @@ function buildMilestones() {
                             <span class="milestone-title">${m.label || `${m.count} succès`}</span>
                         </div>
                         <div class="milestone-status">
-                            <span class="milestone-check">&#10003;</span>
+                            <svg class="milestone-check" xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q48 0 93.5 11t87.5 32q15 8 19.5 24t-5.5 30q-10 14-26.5 18t-32.5-4q-32-15-66.5-23t-69.5-8q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-8-.5-15.5T798-511q-2-17 6.5-32.5T830-564q16-5 30 3t16 24q2 14 3 28t1 29q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-328 372-373q11-11 27.5-11.5T852-781q11 11 11 28t-11 28L452-324q-12 12-28 12t-28-12L282-438q-11-11-11-28t11-28q11-11 28-11t28 11l86 86Z"/></svg>
                         </div>
                     </div>
                 </div>
@@ -1011,7 +1013,7 @@ function buildGrid() {
                 <img src="medias/lock.png" class="cell-lock-icon cell-overlay-icon" style="width:16px;height:16px">
             </div>
             <div class="cell-background cell-background-valid">
-                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor"><path d="m438-452-58-57q-11-11-27.5-11T324-508q-11 11-11 28t11 28l86 86q12 12 28 12t28-12l170-170q12-12 11.5-28T636-592q-12-12-28.5-12.5T579-593L438-452ZM326-90l-58-98-110-24q-15-3-24-15.5t-7-27.5l11-113-75-86q-10-11-10-26t10-26l75-86-11-113q-2-15 7-27.5t24-15.5l110-24 58-98q8-13 22-17.5t28 1.5l104 44 104-44q14-6 28-1.5t22 17.5l58 98 110 24q15 3 24 15.5t7 27.5l-11 113 75 86q10 11 10 26t-10 26l-75 86 11 113q2 15-7 27.5T802-212l-110 24-58 98q-8 13-22 17.5T584-74l-104-44-104 44q-14 6-28 1.5T326-90Zm52-72 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q48 0 93.5 11t87.5 32q15 8 19.5 24t-5.5 30q-10 14-26.5 18t-32.5-4q-32-15-66.5-23t-69.5-8q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-8-.5-15.5T798-511q-2-17 6.5-32.5T830-564q16-5 30 3t16 24q2 14 3 28t1 29q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-328 372-373q11-11 27.5-11.5T852-781q11 11 11 28t-11 28L452-324q-12 12-28 12t-28-12L282-438q-11-11-11-28t11-28q11-11 28-11t28 11l86 86Z"/></svg>
             </div>
             </div>
         `;
@@ -1084,8 +1086,6 @@ function updateNextChallengeBanner() {
     banner.classList.remove("hidden");
 
     const imgSrc = achImg(nextIndex);
-    document.getElementById("nc-poster").src = imgSrc;
-    document.getElementById("nc-poster").alt = ach.title;
     document.getElementById("nc-bg").style.backgroundImage = `url(${imgSrc})`;
     document.getElementById("nc-title").textContent = ach.title;
 
@@ -1097,8 +1097,8 @@ function updateNextChallengeBanner() {
         ratingEl.style.display = "none";
     }
 
-    document.getElementById("nc-poster").onclick       = () => openInfoModal(nextIndex);
-    document.getElementById("nc-challenge-btn").onclick = () => openChallengeDirectly(nextIndex);
+    document.getElementById("next-challenge").onclick   = (e) => { if (!e.target.closest("button")) openInfoModal(nextIndex); };
+    document.getElementById("nc-challenge-btn").onclick = (e) => { e.stopPropagation(); openChallengeDirectly(nextIndex); };
 }
 
 // ===== MODALS =====
@@ -1216,9 +1216,7 @@ function openInfoModal(index, mysteryReveal = false) {
     // Réalisateur / description / bande annonce / note
     const dirRow    = document.getElementById("info-director-row");
     const descEl    = document.getElementById("info-desc");
-    const trailerEl   = document.getElementById("info-trailer");
     const imdbEl      = document.getElementById("info-imdb");
-    const posterBtn   = document.getElementById("info-poster-btn");
     const ratingRow = document.getElementById("info-rating-row");
     // Genres + note (affichés pour tous les états)
     buildGenreTags(ach.genres);
@@ -1231,25 +1229,19 @@ function openInfoModal(index, mysteryReveal = false) {
 
     if (isSecret) {
         dirRow.style.display      = "none";
-        trailerEl.style.display   = "none";
         imdbEl.style.display      = "none";
-        posterBtn.style.display   = "none";
         descEl.style.display      = "block";
         descEl.textContent        = "Ce film se débloque en réclamant un palier de récompenses spécifique.";
         document.getElementById("info-desc-more").classList.add("hidden");
     } else if (isMystery) {
         dirRow.style.display      = "none";
-        trailerEl.style.display   = "none";
         imdbEl.style.display      = "none";
-        posterBtn.style.display   = "none";
         descEl.style.display      = "block";
         descEl.textContent        = "Récupère les récompenses des prochains paliers pour débloquer ce film.";
         document.getElementById("info-desc-more").classList.add("hidden");
     } else {
         dirRow.style.display      = "flex";
         descEl.style.display      = "block";
-        trailerEl.style.display   = "flex";
-        posterBtn.style.display   = "flex";
         document.getElementById("info-director").textContent = ach.realisateur;
         const MAX_DESC = 120;
         const descMoreBtn = document.getElementById("info-desc-more");
@@ -1261,11 +1253,9 @@ function openInfoModal(index, mysteryReveal = false) {
             descEl.textContent = ach.description;
             descMoreBtn.classList.add("hidden");
         }
-        trailerEl.href            = ach.turl;
-        posterBtn.onclick         = () => openPosterModal(achImg(currentIndex));
         if (ach.imdb) {
             imdbEl.href          = ach.imdb;
-            imdbEl.style.display = "flex";
+            imdbEl.style.display = "inline-flex";
         } else {
             imdbEl.style.display = "none";
         }
@@ -2070,6 +2060,7 @@ document.getElementById("filter-menu").addEventListener("click", (e) => {
         document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
     }
+    localStorage.setItem("mg_filter", currentFilter);
     document.getElementById("filter-menu").classList.add("hidden");
     document.getElementById("filter-toggle-btn").classList.remove("active");
     buildGrid();
@@ -2125,66 +2116,6 @@ function closeDescModal() {
 document.getElementById("modal-desc-close").addEventListener("click", closeDescModal);
 document.getElementById("modal-desc-overlay").addEventListener("click", closeDescModal);
 
-function openPosterModal(src) {
-    const modal = document.getElementById("modal-poster");
-    const img   = document.getElementById("modal-poster-img");
-    img.src = src;
-    modal.classList.remove("hidden");
-    requestAnimationFrame(() => modal.classList.add("visible"));
-}
-
-(function initPosterModal() {
-    const modal    = document.getElementById("modal-poster");
-    const closeBtn = document.querySelector(".modal-poster-close");
-    const img      = document.getElementById("modal-poster-img");
-
-    // Fermeture
-    const close = () => {
-        modal.classList.remove("visible");
-        modal.addEventListener("transitionend", () => modal.classList.add("hidden"), { once: true });
-    };
-    closeBtn.addEventListener("click", close);
-    modal.addEventListener("click", (e) => { if (e.target === modal) close(); });
-
-    // Effet 3D
-    const MAX_TILT = 22;
-    let isDragging = false;
-
-    const resetTransform = () => {
-        img.classList.remove("grabbing");
-        img.style.transform = "scale(1)";
-        img.style.boxShadow = "0 24px 80px rgba(0,0,0,0.8)";
-    };
-
-    img.addEventListener("mousedown", (e) => {
-        if (e.button !== 0) return;
-        isDragging = true;
-        img.classList.add("grabbing");
-        e.preventDefault();
-    });
-
-    window.addEventListener("mousemove", (e) => {
-        if (!isDragging) return;
-        const rect   = img.getBoundingClientRect();
-        const cx     = rect.left + rect.width  / 2;
-        const cy     = rect.top  + rect.height / 2;
-        const dx     = (e.clientX - cx) / (rect.width  / 2);
-        const dy     = (e.clientY - cy) / (rect.height / 2);
-        const rotY   =  dx * MAX_TILT;
-        const rotX   = -dy * MAX_TILT;
-        const depth  = Math.sqrt(dx * dx + dy * dy) * 8;
-        img.style.transform  = `scale(1.03) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-        img.style.boxShadow  = `${-rotY * 0.8}px ${rotX * 0.8 + depth + 20}px ${60 + depth * 3}px rgba(0,0,0,0.9)`;
-        img.style.transition = "box-shadow 0.05s ease";
-    });
-
-    window.addEventListener("mouseup", () => {
-        if (!isDragging) return;
-        isDragging = false;
-        img.style.transition = "transform 0.5s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.4s ease";
-        resetTransform();
-    });
-})();
 
 // ============================================================
 //  DIDACTICIEL
@@ -2532,6 +2463,12 @@ document.addEventListener("visibilitychange", () => {
 // Init : afficher la grille immédiatement, Firebase la mettra à jour ensuite
 buildGrid();
 
+// Restaurer le bouton de filtre actif
+if (currentFilter !== "all") {
+    const activeBtn = document.querySelector(`.filter-btn[data-filter="${currentFilter}"]`);
+    if (activeBtn) activeBtn.classList.add("active");
+}
+
 // Init modal couleur accent
 initAccentColorModal();
 
@@ -2641,6 +2578,32 @@ function makeTlCard(idx) {
 }
 
 // LOTR : tout film dont le titre contient "Seigneur" doit être au moins en A (num 2)
+let _toastTimer = null;
+function showToast(msg) {
+    const el = document.getElementById("toast-msg");
+    el.textContent = msg;
+    el.classList.remove("hide");
+    el.classList.add("show");
+    if (_toastTimer) clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => {
+        el.classList.remove("show");
+        el.classList.add("hide");
+        _toastTimer = null;
+    }, 2200);
+}
+
+const LOTR_TOAST_MESSAGES = [
+    "Action impossible",
+    "Je veux rien savoir",
+    "Action impossible",
+    "Arrête, en fait",
+    "Action impossible",
+    "Action impossible",
+    "Action impossible",
+    "Action impossible",
+];
+let _lotrToastCount = 0;
+
 const LOTR_MIN_TIER = 2;
 function isLotrFilm(idx) {
     return ACHIEVEMENTS[idx]?.title?.toLowerCase().includes("seigneur") ?? false;
@@ -2652,7 +2615,9 @@ function placeTlFilm(idx, requestedTier) {
     saveTierlist();
     buildTierlistUI();
     if (effectiveTier !== requestedTier) {
-        // Animer la carte qui a été redirigée vers A
+        const msg = LOTR_TOAST_MESSAGES[_lotrToastCount % LOTR_TOAST_MESSAGES.length];
+        _lotrToastCount++;
+        showToast(msg);
         const card = document.querySelector(`.tl-card[data-idx="${idx}"]`);
         if (card) {
             card.classList.add("lotr-redirect");

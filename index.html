@@ -6,7 +6,7 @@
     <title>Movie Game - Succès</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="splash-active">
@@ -22,7 +22,6 @@
 
             <div id="next-challenge" class="next-challenge hidden">
                     <div class="nc-bg" id="nc-bg"></div>
-                    <img id="nc-poster" class="nc-poster" src="" alt="">
                     <div class="nc-content">
                         <div class="nc-top">
                             <span class="nc-label">Prochain défi</span>
@@ -92,6 +91,8 @@
         </aside>
     </div>
     <!-- Écran succès défi -->
+    <div id="toast-msg" class="toast-msg"></div>
+
     <div id="success-screen" class="success-screen hidden">
         <div class="success-content">
             <img src="medias/gift.gif" class="success-gift" alt="">
@@ -103,17 +104,17 @@
     <!-- Écran fin de jeu -->
     <div id="game-over-screen" class="game-over-screen hidden">
         <div id="game-over-heart" class="game-over-heart"><img src="medias/heart.png" alt="♥"></div>
+        <div id="game-over-fin" class="game-over-fin">FIN</div>
     </div>
 
     <!-- Écran récompense spéciale (palier ?) -->
     <div id="secret-reward-screen" class="secret-reward-screen hidden">
         <div class="secret-reward-inner">
-            <div class="secret-reward-badge">Récompense spéciale !</div>
             <div class="secret-reward-lines" id="secret-reward-lines"></div>
-            <button id="secret-reward-next" class="poster-reveal-next-btn">
-                <span class="secret-reward-btn-label">Suivant</span>
-            </button>
         </div>
+        <button id="secret-reward-next" class="secret-reward-next-btn">
+            <span class="secret-reward-btn-label">Suivant</span>
+        </button>
     </div>
 
     <!-- Écran révélation film mystère -->
@@ -298,7 +299,6 @@
                         </div>
                     </div>
                     <div class="info-genres-row hidden" id="info-genres-row"></div>
-                    <div class="modal-separator"></div>
                     <div class="info-section" id="info-director-row">
                         <span class="info-section-label">Réalisateur</span>
                         <span id="info-director"></span>
@@ -311,24 +311,10 @@
 
                     <div class="info-actions-row">
                         <div class="info-links-row">
-                            <a class="info-link-btn" id="info-trailer" href="#" target="_blank" rel="noopener noreferrer">
-                                <div class="info-link-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22px" height="22px" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M15.033 9.44a.647.647 0 0 1 0 1.12l-4.065 2.352a.645.645 0 0 1-.968-.56V7.648a.645.645 0 0 1 .967-.56zM7 21h10"/><rect width="20" height="14" x="2" y="3" rx="2"/></g></svg>
-                                </div>
-                                <span>Trailer</span>
+<a class="info-imdb-btn" id="info-imdb" href="#" target="_blank" rel="noopener noreferrer">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h560v-280h80v280q0 33-23.5 56.5T760-120H200Zm188-212-56-56 372-372H560v-80h280v280h-80v-144L388-332Z"/></svg>
+                                Voir la page du film
                             </a>
-                            <a class="info-link-btn" id="info-imdb" href="#" target="_blank" rel="noopener noreferrer">
-                                <div class="info-link-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22px" height="22px" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m21 21l-4.34-4.34"/><circle cx="11" cy="11" r="8"/></g></svg>
-                                </div>
-                                <span>IMDb</span>
-                            </a>
-                            <button class="info-link-btn" id="info-poster-btn">
-                                <div class="info-link-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22px" height="22px" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></g></svg>
-                                </div>
-                                <span>Affiche</span>
-                            </button>
                         </div>
                         <button id="info-cta" class="info-cta-btn"></button>
                     </div>
@@ -349,10 +335,6 @@
     </div>
 
     <!-- Modal Affiche plein écran -->
-    <div id="modal-poster" class="modal-poster hidden">
-        <button class="modal-poster-close">&times;</button>
-        <img id="modal-poster-img" src="" alt="" class="modal-poster-img">
-    </div>
 
     <!-- Bouton Joker (au-dessus de la modal question) -->
     <div id="joker-use-bar" class="joker-use-bar hidden">
@@ -407,9 +389,6 @@
     <!-- Tier List Modal -->
     <div id="modal-tierlist" class="tl-modal hidden">
         <div class="tl-inner">
-            <header class="tl-header">
-                <span class="tl-hint">Glisse · Double-clic pour retirer</span>
-            </header>
             <div class="tl-rows-area" id="tl-rows"></div>
             <div class="tl-bank-area">
                 <div class="tl-bank-scroll" id="tl-bank"></div>
