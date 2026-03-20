@@ -990,6 +990,8 @@ body {
     gap: 8px;
     padding: 10px;
     width: 100%;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 2000px;
 }
 
 .grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
@@ -1009,12 +1011,13 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.02);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
     transition: transform 0.1s ease, box-shadow 0.3s ease;
-    will-change: transform;
+    contain: layout style paint;
 }
 
 .cell:active {
     transform: scale(0.94);
     transition: transform 0.08s ease;
+    will-change: transform;
 }
 
 
@@ -1426,6 +1429,10 @@ body {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
+.sidebar-prog-frame {
+    margin: 0px 12px 8px 12px;
+}
+
 @media (max-width: 800px) {
     .cadre {
         border-color: transparent;
@@ -1510,20 +1517,81 @@ body {
     align-items: center;
     justify-content: flex-start;
 }
-.sidebar-inventory-badge {
-    gap: 6px;
+.reward-item {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.sidebar-inventory-icon {
-    width: 16px;
-    height: 16px;
+.reward-item-icon {
+    width: 18px;
+    height: 18px;
     object-fit: contain;
-    opacity: 0.9;
 }
-.sidebar-inventory-count {
-    font-size: 0.85rem;
-    font-weight: 700;
+.reward-item-count {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    background: #2a2a2e;
     color: #fff;
-    line-height: 1;
+    font-size: 0.6rem;
+    font-weight: 800;
+    min-width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.05);
+}
+.inv-item {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#inventory-keys {
+    background: rgba(255, 149, 11, 0.1);
+}
+#inventory-jokers {
+    background: rgba(117, 11, 255, 0.1);
+}
+
+.inv-item-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+.inv-item-count {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    background: #2a2a2ed6;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.04);
 }
 .sidebar-inventory-title {
     font-size: 0.65rem;
@@ -1818,7 +1886,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
     background-color: rgba(0, 0, 0, 0.1);
     padding: 7px 9px;
     border-radius: 8px;
@@ -1870,22 +1938,33 @@ body {
     letter-spacing: 0.2px;
     background: rgba(220, 100, 20, 0.15);
     color: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(220, 100, 20, 0.38);
+    border: 1px solid rgba(220, 100, 20, 0.1);
 }
 .reward-badge-key {
-    background: rgba(220, 100, 20, 0.15);
-    color: #f97316;
-    border-color: rgba(220, 100, 20, 0.38);
+    background: rgba(220, 100, 20, 0.1);
+    color: #ffffff;
+    font-weight: 400;
+    border-color: rgba(220, 100, 20, 0);
 }
 .reward-badge-joker {
-    background: rgba(80, 130, 220, 0.12);
-    color: #7eb8f7;
-    border-color: rgba(80, 130, 220, 0.35);
+    background: rgba(80, 130, 220, 0.1);
+    color: #ffffff;
+    font-weight: 400;
+    border-color: rgba(80, 130, 220, 0);
 }
 .reward-badge-secret {
-    background: rgba(197, 100, 255, 0.12);
+    background: rgba(197, 100, 255, 0.1);
     color: #d48aff;
-    border-color: rgba(197, 100, 255, 0.3);
+    font-weight: 100;
+    height: 30px;
+    border-color: rgba(197, 100, 255, 0);
+    gap: 5px;
+}
+.reward-badge-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    vertical-align: middle;
 }
 .reward-badge-mystery {
     background: rgba(124, 58, 237, 0.15);

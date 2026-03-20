@@ -688,7 +688,7 @@ refRevealedMysteries.on("value", (snapshot) => {
 
 refClaimedMilestones.on("value", (snapshot) => {
     cachedClaimedMilestones = snapshot.val() || 0;
-    buildMilestones();
+    buildMilestonesDebounced();
     updateRewardsBadge();
     updateMysteryPointsIndicator();
 }, (err) => {
@@ -803,9 +803,9 @@ function updateCounter() {
 
 function rewardBadgesHTML(m) {
     const badges = [];
-    if (m.keys)               badges.push(`<span class="reward-badge reward-badge-key">${m.keys} ${KEY_ICON}</span>`);
-    if (m.jokers)             badges.push(`<span class="reward-badge reward-badge-joker">${m.jokers} ${JOKER_ICON}</span>`);
-    if (m.secretFilm !== undefined) badges.push(`<span class="reward-badge reward-badge-secret">Film secret</span>`);
+    if (m.keys)    badges.push(`<div class="reward-item"><img src="medias/key.png" class="reward-item-icon"><span class="reward-item-count">${m.keys}</span></div>`);
+    if (m.jokers)  badges.push(`<div class="reward-item"><img src="medias/joker.png" class="reward-item-icon"><span class="reward-item-count">${m.jokers}</span></div>`);
+    if (m.secretFilm !== undefined) badges.push(`<span class="reward-badge reward-badge-secret"><img src="medias/question.png" class="reward-badge-icon"> Film secret</span>`);
     if (m.rewards && m.rewards.includes("?")) badges.push(`<span class="reward-badge">?</span>`);
     return badges.join("");
 }
@@ -1042,10 +1042,16 @@ function buildGrid() {
     });
 
     updateCounter();
-    buildMilestones();
     updateNextChallengeBanner();
     updateGridHeading();
     firstBuildDone = true;
+    buildMilestonesDebounced();
+}
+
+let _buildMilestonesTimer = null;
+function buildMilestonesDebounced() {
+    clearTimeout(_buildMilestonesTimer);
+    _buildMilestonesTimer = setTimeout(buildMilestones, 80);
 }
 
 function updateGridHeading() {
@@ -2105,12 +2111,10 @@ function startGridIntroAnimation() {
     gridAnimStarted = true;
     const cells = [...document.querySelectorAll("#grid .cell")];
     cells.forEach((cell, i) => {
-        cell.style.setProperty("--cell-delay", (i * 0.05) + "s");
+        cell.style.setProperty("--cell-delay", (i * 0.04) + "s");
         cell.classList.add("cell-intro");
+        cell.addEventListener("animationend", () => cell.classList.remove("cell-intro"), { once: true });
     });
-    setTimeout(() => {
-        cells.forEach(c => c.classList.remove("cell-intro"));
-    }, 3000);
 }
 
 function triggerGridAnimation() {
