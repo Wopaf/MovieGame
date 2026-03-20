@@ -70,22 +70,38 @@
                         <span class="sidebar-title-value" id="sidebar-title-value">—</span>
                     </div>
                 </div>
-                <div class="sidebar-panel-body">
-                    <div class="sidebar-prog-counts">
-                        <span class="sidebar-prog-num" id="sp-count">0</span>
-                        <span class="sidebar-prog-sep">/</span>
-                        <span class="sidebar-prog-total" id="sp-total">0</span>
-                        <span class="sidebar-prog-unit">films validés</span>
-                    </div>
-                    <div class="sidebar-prog-bar-row">
-                        <div class="sidebar-progress-track">
-                            <div class="sidebar-progress-fill" id="sp-bar"></div>
+                <div class="sidebar-inventory-section">
+                    <span class="sidebar-inventory-title">Inventaire</span>
+                    <div class="sidebar-inventory-row">
+                        <div class="reward-badge reward-badge-key sidebar-inventory-badge" id="inventory-keys">
+                            <span class="sidebar-inventory-count" id="inventory-keys-count">0</span>
+                            <img src="medias/key.png" class="sidebar-inventory-icon">
                         </div>
-                        <span class="sidebar-prog-pct" id="sp-pct">0%</span>
+                        <div class="reward-badge reward-badge-joker sidebar-inventory-badge" id="inventory-jokers">
+                            <span class="sidebar-inventory-count" id="inventory-jokers-count">0</span>
+                            <img src="medias/joker.png" class="sidebar-inventory-icon">
+                        </div>
                     </div>
                 </div>
                 </div><!-- /.sidebar-header-frame -->
                 <div class="sidebar-milestones-label">Succès</div>
+                <div class="sidebar-header-frame sidebar-prog-frame">
+                    <div class="sidebar-panel-body">
+                        <div class="sidebar-prog-counts">
+                            <span class="sidebar-prog-num" id="sp-count">0</span>
+                            <span class="sidebar-prog-sep">/</span>
+                            <span class="sidebar-prog-total" id="sp-total">0</span>
+                            <span class="sidebar-prog-unit">films validés</span>
+                        </div>
+                        <div class="sidebar-prog-bar-row">
+                            <div class="sidebar-progress-track">
+                                <div class="sidebar-progress-fill" id="sp-bar"></div>
+                            </div>
+                            <span class="sidebar-prog-pct" id="sp-pct">0%</span>
+                        </div>
+                    </div>
+                </div>
+                
                 <div id="milestones" class="milestones"></div>
             </div>
         </aside>
@@ -156,32 +172,15 @@
     </div>
 
     <div class="filter-bar view-hidden" id="filter-group">
-        <div class="filter-bar-left">
-            <div class="badge-tooltip-anchor" id="keys-tooltip-anchor">
-                <div class="mystery-points-indicator hidden" id="mystery-points-indicator">
-                    <span id="mystery-points-text"></span>
-                </div>
-                <div class="badge-tooltip hidden" id="keys-tooltip">
-                    <p class="badge-tooltip-title">Clés</p>
-                    <p class="badge-tooltip-body">Les clés permettent de déverrouiller les films verrouillés. Obtenez-en en atteignant des paliers de récompense.</p>
-                </div>
-            </div>
-            <div class="badge-tooltip-anchor" id="jokers-tooltip-anchor">
-                <div class="jokers-indicator hidden" id="jokers-indicator">
-                    <span id="jokers-text"></span>
-                </div>
-                <div class="badge-tooltip hidden" id="jokers-tooltip">
-                    <p class="badge-tooltip-title">Jokers</p>
-                    <p class="badge-tooltip-body">Les jokers permettent de valider un film sans répondre à la question. Obtenez-en en atteignant des paliers de récompense.</p>
-                </div>
-            </div>
+        <div class="filter-bar-inline">
+            <button class="filter-btn filter-btn-genre-item" data-filter="all">Tous</button>
+            <button class="filter-btn filter-btn-genre-item" data-filter="unvalidated">Non validé<span class="filter-genre-count" id="fc-unvalidated"></span></button>
+            <button class="filter-btn filter-btn-genre-item" data-filter="locked">Verrouillé<span class="filter-genre-count" id="fc-locked"></span></button>
         </div>
         <div id="filter-indicator" class="filter-indicator"></div>
         <div class="filter-menu hidden" id="filter-menu">
             <div id="filter-page-main">
                 <button class="filter-btn filter-btn-genre-item" data-filter="validated">Validé<span class="filter-genre-count" id="fc-validated"></span></button>
-                <button class="filter-btn filter-btn-genre-item" data-filter="unvalidated">Non validé<span class="filter-genre-count" id="fc-unvalidated"></span></button>
-                <button class="filter-btn filter-btn-genre-item" data-filter="locked">Verrouillé<span class="filter-genre-count" id="fc-locked"></span></button>
                 <button class="filter-btn filter-btn-genre-item" data-filter="secret">Secret<span class="filter-genre-count" id="fc-secret"></span></button>
                 <div class="filter-menu-divider"></div>
                 <button class="filter-btn filter-btn-genre" id="filter-genre-btn">
@@ -199,8 +198,7 @@
             </div>
         </div>
         <button class="filter-toggle-btn" id="filter-toggle-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 5h20M6 12h12m-9 7h6"/></svg>
-            Filtrer
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M440-440H240q-17 0-28.5-11.5T200-480q0-17 11.5-28.5T240-520h200v-200q0-17 11.5-28.5T480-760q17 0 28.5 11.5T520-720v200h200q17 0 28.5 11.5T760-480q0 17-11.5 28.5T720-440H520v200q0 17-11.5 28.5T480-200q-17 0-28.5-11.5T440-240v-200Z"/></svg>
         </button>
     </div>
 
@@ -304,7 +302,7 @@
                         <span id="info-director"></span>
                     </div>
                     <div class="info-section">
-                        <span class="info-section-label">Description</span>
+                        <span class="info-section-label" id="info-desc-label">Description</span>
                         <p class="info-desc" id="info-desc"></p>
                         <button class="info-desc-more hidden" id="info-desc-more">Voir plus</button>
                     </div>
@@ -342,6 +340,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 5v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2" /><path d="M8 6h.01" /><path d="M16 18h.01" /><path d="M11.75 14.112l-1.63 .853a.294 .294 0 0 1 -.425 -.307l.31 -1.808l-1.317 -1.28a.292 .292 0 0 1 .163 -.499l1.82 -.264l.815 -1.644a.294 .294 0 0 1 .527 0l.814 1.644l1.82 .264a.292 .292 0 0 1 .164 .499l-1.318 1.28l.31 1.807a.292 .292 0 0 1 -.425 .308l-1.628 -.853" /></svg>
             Utiliser un Joker
         </button>
+        <div class="joker-use-count" id="joker-use-count"></div>
     </div>
 
     <!-- Modal Question -->

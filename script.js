@@ -634,18 +634,19 @@ function initAccentColorModal() {
 
 function updateMysteryPointsIndicator() {
     const points = getAvailablePoints();
-    const el = document.getElementById("mystery-points-indicator");
-    if (!el) return;
-    el.classList.remove("hidden");
-    el.style.display = (currentView === 'tierlist' || currentView === 'rewards') ? 'none' : '';
-    document.getElementById("mystery-points-text").innerHTML = `<span class="mpi-count">${points} ${KEY_ICON}</span>`;
+    const countEl = document.getElementById("inventory-keys-count");
+    const pluralEl = document.getElementById("inventory-keys-plural");
+    if (countEl) countEl.textContent = points;
+    if (pluralEl) pluralEl.textContent = points > 1 ? "s" : "";
 }
 
 function updateJokersIndicator(count) {
-    const el = document.getElementById("jokers-indicator");
-    if (!el) return;
-    el.classList.remove("hidden");
-    document.getElementById("jokers-text").innerHTML = `${count} ${JOKER_ICON}`;
+    const countEl = document.getElementById("inventory-jokers-count");
+    const pluralEl = document.getElementById("inventory-jokers-plural");
+    if (countEl) countEl.textContent = count;
+    if (pluralEl) pluralEl.textContent = count > 1 ? "s" : "";
+    const useCount = document.getElementById("joker-use-count");
+    if (useCount) useCount.innerHTML = `<img src="medias/joker.png" class="cta-icon"> ${count} joker${count > 1 ? "s" : ""} disponible${count > 1 ? "s" : ""}`;
 }
 
 function updateRewardsBadge(playNotif = false) {
@@ -1062,7 +1063,7 @@ function updateGridHeading() {
     } else {
         heading.textContent = labels[currentFilter] ?? "Tous les films";
     }
-    if (currentFilter !== "all") banner.classList.add("hidden");
+    if (currentFilter !== "all" && currentFilter !== "unvalidated") banner.classList.add("hidden");
 }
 
 function updateNextChallengeBanner() {
@@ -1227,21 +1228,27 @@ function openInfoModal(index, mysteryReveal = false) {
         ratingRow.classList.add("hidden");
     }
 
+    const keysRowExisting = document.getElementById("info-keys-available");
+    if (keysRowExisting) keysRowExisting.style.display = "none";
+    const descLabel = document.getElementById("info-desc-label");
     if (isSecret) {
         dirRow.style.display      = "none";
         imdbEl.style.display      = "none";
         descEl.style.display      = "block";
+        if (descLabel) descLabel.style.display = "none";
         descEl.textContent        = "Ce film se débloque en réclamant un palier de récompenses spécifique.";
         document.getElementById("info-desc-more").classList.add("hidden");
     } else if (isMystery) {
         dirRow.style.display      = "none";
         imdbEl.style.display      = "none";
         descEl.style.display      = "block";
+        if (descLabel) descLabel.style.display = "none";
         descEl.textContent        = "Récupère les récompenses des prochains paliers pour débloquer ce film.";
         document.getElementById("info-desc-more").classList.add("hidden");
     } else {
         dirRow.style.display      = "flex";
         descEl.style.display      = "block";
+        if (descLabel) descLabel.style.display = "";
         document.getElementById("info-director").textContent = ach.realisateur;
         const MAX_DESC = 120;
         const descMoreBtn = document.getElementById("info-desc-more");
@@ -1273,9 +1280,18 @@ function openInfoModal(index, mysteryReveal = false) {
         cta.style.display = "none";
     } else if (isMystery) {
         const points = getAvailablePoints();
+        let keysRow = document.getElementById("info-keys-available");
+        if (!keysRow) {
+            keysRow = document.createElement("div");
+            keysRow.id = "info-keys-available";
+            keysRow.className = "info-keys-available";
+            cta.parentNode.insertBefore(keysRow, cta);
+        }
+        keysRow.innerHTML = `<img src="medias/key.png" class="cta-icon"> <span>${points} clé${points > 1 ? "s" : ""} disponible${points > 1 ? "s" : ""}</span>`;
+        keysRow.style.display = "flex";
         if (points > 0) {
             cta.classList.add("cta-unlock");
-            cta.innerHTML = `<img src="medias/delock.png" class="cta-icon"> Débloquer ce film`;
+            cta.innerHTML = `<span class="cta-unlock-left"><img src="medias/delock.png" class="cta-icon"> Débloquer ce film</span><span class="cta-unlock-right">1&nbsp;<img src="medias/key.png" class="cta-icon"></span>`;
         } else {
             cta.style.display = "none";
         }
@@ -2046,26 +2062,31 @@ document.getElementById("grid").classList.add("cols-3");
 })();
 
 // Boutons de filtre
-document.getElementById("filter-menu").addEventListener("click", (e) => {
-    const btn = e.target.closest(".filter-btn");
-    if (!btn) return;
-    const f = btn.dataset.filter;
+function applyFilter(f) {
     if (!f) return;
     playSound("clic1");
-    if (currentFilter === f) {
-        currentFilter = "all";
-        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-    } else {
-        currentFilter = f;
-        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-    }
+    currentFilter = (currentFilter === f || f === "all") ? "all" : f;
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    const activeBtn = document.querySelector(`.filter-btn[data-filter="${currentFilter}"]`);
+    if (activeBtn) activeBtn.classList.add("active");
     localStorage.setItem("mg_filter", currentFilter);
     document.getElementById("filter-menu").classList.add("hidden");
     document.getElementById("filter-toggle-btn").classList.remove("active");
     buildGrid();
     triggerGridAnimation();
     window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+document.getElementById("filter-menu").addEventListener("click", (e) => {
+    const btn = e.target.closest(".filter-btn");
+    if (!btn || !btn.dataset.filter) return;
+    applyFilter(btn.dataset.filter);
+});
+
+document.querySelector(".filter-bar-inline").addEventListener("click", (e) => {
+    const btn = e.target.closest(".filter-btn");
+    if (!btn || !btn.dataset.filter) return;
+    applyFilter(btn.dataset.filter);
 });
 
 function hideFilterIndicator() {}
@@ -2464,10 +2485,8 @@ document.addEventListener("visibilitychange", () => {
 buildGrid();
 
 // Restaurer le bouton de filtre actif
-if (currentFilter !== "all") {
-    const activeBtn = document.querySelector(`.filter-btn[data-filter="${currentFilter}"]`);
-    if (activeBtn) activeBtn.classList.add("active");
-}
+const restoredFilterBtn = document.querySelector(`.filter-btn[data-filter="${currentFilter}"]`);
+if (restoredFilterBtn) restoredFilterBtn.classList.add("active");
 
 // Init modal couleur accent
 initAccentColorModal();
