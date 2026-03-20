@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-            <h2 class="grid-heading" id="grid-heading">Tous les films</h2>
+            <h2 class="grid-heading" id="grid-heading">Tous les films<span class="grid-heading-count" id="grid-heading-count"></span></h2>
 
             <div id="grid" class="grid"></div>
         </main>
@@ -173,14 +173,14 @@
     <div class="filter-bar view-hidden" id="filter-group">
         <div class="filter-bar-inline">
             <button class="filter-btn filter-btn-genre-item" data-filter="all">Tous</button>
-            <button class="filter-btn filter-btn-genre-item" data-filter="unvalidated">Non validé<span class="filter-genre-count" id="fc-unvalidated"></span></button>
-            <button class="filter-btn filter-btn-genre-item" data-filter="locked">Verrouillé<span class="filter-genre-count" id="fc-locked"></span></button>
+            <button class="filter-btn filter-btn-genre-item" data-filter="unvalidated">Non validé</button>
+            <button class="filter-btn filter-btn-genre-item" data-filter="locked">Verrouillé</button>
         </div>
         <div id="filter-indicator" class="filter-indicator"></div>
         <div class="filter-menu hidden" id="filter-menu">
             <div id="filter-page-main">
-                <button class="filter-btn filter-btn-genre-item" data-filter="validated">Validé<span class="filter-genre-count" id="fc-validated"></span></button>
-                <button class="filter-btn filter-btn-genre-item" data-filter="secret">Secret<span class="filter-genre-count" id="fc-secret"></span></button>
+                <button class="filter-btn filter-btn-genre-item" data-filter="validated">Validé</button>
+                <button class="filter-btn filter-btn-genre-item" data-filter="secret">Secret</button>
                 <div class="filter-menu-divider"></div>
                 <button class="filter-btn filter-btn-genre" id="filter-genre-btn">
                     Genre
@@ -336,8 +336,8 @@
     <!-- Bouton Joker (au-dessus de la modal question) -->
     <div id="joker-use-bar" class="joker-use-bar hidden">
         <button id="joker-use-btn" class="joker-use-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19 5v14a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2" /><path d="M8 6h.01" /><path d="M16 18h.01" /><path d="M11.75 14.112l-1.63 .853a.294 .294 0 0 1 -.425 -.307l.31 -1.808l-1.317 -1.28a.292 .292 0 0 1 .163 -.499l1.82 -.264l.815 -1.644a.294 .294 0 0 1 .527 0l.814 1.644l1.82 .264a.292 .292 0 0 1 .164 .499l-1.318 1.28l.31 1.807a.292 .292 0 0 1 -.425 .308l-1.628 -.853" /></svg>
-            Utiliser un Joker
+            <span class="cta-unlock-left">Utiliser un Joker</span>
+            <span class="cta-unlock-right">1&nbsp;<img src="medias/joker.png" class="cta-icon"></span>
         </button>
         <div class="joker-use-count" id="joker-use-count"></div>
     </div>

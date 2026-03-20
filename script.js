@@ -960,28 +960,11 @@ function buildMilestones() {
     });
 }
 
-function updateFilterCounts() {
-    const validated = getValidated();
-    const revealedMysteries = getRevealedMysteries();
-    const counts = { validated: 0, unvalidated: 0, locked: 0, secret: 0 };
-    ACHIEVEMENTS.forEach((ach, i) => {
-        if (validated.includes(i)) { counts.validated++; return; }
-        const stillLocked = (ach.verrouille || ach.secret) && !revealedMysteries.includes(i);
-        if (ach.verrouille && stillLocked) { counts.locked++; return; }
-        if (ach.secret    && stillLocked) { counts.secret++;  return; }
-        counts.unvalidated++;
-    });
-    ["validated","unvalidated","locked","secret"].forEach(k => {
-        const el = document.getElementById(`fc-${k}`);
-        if (el) el.textContent = counts[k];
-    });
-}
 
 function buildGrid() {
     const grid = document.getElementById("grid");
     const validated = getValidated();
     const revealedMysteries = getRevealedMysteries();
-    updateFilterCounts();
     grid.innerHTML = "";
 
 
@@ -1000,7 +983,7 @@ function buildGrid() {
         const displayTitle = isMystery ? "Film verrouillé" : isSecret ? "Film secret" : ach.title;
 
         cell.innerHTML = `
-            <img class="cell-icon${isMystery || isSecret ? " cell-icon-locked" : ""}" src="${achImg(i)}" alt="${displayTitle}" loading="lazy">
+            <img class="cell-icon${isMystery || isSecret ? " cell-icon-locked" : ""}" src="${isMystery || isSecret ? "medias/imageflou.png" : achImg(i)}" alt="${displayTitle}" loading="lazy">
             ${isMystery ? `<div class="cell-lock-overlay"><img src="medias/lock.png" class="cell-overlay-icon"></div>` : ""}
             ${isSecret  ? `<div class="cell-lock-overlay cell-secret-overlay"><img src="medias/question.png" class="cell-overlay-icon"></div>` : ""}
             <div class="cell-content">
@@ -1055,8 +1038,9 @@ function buildMilestonesDebounced() {
 }
 
 function updateGridHeading() {
-    const heading = document.getElementById("grid-heading");
-    const banner  = document.getElementById("next-challenge");
+    const heading  = document.getElementById("grid-heading");
+    const countEl  = document.getElementById("grid-heading-count");
+    const banner   = document.getElementById("next-challenge");
     const labels = {
         "all":         "Tous les films",
         "validated":   "Films validés",
@@ -1064,11 +1048,17 @@ function updateGridHeading() {
         "locked":      "Films verrouillés",
         "secret":      "Films secrets",
     };
-    if (currentFilter.startsWith("genre:")) {
-        heading.textContent = currentFilter.slice(6);
-    } else {
-        heading.textContent = labels[currentFilter] ?? "Tous les films";
-    }
+    const label = currentFilter.startsWith("genre:")
+        ? currentFilter.slice(6)
+        : (labels[currentFilter] ?? "Tous les films");
+
+    // Mettre à jour le texte sans toucher au span enfant
+    heading.firstChild.textContent = label;
+
+    // Compter les films visibles pour le filtre courant
+    const n = getSortedIndices().length;
+    if (countEl) countEl.textContent = n ? n : "";
+
     if (currentFilter !== "all" && currentFilter !== "unvalidated") banner.classList.add("hidden");
 }
 
