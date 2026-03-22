@@ -3,8 +3,8 @@
    ============================================================ */
 :root {
     /* Couleurs principales */
-    --color-bg:             #121418;
-    --color-panel:          #1f1f26;
+    --color-bg:             #121317;
+    --color-panel:          #2a2a32;
     --color-panel-hover:    #2e2e2c;
     --color-border:         #363634;
     --color-accent:         #2959e8;
@@ -4147,6 +4147,140 @@ body {
     animation: introTitleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards;
 }
 .challenge-intro-subtitle.hidden { display: none; }
+
+/* ── MODAL JUMANJI ─────────────────────────────────────────────────────────── */
+.jumanji-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 20000;
+    background: #0b0d08;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    overflow: hidden;
+}
+.jumanji-modal.hidden { display: none; }
+.jumanji-modal.jumanji-fade { opacity: 0; }
+.jumanji-modal.jumanji-fade .jumanji-bg { transform: scale(1.5); }
+
+.jumanji-bg {
+    position: absolute;
+    inset: 0;
+    background: url('medias/jungle.png') center / cover no-repeat;
+    transform: scale(1);
+    transition: transform 0.8s ease;
+}
+
+.jumanji-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 40px 24px;
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    font-family: 'Jim Nightshade', cursive;
+}
+
+@keyframes jumanjiItemIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.jumanji-modal.jumanji-visible .jumanji-curse     { animation: jumanjiItemIn 0.7s ease forwards; animation-delay: 0.3s; opacity: 0; }
+.jumanji-modal.jumanji-visible .jumanji-dice-row  { animation: jumanjiItemIn 0.7s ease forwards; animation-delay: 0.65s; opacity: 0; }
+.jumanji-modal.jumanji-visible .jumanji-sum       { animation: jumanjiItemIn 0.7s ease forwards; animation-delay: 0.9s; opacity: 0; }
+.jumanji-modal.jumanji-visible .jumanji-roll-btn  { animation: jumanjiItemIn 0.7s ease forwards; animation-delay: 0.9s; opacity: 0; }
+
+.jumanji-curse {
+    font-size: 2rem;
+    color: #c8b87a;
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+    text-shadow: 0 0 18px rgba(180, 150, 80, 0.6), 0 0 40px rgba(120, 100, 40, 0.35);
+}
+
+.jumanji-dice-row {
+    display: flex;
+    gap: 36px;
+    align-items: center;
+}
+
+.jumanji-die {
+    font-size: 88px;
+    line-height: 1;
+    color: #c8b87a;
+    filter: drop-shadow(0 0 14px rgba(180, 150, 80, 0.5));
+    user-select: none;
+}
+.jumanji-die.rolling {
+    animation: diceRoll 0.65s ease-out;
+}
+@keyframes diceRoll {
+    0%   { transform: rotate(0deg) scale(1); }
+    20%  { transform: rotate(-18deg) scale(1.12); }
+    50%  { transform: rotate(12deg) scale(0.93); }
+    75%  { transform: rotate(-6deg) scale(1.06); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+
+.jumanji-sum {
+    font-size: 2rem;
+    color: #c8b87a;
+    letter-spacing: 0.08em;
+    min-height: 1.4em;
+}
+
+.jumanji-timer {
+    font-size: 1.6rem;
+    color: #9a7a40;
+    letter-spacing: 0.05em;
+    min-height: 1.4em;
+}
+.jumanji-timer.hidden { display: none; }
+
+.jumanji-roll-btn {
+    padding: 14px 48px;
+    font-size: 1.1rem;
+    font-family: inherit;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    background: linear-gradient(180deg, #2c1f14 0%, #1a1008 45%, #251810 55%, #1a1008 100%);
+    color: #c8a87a;
+    border-top: 1px solid #5a3a20;
+    border-left: 1px solid #4a2e18;
+    border-right: 1px solid #3a2010;
+    border-bottom: 2px solid #0d0804;
+    border-radius: 3px;
+    cursor: pointer;
+    box-shadow:
+        inset 0 1px 0 rgba(180,120,60,0.15),
+        inset 0 -1px 0 rgba(0,0,0,0.4),
+        0 4px 12px rgba(0,0,0,0.6),
+        0 0 20px rgba(0,0,0,0.3);
+    transition: transform 0.1s, box-shadow 0.1s, filter 0.1s;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+.jumanji-roll-btn:hover:not(:disabled) {
+    filter: brightness(1.15);
+    box-shadow:
+        inset 0 1px 0 rgba(180,120,60,0.2),
+        inset 0 -1px 0 rgba(0,0,0,0.4),
+        0 6px 18px rgba(0,0,0,0.7),
+        0 0 28px rgba(100,60,20,0.3);
+}
+.jumanji-roll-btn:active:not(:disabled) {
+    transform: scale(0.97) translateY(1px);
+    box-shadow:
+        inset 0 2px 4px rgba(0,0,0,0.5),
+        0 2px 6px rgba(0,0,0,0.5);
+}
+.jumanji-roll-btn.hidden { display: none; }
 
 .q-subtitle {
     font-size: 0.78rem;

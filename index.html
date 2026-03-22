@@ -6,7 +6,7 @@
     <title>Movie Game - Succès</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Jim+Nightshade&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="splash-active">
@@ -398,6 +398,21 @@
                 <button class="accent-modal-close" id="accent-modal-close">&times;</button>
             </div>
             <div class="accent-color-swatches" id="accent-color-swatches"></div>
+        </div>
+    </div>
+
+    <!-- Modal Jumanji — Piège de la jungle -->
+    <div id="modal-jumanji" class="jumanji-modal hidden">
+        <div class="jumanji-bg"></div>
+        <div class="jumanji-inner">
+            <p class="jumanji-curse">Dans la jungle tu attendras,<br>un 5 ou un 8 te délivrera</p>
+            <div class="jumanji-dice-row">
+                <span class="jumanji-die" id="jumanji-die-1">⚄</span>
+                <span class="jumanji-die" id="jumanji-die-2">⚄</span>
+            </div>
+            <div id="jumanji-sum" class="jumanji-sum"></div>
+            <div id="jumanji-timer" class="jumanji-timer hidden"></div>
+            <button id="jumanji-roll-btn" class="jumanji-roll-btn">🎲 LANCER LES DÉS</button>
         </div>
     </div>
 

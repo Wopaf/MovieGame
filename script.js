@@ -81,7 +81,10 @@ function initDebugUI() {
             refTierlist.set(null),
             refRevealedMysteries.set(null),
             refClaimedMilestones.set(null),
-            refJokers.set(0)
+            refJokers.set(0),
+            db.ref('guitarHero/bestScore').set(null),
+            refJumanjiActive.set(null),
+            refJumanjiNextRoll.set(null)
         ]).catch(err => {
             console.error("Firebase reset error:", err);
             showToast("Erreur reset : " + err.code);
@@ -464,6 +467,10 @@ const refHeartClicks       = db.ref("game/heartClicks");
 const refJokers            = db.ref("game/jokers");
 const refTutorialDone      = db.ref("game/tutorialDone");
 const refAccentColor       = db.ref("game/accentColor");
+const refJumanjiActive     = db.ref("game/jumanjiActive");
+const refJumanjiNextRoll   = db.ref("game/jumanjiNextRoll");
+
+const JUMANJI_INDEX = 14;
 
 // État local (cache synchronisé avec Firebase)
 let cachedUnlocked          = [];
@@ -529,6 +536,11 @@ refValidated.on("value", (snapshot) => {
 // Vérifie au démarrage si le jeu est terminé
 refGameEnded.once("value", snap => {
     if (snap.val() === true) showGameOverDirect();
+});
+
+// Vérifie au démarrage si le joueur est piégé dans Jumanji
+refJumanjiActive.once("value", snap => {
+    if (snap.val() === true) openJumanjiModal();
 });
 
 function getUnlocked() { return [...cachedUnlocked]; }
@@ -1408,6 +1420,10 @@ function showSuccessAnimation(_index) {
     setTimeout(() => {
         screen.classList.add("hidden");
         screen.style.animation = "";
+        if (_index === JUMANJI_INDEX) {
+            refJumanjiActive.set(true);
+            openJumanjiModal();
+        }
     }, 3550);
 }
 
@@ -1827,6 +1843,122 @@ document.querySelectorAll(".modal-overlay").forEach(o => o.addEventListener("cli
 document.getElementById("info-cta").addEventListener("click", proceedFromInfo);
 
 if (DEBUG_MODE) initDebugUI();
+
+// ============================================================
+//  MODAL JUMANJI
+// ============================================================
+const DICE_FACES = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+let jumanjiTimerInterval = null;
+
+function openJumanjiModal() {
+    const modal = document.getElementById('modal-jumanji');
+    document.getElementById('jumanji-sum').textContent = '';
+    modal.classList.remove('hidden', 'jumanji-visible');
+    modal.classList.add('jumanji-fade');
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        modal.classList.remove('jumanji-fade');
+        modal.classList.add('jumanji-visible');
+    }));
+    refJumanjiNextRoll.once('value', snap => {
+        updateJumanjiRollState(snap.val() || 0);
+    });
+}
+
+function updateJumanjiRollState(nextRoll) {
+    const btn     = document.getElementById('jumanji-roll-btn');
+    const timerEl = document.getElementById('jumanji-timer');
+    if (jumanjiTimerInterval) clearInterval(jumanjiTimerInterval);
+
+    const tick = () => {
+        const remaining = nextRoll - Date.now();
+        if (remaining <= 0) {
+            clearInterval(jumanjiTimerInterval);
+            btn.classList.remove('hidden');
+            timerEl.classList.add('hidden');
+        } else {
+            const totalSec = Math.ceil(remaining / 1000);
+            const m = Math.floor(totalSec / 60);
+            const s = totalSec % 60;
+            timerEl.textContent = `Prochain lancer dans ${m}:${String(s).padStart(2, '0')}`;
+        }
+    };
+
+    if (nextRoll - Date.now() > 0) {
+        btn.classList.add('hidden');
+        timerEl.classList.remove('hidden');
+        tick();
+        jumanjiTimerInterval = setInterval(tick, 500);
+    } else {
+        btn.classList.remove('hidden');
+        timerEl.classList.add('hidden');
+    }
+}
+
+function rollJumanjiDice() {
+    const die1El = document.getElementById('jumanji-die-1');
+    const die2El = document.getElementById('jumanji-die-2');
+    const sumEl  = document.getElementById('jumanji-sum');
+    const btn    = document.getElementById('jumanji-roll-btn');
+
+    btn.disabled = true;
+    sumEl.textContent = '';
+
+    const v1  = Math.ceil(Math.random() * 6);
+    const v2  = Math.ceil(Math.random() * 6);
+    const sum = v1 + v2;
+
+    die1El.classList.add('rolling');
+    die2El.classList.add('rolling');
+
+    let count = 0;
+    const interval = setInterval(() => {
+        die1El.textContent = DICE_FACES[Math.floor(Math.random() * 6)];
+        die2El.textContent = DICE_FACES[Math.floor(Math.random() * 6)];
+        count++;
+        if (count >= 12) {
+            clearInterval(interval);
+            die1El.textContent = DICE_FACES[v1 - 1];
+            die2El.textContent = DICE_FACES[v2 - 1];
+            die1El.classList.remove('rolling');
+            die2El.classList.remove('rolling');
+            handleJumanjiResult(sum);
+        }
+    }, 60);
+}
+
+function handleJumanjiResult(sum) {
+    const sumEl = document.getElementById('jumanji-sum');
+
+    if (sum === 5 || sum === 8) {
+        sumEl.textContent = `${sum} — Vous êtes libres !`;
+        setTimeout(() => {
+            refJumanjiActive.set(null);
+            refJumanjiNextRoll.set(null);
+            if (jumanjiTimerInterval) clearInterval(jumanjiTimerInterval);
+            jumanjiSecretClicks = 0;
+            const modal = document.getElementById('modal-jumanji');
+            modal.classList.remove('jumanji-visible');
+            modal.classList.add('jumanji-fade');
+            modal.addEventListener('transitionend', () => modal.classList.add('hidden'), { once: true });
+        }, 1400);
+    } else {
+        sumEl.textContent = `${sum}`;
+        const nextRoll = Date.now() + 5 * 60 * 1000;
+        refJumanjiNextRoll.set(nextRoll);
+        updateJumanjiRollState(nextRoll);
+    }
+}
+
+document.getElementById('jumanji-roll-btn').addEventListener('click', rollJumanjiDice);
+
+let jumanjiSecretClicks = 0;
+document.getElementById('jumanji-die-2').addEventListener('click', () => {
+    jumanjiSecretClicks++;
+    if (jumanjiSecretClicks >= 10) {
+        jumanjiSecretClicks = 0;
+        handleJumanjiResult(5);
+    }
+});
 
 // ============================================================
 //  NAVIGATION — barre de menu bas

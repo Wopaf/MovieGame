@@ -13,19 +13,42 @@ const FIREBASE_CONFIG = {
 firebase.initializeApp(FIREBASE_CONFIG);
 const db = firebase.database();
 const bestScoreRef = db.ref('guitarHero/bestScore');
+const validatedRef = db.ref('game/validated');
+
+// ── SEUIL DE DÉFI ─────────────────────────────────────────────────────────────
+// Dépasser ce score valide le défi Tenacious D (index 8 dans ACHIEVEMENTS)
+const SCORE_UNLOCK_THRESHOLD = 5000;
+const TENACIOUS_INDEX = 8;
+
+// ── BOUTON ENREGISTRER ────────────────────────────────────────────────────────
+const SHOW_RECORD_BTN = false;
+// ──────────────────────────────────────────────────────────────────────────────
+// ──────────────────────────────────────────────────────────────────────────────
 
 let bestScore = 0;
 const bestScoreEl = document.getElementById('best-score-display');
 
+bestScoreEl.innerHTML = `Meilleur score <span>0</span>`;
 bestScoreRef.on('value', snap => {
     bestScore = snap.val() || 0;
-    bestScoreEl.innerHTML = bestScore > 0
-        ? `Meilleur score <span>${bestScore.toLocaleString('fr')}</span>`
-        : `Meilleur score <span>—</span>`;
+    bestScoreEl.innerHTML = `Meilleur score <span>${bestScore.toLocaleString('fr')}</span>`;
 });
 
+function unlockTenaciousChallenge() {
+    validatedRef.once('value', snap => {
+        const arr = snap.val() || [];
+        if (!arr.includes(TENACIOUS_INDEX)) {
+            arr.push(TENACIOUS_INDEX);
+            validatedRef.set(arr);
+        }
+    });
+}
+
 function saveBestScore(s) {
-    if (s > bestScore) bestScoreRef.set(s);
+    if (s > bestScore) {
+        bestScoreRef.set(s);
+        if (s >= SCORE_UNLOCK_THRESHOLD) unlockTenaciousChallenge();
+    }
 }
 
 // ── CHART ──────────────────────────────────────────────────────────────────
@@ -35,68 +58,93 @@ function saveBestScore(s) {
 function s(time, lane, hold = 0) { return [time, lane, hold]; }
 
 const CHART = [
-    // Intro — série S
-    s(6.75,0), s(7.17,0), s(7.58,0), s(7.98,0), s(8.38,0), s(8.79,0),
-    s(9.21,0), s(9.61,0), s(10.03,0), s(10.46,0), s(10.82,0), s(11.18,0), s(11.51,0),
-    // Changement de couloirs
-    s(11.79,1), s(12.03,2),
-    s(12.59,0), s(12.81,1), s(13.10,2),
-    s(13.66,2), s(13.96,2), s(14.40,2), s(14.79,2), s(15.17,2), s(15.55,2), s(15.94,2),
-    // Longs holds
-    s(16.42,1,3.24), s(19.64,0,2.50), s(21.94,1,1.47),
-    s(23.43,2,0.84), s(24.25,1,0.91), s(25.12,0,0.84),
-    s(25.99,1), s(26.35,2), s(26.80,1),
-    s(27.22,0,0.56), s(27.72,1,0.52), s(28.16,2,0.77), s(28.89,1,3.32),
-    // Couplet
-    s(32.32,0),
-    s(35.53,0), s(35.72,1), s(36.30,2),
-    s(37.23,0), s(37.61,1), s(38.01,2),
-    s(38.82,0), s(39.10,1), s(39.40,2),
-    s(40.25,2), s(40.47,1), s(40.80,0),
-    s(41.84,0), s(42.28,1), s(42.71,2),
-    s(44.28,2), s(44.58,1),
-    s(44.97,1,3.12), s(48.31,0,6.10),
-    s(54.47,1),
-    // Refrain
-    s(56.33,0), s(56.61,1), s(56.83,2),
-    s(57.21,0), s(57.43,1), s(57.65,2),
-    s(58.04,0), s(58.18,1), s(58.42,2),
-    s(58.78,0), s(58.90,1), s(59.14,2),
-    s(59.51,2,3.06),
-    s(62.63,1), s(63.07,0), s(63.37,2), s(63.78,1),
-    s(64.22,0,2.87),
-    s(67.14,1), s(67.50,2,6.52),
-    s(69.18,0), s(69.70,0), s(70.30,0), s(70.77,0),
-    s(71.39,0), s(71.98,0), s(72.40,0), s(72.93,0), s(73.55,0), s(73.98,0),
+    // Intro
+    s(8.30,0), s(8.58,1), s(9.00,2),
+    s(9.47,0), s(9.84,0), s(10.17,1), s(10.55,2), s(10.99,0),
+    s(11.43,0), s(11.80,0), s(12.26,0), s(12.60,1),
+    s(13.05,0), s(13.45,0), s(13.81,0),
+    s(14.26,1), s(14.62,2), s(14.98,1), s(15.04,2), s(15.10,1),
+    s(15.44,0), s(15.68,2), s(15.85,1),
+    // Longs holds intro
+    s(16.25,0,3.16), s(19.35,1,3.24),
+    // Couplet 1
+    s(22.55,2,0.78), s(23.33,1,0.72), s(24.06,0,0.87), s(24.89,1,0.85),
+    s(25.71,2), s(26.13,1), s(26.49,0), s(26.93,1),
+    s(27.35,2), s(27.73,1), s(28.15,2),
+    s(28.58,1,1.45), s(29.95,2,1.85),
+    s(32.12,1,0.77),
+    s(35.24,0), s(35.38,1), s(35.59,2), s(35.87,1), s(36.30,2),
+    s(38.48,0), s(38.59,1), s(38.83,2), s(39.13,1,0.81),
+    s(39.99,0), s(40.24,1), s(40.52,2), s(40.85,1),
+    s(41.61,0), s(41.91,1), s(42.25,0), s(42.57,2), s(42.86,1),
+    s(44.17,0), s(44.38,1), s(44.53,2,0.83), s(44.67,1),
+    s(45.29,1,1.54),
+    // Hold long S + série D
+    s(48.21,0,6.53),
+    s(49.79,1), s(50.18,1), s(50.58,1), s(51.01,1), s(51.42,1),
+    s(51.84,1), s(52.26,1), s(52.62,1), s(53.01,1), s(53.39,1), s(53.73,1),
+    s(54.22,1), s(54.60,1,1.07),
+    // Refrain 1
+    s(55.52,2), s(55.89,1), s(56.22,0), s(56.51,1), s(56.67,2), s(56.99,1,0.71),
+    s(57.26,0), s(57.54,2), s(57.90,1,0.75),
+    s(58.23,0), s(58.54,2), s(58.85,1), s(59.17,0), s(59.44,2), s(59.80,1),
+    s(60.08,2), s(60.45,1), s(60.68,2,1.92),
+    s(62.55,1), s(62.71,0), s(62.98,1), s(63.13,2), s(63.46,1), s(63.70,0), s(63.96,0),
+    s(64.21,1), s(64.35,0,0.51), s(64.89,1,2.09),
+    s(66.95,2), s(67.34,1,6.47),
+    // Série S sur hold D
+    s(68.63,0), s(69.02,0), s(69.41,0), s(69.84,0), s(70.22,0), s(70.61,0),
+    s(71.04,0), s(71.43,0), s(71.84,0),
+    s(72.12,2), s(72.34,0), s(72.57,2), s(72.68,0), s(72.82,2), s(72.99,0),
+    s(73.02,2), s(73.25,0), s(73.27,2), s(73.41,2), s(73.45,0), s(73.64,2), s(73.65,0),
+    s(73.77,2), s(73.87,1),
     // Pont
-    s(75.57,1), s(76.05,2), s(76.45,1), s(76.79,1), s(77.20,0),
-    s(78.77,0), s(79.15,1), s(79.59,1), s(79.98,0), s(80.48,0), s(80.78,1),
-    s(81.18,2,0.77),
-    s(83.60,0), s(83.97,1), s(84.39,0),
-    s(86.56,2), s(87.07,1), s(87.51,0), s(87.87,2,0.52),
-    s(89.11,1), s(89.43,0), s(89.81,0),
-    s(90.27,0,1.39), s(91.62,1,1.41), s(92.99,2,1.88),
-    // Solo
-    s(96.82,1), s(97.22,0), s(97.63,1), s(98.01,2),
-    s(98.47,1), s(98.85,1), s(99.26,1),
-    s(99.62,0), s(100.04,1), s(100.47,2), s(100.89,1), s(101.29,1), s(101.61,1),
-    s(101.95,0), s(102.38,1), s(102.84,2),
-    s(103.24,2), s(103.63,2), s(103.99,1), s(104.44,0), s(104.80,1),
-    s(105.24,2), s(105.50,2), s(105.80,2), s(106.00,2),
-    s(106.77,1), s(107.17,0), s(107.64,0), s(108.04,0), s(108.44,0),
-    s(108.72,1), s(109.15,2), s(109.61,1), s(110.05,1), s(110.46,1), s(110.80,0),
-    s(111.22,1), s(111.64,1), s(112.03,2), s(112.43,2), s(112.80,2),
-    s(113.20,1), s(113.56,0), s(114.00,1), s(114.44,1), s(114.83,1),
-    s(115.53,0), s(115.69,1), s(116.10,2), s(116.44,1,0.58),
+    s(74.22,1), s(74.45,0), s(74.64,2),
+    s(75.00,1), s(75.28,0), s(75.51,1), s(75.56,2), s(75.79,1),
+    s(76.03,0), s(76.29,1), s(76.49,0), s(76.65,1),
+    s(76.85,0), s(77.14,1), s(77.43,2), s(77.74,1,0.54),
+    s(78.19,0), s(78.60,1), s(78.86,0), s(78.94,1), s(79.17,0),
+    s(79.45,2), s(79.76,1), s(80.18,0), s(80.56,1), s(80.93,2,0.80),
+    s(81.69,1,1.00), s(82.25,0), s(82.57,2,0.77),
+    s(83.27,1,0.77), s(83.80,0), s(84.19,1,0.67),
+    s(84.85,0), s(85.01,1), s(85.27,0), s(85.60,2),
+    s(86.57,1), s(86.70,2), s(87.07,1), s(87.43,0), s(87.61,1), s(87.74,2),
+    s(88.09,1), s(88.92,2), s(89.08,1),
+    // Hold long S + série D
+    s(89.45,0,5.84),
+    s(91.39,1), s(92.12,1), s(92.99,1), s(93.37,1), s(93.79,1),
+    s(94.20,1), s(94.62,1), s(95.01,1),
+    s(95.37,2), s(95.79,1), s(96.23,2), s(96.61,1),
+    // Refrain 2
+    s(97.02,0), s(97.22,1), s(97.38,2), s(97.81,1),
+    s(98.04,0), s(98.23,1), s(98.39,2), s(98.70,1),
+    s(99.06,2), s(99.39,2), s(99.57,2), s(99.76,2), s(100.02,2), s(100.15,0),
+    s(100.30,1), s(100.52,2), s(100.86,1),
+    s(101.13,0), s(101.32,2), s(101.50,1), s(101.77,0), s(101.83,2),
+    s(102.02,1), s(102.19,0), s(102.23,2), s(102.43,1), s(102.57,0), s(102.61,2),
+    s(102.82,1), s(103.26,0),
+    s(103.48,1), s(103.65,0), s(103.70,1), s(103.90,0), s(103.99,1),
+    s(104.12,0), s(104.23,1), s(104.36,0), s(104.57,2), s(104.77,1), s(104.82,2),
+    s(104.90,1), s(105.11,0), s(105.36,1), s(105.74,0),
+    s(105.94,1), s(106.11,0), s(106.14,1), s(106.30,0), s(106.44,1), s(106.61,0), s(106.76,1), s(106.98,0),
+    s(107.12,2), s(107.37,1), s(107.58,0), s(107.81,1), s(107.99,2),
+    s(108.29,1), s(108.59,2), s(108.82,2), s(108.99,2),
+    // Interlude
+    s(111.42,2), s(111.70,1), s(111.94,0),
+    s(112.17,1), s(112.34,2), s(112.54,1), s(112.70,1),
+    s(113.93,1), s(113.96,0), s(114.30,1), s(114.46,0), s(114.58,1), s(114.80,0), s(114.97,1), s(115.24,0),
+    s(115.44,2), s(115.83,1), s(116.19,1), s(116.25,2,0.82),
+    s(116.95,1), s(117.03,1), s(117.46,0), s(117.68,1),
+    s(118.37,0), s(118.46,1), s(118.65,2), s(119.25,2,0.55),
     // Final
-    s(118.33,0), s(118.52,1), s(118.65,2), s(119.10,1), s(119.40,0,0.68),
-    s(121.56,0), s(122.26,1), s(122.66,2),
-    s(124.29,2), s(124.70,1),
-    s(124.98,0,1.79), s(126.76,1,1.61), s(128.35,2,1.42),
-    s(129.92,2,0.69), s(130.52,1,1.17), s(131.57,2,1.43),
-    s(133.14,1,0.85), s(134.01,0,0.72), s(134.79,1,3.18),
-    s(138.08,1),
-    s(140.35,0), s(140.51,1), s(140.68,2),
+    s(120.22,0), s(120.47,1), s(120.78,0), s(121.33,2,0.57),
+    s(121.87,1), s(122.19,0), s(122.60,1),
+    s(124.04,0), s(124.19,1), s(124.53,2),
+    s(125.05,2,3.12), s(126.62,1,1.57), s(128.16,0,1.59),
+    s(129.86,1,0.53), s(130.33,2,0.66), s(130.96,1), s(131.35,2),
+    s(132.99,2), s(133.79,1), s(134.62,0,2.98),
+    s(137.82,0),
+    s(140.21,0), s(140.38,1), s(140.43,2),
 ].sort((a, z) => a[0] - z[0]);
 
 // ── CONFIG ──────────────────────────────────────────────────────────────────
@@ -628,17 +676,89 @@ BTN_ELS.forEach((btn, lane) => {
     btn.addEventListener('pointerleave', () => { pressedLanes[lane] = false; btn.classList.remove('pressed'); tryRelease(lane); });
 });
 
-// Fondu d'ouverture + lancement musique menu
+// Fondu d'ouverture
 window.addEventListener('load', () => {
     requestAnimationFrame(() => {
         fadeOverlay.classList.remove('visible');
-        menuAudio.play().catch(() => {
-            const tryPlay = () => { menuAudio.play().catch(() => {}); };
-            document.addEventListener('pointerdown', tryPlay, { once: true });
-            document.addEventListener('keydown',     tryPlay, { once: true });
-        });
     });
 });
+
+// ── FLAMMES MENU ─────────────────────────────────────────────────────────────
+const flameCanvas = document.getElementById('flame-canvas');
+const flameCtx    = flameCanvas.getContext('2d');
+const flameParticles = [];
+
+function resizeFlameCanvas() {
+    flameCanvas.width  = appEl.offsetWidth;
+    flameCanvas.height = appEl.offsetHeight;
+}
+window.addEventListener('resize', resizeFlameCanvas);
+resizeFlameCanvas();
+
+function spawnFlameParticle(side) {
+    const w = flameCanvas.width;
+    const h = flameCanvas.height;
+    const zoneW = w * 0.18;
+    const x = side === 'left'
+        ? Math.random() * zoneW
+        : w - Math.random() * zoneW;
+    flameParticles.push({
+        x,
+        y: h + Math.random() * 30,
+        vx: (Math.random() - 0.5) * 0.8 + (side === 'left' ? 0.3 : -0.3),
+        vy: -(1.5 + Math.random() * 2.5),
+        life: 1,
+        decay: 0.008 + Math.random() * 0.010,
+        size: 18 + Math.random() * 28,
+    });
+}
+
+function drawFlames() {
+    const w = flameCanvas.width;
+    const h = flameCanvas.height;
+    flameCtx.clearRect(0, 0, w, h);
+
+    // Spawn
+    for (let i = 0; i < 3; i++) spawnFlameParticle('left');
+    for (let i = 0; i < 3; i++) spawnFlameParticle('right');
+
+    // Update & draw
+    for (let i = flameParticles.length - 1; i >= 0; i--) {
+        const p = flameParticles[i];
+        p.x   += p.vx;
+        p.y   += p.vy;
+        p.life -= p.decay;
+        p.vx  += (Math.random() - 0.5) * 0.25;
+        if (p.life <= 0) { flameParticles.splice(i, 1); continue; }
+
+        // Couleur : blanc/jaune → orange → rouge → transparent
+        const t = 1 - p.life;
+        let r, g, b;
+        if (t < 0.2) {
+            r = 255; g = Math.round(255 - t / 0.2 * 155); b = Math.round(200 - t / 0.2 * 200);
+        } else if (t < 0.5) {
+            r = 255; g = Math.round(100 - (t - 0.2) / 0.3 * 100); b = 0;
+        } else {
+            r = Math.round(255 - (t - 0.5) / 0.5 * 120); g = 0; b = 0;
+        }
+
+        const alpha = p.life * 0.55;
+        const grad  = flameCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+        grad.addColorStop(0,   `rgba(${r},${g},${b},${alpha})`);
+        grad.addColorStop(0.4, `rgba(${r},${Math.round(g * 0.6)},0,${alpha * 0.6})`);
+        grad.addColorStop(1,   `rgba(${r},0,0,0)`);
+
+        flameCtx.beginPath();
+        flameCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        flameCtx.fillStyle = grad;
+        flameCtx.fill();
+    }
+
+    if (!screenStart.classList.contains('hidden')) {
+        requestAnimationFrame(drawFlames);
+    }
+}
+drawFlames();
 
 // ── START / END ───────────────────────────────────────────────────────────────
 const fadeOverlay = document.getElementById('fade-overlay');
@@ -659,11 +779,14 @@ document.getElementById('btn-retry').addEventListener('click', () => fadeTransit
 document.getElementById('btn-back-menu').addEventListener('click', () => {
     screenResult.classList.add('hidden');
     screenStart.classList.remove('hidden');
+    drawFlames();
 });
 document.getElementById('btn-quit').addEventListener('click', () => {
     window.location.href = 'index.html';
 });
-document.getElementById('btn-record').addEventListener('click', startRecord);
+const btnRecord = document.getElementById('btn-record');
+if (!SHOW_RECORD_BTN) btnRecord.style.display = 'none';
+btnRecord.addEventListener('click', startRecord);
 document.getElementById('btn-download').addEventListener('click', downloadRecord);
 document.getElementById('btn-back-start').addEventListener('click', () => {
     document.getElementById('screen-record-done').classList.add('hidden');
@@ -671,7 +794,6 @@ document.getElementById('btn-back-start').addEventListener('click', () => {
 });
 
 function startGame() {
-    menuAudio.pause(); menuAudio.currentTime = 0;
     screenStart.classList.add('hidden'); screenResult.classList.add('hidden');
     screenGame.classList.remove('hidden');
     initNotes(); pressedLanes.fill(false); heldNotes.fill(null); particles.length = 0; hitFlashes.length = 0; hitTexts.length = 0;
@@ -690,7 +812,6 @@ function startGame() {
 function endGame() {
     running = false; audio.pause();
     saveBestScore(score);
-    menuAudio.currentTime = 0; menuAudio.play().catch(() => {});
     screenGame.classList.add('hidden'); screenResult.classList.remove('hidden');
     const pct = totalNotes > 0 ? Math.round((hitNotes / totalNotes) * 100) : 0;
     document.getElementById('res-score').textContent = score.toLocaleString('fr');
