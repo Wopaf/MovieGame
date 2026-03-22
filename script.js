@@ -1274,7 +1274,8 @@ function openInfoModal(index, mysteryReveal = false) {
     cta.style.display = "";
 
     if (isValidated) {
-        cta.style.display = "none";
+        cta.classList.add("cta-question");
+        cta.innerHTML = ` Accéder au défi`;
     } else if (isSecret) {
         // Film secret : on ne peut pas le débloquer manuellement
         cta.style.display = "none";
