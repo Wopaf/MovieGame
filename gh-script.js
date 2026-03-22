@@ -17,7 +17,7 @@ const validatedRef = db.ref('game/validated');
 
 // ── SEUIL DE DÉFI ─────────────────────────────────────────────────────────────
 // Dépasser ce score valide le défi Tenacious D (index 8 dans ACHIEVEMENTS)
-const SCORE_UNLOCK_THRESHOLD = 5000;
+const SCORE_UNLOCK_THRESHOLD = 300000;
 const TENACIOUS_INDEX = 8;
 
 // ── BOUTON ENREGISTRER ────────────────────────────────────────────────────────
@@ -28,10 +28,15 @@ const SHOW_RECORD_BTN = false;
 let bestScore = 0;
 const bestScoreEl = document.getElementById('best-score-display');
 
-bestScoreEl.innerHTML = `Meilleur score <span>0</span>`;
+function updateBestScoreDisplay() {
+    bestScoreEl.innerHTML =
+        `<div class="score-target">Objectif <span>${SCORE_UNLOCK_THRESHOLD.toLocaleString('fr')}</span></div>` +
+        `Meilleur score <span>${bestScore.toLocaleString('fr')}</span>`;
+}
+updateBestScoreDisplay();
 bestScoreRef.on('value', snap => {
     bestScore = snap.val() || 0;
-    bestScoreEl.innerHTML = `Meilleur score <span>${bestScore.toLocaleString('fr')}</span>`;
+    updateBestScoreDisplay();
 });
 
 function unlockTenaciousChallenge() {
@@ -778,7 +783,7 @@ document.getElementById('btn-start').addEventListener('click', () => fadeTransit
 document.getElementById('btn-retry').addEventListener('click', () => fadeTransition(startGame));
 document.getElementById('btn-back-menu').addEventListener('click', () => {
     screenResult.classList.add('hidden');
-    screenStart.classList.remove('hidden');
+    screenStart.classList.remove('hidden'); screenStart.classList.add('active');
     drawFlames();
 });
 document.getElementById('btn-quit').addEventListener('click', () => {
@@ -790,11 +795,11 @@ btnRecord.addEventListener('click', startRecord);
 document.getElementById('btn-download').addEventListener('click', downloadRecord);
 document.getElementById('btn-back-start').addEventListener('click', () => {
     document.getElementById('screen-record-done').classList.add('hidden');
-    screenStart.classList.remove('hidden');
+    screenStart.classList.remove('hidden'); screenStart.classList.add('active');
 });
 
 function startGame() {
-    screenStart.classList.add('hidden'); screenResult.classList.add('hidden');
+    screenStart.classList.add('hidden'); screenStart.classList.remove('active'); screenResult.classList.add('hidden');
     screenGame.classList.remove('hidden');
     initNotes(); pressedLanes.fill(false); heldNotes.fill(null); particles.length = 0; hitFlashes.length = 0; hitTexts.length = 0;
     BTN_ELS.forEach(b => b.classList.remove('pressed'));
@@ -806,7 +811,20 @@ function startGame() {
     audio.addEventListener('loadedmetadata', () => { songDuration = audio.duration; }, { once: true });
     running = true;
     requestAnimationFrame(gameLoop);
-    setTimeout(() => { audio.play().catch(() => {}); }, 1000);
+
+    audio.play().catch(() => {});
+
+    const countdownEl = document.getElementById('countdown-display');
+    ['3', '2', '1'].forEach((val, i) => {
+        setTimeout(() => {
+            countdownEl.textContent = val;
+            countdownEl.classList.remove('countdown-hidden');
+            countdownEl.style.animation = 'none';
+            void countdownEl.offsetWidth;
+            countdownEl.style.animation = '';
+        }, 1000 + i * 1000);
+    });
+    setTimeout(() => countdownEl.classList.add('countdown-hidden'), 4000);
 }
 
 function endGame() {

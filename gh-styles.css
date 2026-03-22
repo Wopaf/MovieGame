@@ -89,11 +89,25 @@ body {
     text-transform: uppercase;
     white-space: nowrap;
     margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
 }
 #best-score-display span {
     color: #ff7700;
     font-size: 15px;
     letter-spacing: 1px;
+}
+.score-target {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #663333;
+    text-transform: uppercase;
+}
+.score-target span {
+    color: #cc4400;
+    font-size: 13px;
 }
 .start-title {
     font-family: 'Metal Mania', 'MedievalSharp', 'Arial Black', Arial, sans-serif;
@@ -336,6 +350,28 @@ kbd {
     inset: 0;
     width: 100%;
     height: 100%;
+}
+
+#countdown-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(100px, 28vw, 200px);
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 0 40px rgba(255,255,255,0.4);
+    z-index: 20;
+    pointer-events: none;
+    animation: countdownPop 0.8s ease-out forwards;
+}
+#countdown-display.countdown-hidden { display: none; }
+
+@keyframes countdownPop {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(1.8); }
+    30%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    70%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
 }
 
 /* ── HIT ZONE ── */
