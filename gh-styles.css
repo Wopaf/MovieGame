@@ -17,6 +17,9 @@ body {
     height: 100dvh;
     overflow: hidden;
     user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
     display: flex;
     justify-content: center;
 }
