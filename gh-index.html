@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Exploder Hero</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="gh-styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+<div id="app">
+    <div id="screen-start" class="screen active">
+        <div class="start-content">
+            <h1 class="start-title">MASTER<br>EXPLODER<br><span class="title-hero">HERO</span></h1>
+        </div>
+        <div class="start-bottom">
+            <div id="best-score-display"></div>
+            <button id="btn-start" class="btn-start">JOUER</button>
+            <button id="btn-record" class="btn-record">⏺ ENREGISTRER</button>
+            <button id="btn-quit" class="btn-record">← QUITTER</button>
+        </div>
+    </div>
+
+    <div id="screen-game" class="screen hidden">
+        <div id="hud">
+            <div id="hud-score">
+                <div id="combo-display" class="combo-hidden">
+                    <span id="combo-number">x1</span>
+                    <span class="combo-label">COMBO</span>
+                </div>
+            </div>
+            <div id="hud-center">
+                <div class="hud-label">SCORE</div>
+                <div id="score-display">0</div>
+                <div id="feedback-display"></div>
+            </div>
+            <div id="hud-progress">
+                <div id="progress-bar-gh">
+                    <div id="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <canvas id="game-canvas"></canvas>
+
+        <div id="hit-zone">
+            <div class="lane-btn" id="btn-s" data-lane="0">
+                <div class="lane-btn-inner"></div>
+            </div>
+            <div class="lane-btn" id="btn-d" data-lane="1">
+                <div class="lane-btn-inner"></div>
+            </div>
+            <div class="lane-btn" id="btn-f" data-lane="2">
+                <div class="lane-btn-inner"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran d'enregistrement -->
+    <div id="screen-record" class="screen hidden">
+        <canvas id="record-canvas"></canvas>
+        <div id="rec-hud">
+            <div id="rec-dot">⏺</div>
+            <div id="rec-time">0:00.00</div>
+            <div id="rec-label">ENREGISTREMENT</div>
+        </div>
+        <div id="rec-keys">
+            <div class="rec-key" id="rec-btn-s">S</div>
+            <div class="rec-key" id="rec-btn-d">D</div>
+            <div class="rec-key" id="rec-btn-f">F</div>
+        </div>
+    </div>
+
+    <!-- Écran fin d'enregistrement -->
+    <div id="screen-record-done" class="screen hidden">
+        <div class="result-content">
+            <div class="result-band">ENREGISTREMENT TERMINÉ</div>
+            <h2 class="result-title">MASTER EXPLODER HERO</h2>
+            <div id="rec-note-count" style="font-size:18px;color:#888;margin:8px 0;letter-spacing:2px;"></div>
+            <button id="btn-download" class="btn-start">⬇ TÉLÉCHARGER</button>
+            <button id="btn-back-start" class="btn-record" style="margin-top:8px;">← RETOUR</button>
+        </div>
+    </div>
+
+    <div id="screen-result" class="screen hidden">
+        <div class="result-content">
+            <div class="result-band">TENACIOUS D</div>
+            <h2 class="result-title">MASTER EXPLODER HERO</h2>
+            <div id="result-grade" class="result-grade">S</div>
+            <div class="result-stats">
+                <div class="result-stat"><span class="stat-val" id="res-score">0</span><span class="stat-label">SCORE</span></div>
+                <div class="result-stat"><span class="stat-val" id="res-combo">0</span><span class="stat-label">COMBO MAX</span></div>
+                <div class="result-stat"><span class="stat-val" id="res-pct">0%</span><span class="stat-label">PRÉCISION</span></div>
+            </div>
+            <button id="btn-retry" class="btn-start">REJOUER</button>
+            <button id="btn-back-menu" class="btn-record">← RETOUR AU MENU</button>
+        </div>
+    </div>
+
+    <div id="fade-overlay" class="visible"></div>
+</div>
+    <audio id="audio" src="sounds/masterexploder.mp3" preload="auto"></audio>
+    <audio id="menu-audio" src="sounds/master8bits.mp3" loop preload="auto"></audio>
+    <script src="gh-script.js"></script>
+</body>
+</html>

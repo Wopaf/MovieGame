@@ -1086,16 +1086,8 @@ function updateNextChallengeBanner() {
     document.getElementById("nc-bg").style.backgroundImage = `url(${imgSrc})`;
     document.getElementById("nc-title").textContent = ach.title;
 
-    const ratingEl = document.getElementById("nc-rating");
-    if (ach.rating) {
-        document.getElementById("nc-rating-value").textContent = ach.rating;
-        ratingEl.style.display = "flex";
-    } else {
-        ratingEl.style.display = "none";
-    }
 
-    document.getElementById("next-challenge").onclick   = (e) => { if (!e.target.closest("button")) openInfoModal(nextIndex); };
-    document.getElementById("nc-challenge-btn").onclick = (e) => { e.stopPropagation(); openChallengeDirectly(nextIndex); };
+    document.getElementById("next-challenge").onclick = () => openInfoModal(nextIndex);
 }
 
 // ===== MODALS =====
@@ -1115,9 +1107,9 @@ function fillModal(modal, index, forceReveal) {
     modal.querySelector(".modal-title").textContent = isLocked ? lockLabel : ach.title;
 
     const icon = modal.querySelector(".modal-icon");
-    icon.src = achImg(index);
+    icon.src = isLocked ? "medias/imageflou.png" : achImg(index);
     icon.alt = isLocked ? lockLabel : ach.title;
-    icon.classList.toggle("modal-icon-locked", isLocked);
+    icon.classList.toggle("modal-icon-locked", false);
 }
 
 function openAnimatedModal(modalId, index, forceReveal) {
@@ -1186,10 +1178,10 @@ function openInfoModal(index, mysteryReveal = false) {
     const isLocked  = isMystery || isSecret;
 
     // Fond
-    const imgSrc = achImg(index);
+    const imgSrc = isLocked ? "medias/imageflou.png" : achImg(index);
     const infoBgEl = document.getElementById("info-bg");
     infoBgEl.style.backgroundImage = `url(${imgSrc})`;
-    infoBgEl.style.filter = isLocked ? "blur(25px) brightness(0.35) saturate(0.6)" : "";
+    infoBgEl.style.filter = "";
     document.getElementById("modal-info").style.setProperty("--modal-poster", `url(${imgSrc})`);
     document.getElementById("info-validated-badge").classList.toggle("hidden", !isValidated);
 
@@ -1703,8 +1695,12 @@ function proceedFromInfo() {
             closeAnimatedModal(() => showPosterReveal(index));
         }, 650);
     } else {
+        const ach = ACHIEVEMENTS[index];
+        if (ach.title && ach.title.includes('Tenacious')) {
+            window.location.href = 'gh-index.html';
+            return;
+        }
         closeAnimatedModal(() => {
-            const ach = ACHIEVEMENTS[index];
             showChallengeIntro(index, () => {
                 const questionEl = document.getElementById("question-text");
                 const rebusEl    = document.getElementById("question-rebus");
