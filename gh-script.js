@@ -1,5 +1,12 @@
 'use strict';
 
+// Plein écran au premier tap
+document.addEventListener('pointerdown', () => {
+    const el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+}, { once: true });
+
 // ── FIREBASE ──────────────────────────────────────────────────────────────────
 const FIREBASE_CONFIG = {
     apiKey: "AIzaSyBsjr0peOj1jFPhAA080MWuUGlyYapjxn0",
@@ -17,7 +24,7 @@ const validatedRef = db.ref('game/validated');
 
 // ── SEUIL DE DÉFI ─────────────────────────────────────────────────────────────
 // Dépasser ce score valide le défi Tenacious D (index 8 dans ACHIEVEMENTS)
-const SCORE_UNLOCK_THRESHOLD = 300000;
+const SCORE_UNLOCK_THRESHOLD = 100000;
 const TENACIOUS_INDEX = 8;
 
 // ── BOUTON ENREGISTRER ────────────────────────────────────────────────────────

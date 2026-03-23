@@ -1,3 +1,10 @@
+// Plein écran au premier tap
+document.addEventListener('pointerdown', () => {
+    const el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+}, { once: true });
+
 // ============================================================
 //  CONFIGURATION FIREBASE — Remplacer par tes identifiants
 // ============================================================
@@ -1608,13 +1615,14 @@ function typewriterEffect(el, text, speed, callback) {
     next();
 }
 
-function startQuestionSequence() {
+function startQuestionSequence(showInput = true) {
     const questionEl  = document.getElementById("question-text");
     const rebusEl     = document.getElementById("question-rebus");
     const inputGroup  = document.querySelector("#modal-question .input-group");
 
     // Tout masquer au départ
     inputGroup.classList.add("q-pending");
+    if (!showInput) inputGroup.classList.add("q-collapsed");
     if (!rebusEl.classList.contains("hidden")) rebusEl.classList.add("q-pending");
 
     // Laisser l'animation d'ouverture du modal se terminer
@@ -1625,10 +1633,12 @@ function startQuestionSequence() {
                 rebusEl.classList.add("q-reveal");
                 rebusEl.addEventListener("animationend", () => {
                     rebusEl.classList.remove("q-reveal");
-                    revealInput(inputGroup);
+                    if (showInput) revealInput(inputGroup);
+                    else inputGroup.classList.add("q-collapsed");
                 }, { once: true });
             } else {
-                revealInput(inputGroup);
+                if (showInput) revealInput(inputGroup);
+                else inputGroup.classList.add("q-collapsed");
             }
         };
 
@@ -1679,6 +1689,8 @@ function openChallengeDirectly(index) {
         else { qSubEl.classList.add("hidden"); }
         const qImgSrc = achImg(index);
         document.getElementById("modal-question").style.setProperty("--modal-poster", `url(${qImgSrc})`);
+        document.getElementById('q-validated-badge').classList.add('hidden');
+        document.getElementById('q-input-group').classList.remove('q-collapsed');
         openAnimatedModal("modal-question", index, true);
         startQuestionSequence();
     });
@@ -1693,7 +1705,23 @@ function proceedFromInfo() {
     document.getElementById("answer-error").classList.add("hidden");
 
     if (validated.includes(index)) {
-        closeAnimatedModal(() => openAnimatedModal("modal-done", index));
+        closeAnimatedModal(() => {
+            const ach = ACHIEVEMENTS[index];
+            const questionEl = document.getElementById("question-text");
+            const rebusEl    = document.getElementById("question-rebus");
+            if (ach.rebus) { rebusEl.src = ach.rebus; rebusEl.classList.remove("hidden"); }
+            else { rebusEl.classList.add("hidden"); }
+            if (ach.question) { questionEl.dataset.qtext = ach.question; questionEl.textContent = ""; questionEl.classList.remove("hidden"); }
+            else { questionEl.dataset.qtext = ""; questionEl.classList.add("hidden"); }
+            const qSubEl = document.getElementById("q-subtitle");
+            if (ach.sousTitre) { qSubEl.textContent = ach.sousTitre; qSubEl.classList.remove("hidden"); }
+            else { qSubEl.classList.add("hidden"); }
+            document.getElementById("modal-question").style.setProperty("--modal-poster", `url(${achImg(index)})`);
+            document.getElementById('q-validated-badge').classList.remove('hidden');
+            document.getElementById('answer-error').classList.add('hidden');
+            openAnimatedModal("modal-question", index, true);
+            startQuestionSequence(false);
+        });
     } else if (cta.classList.contains("cta-unlock")) {
         // Phase 1 : flash doré sur le modal actuel
         const modalContent = document.getElementById("modal-info").querySelector(".modal-content");
@@ -1740,6 +1768,8 @@ function proceedFromInfo() {
                 else { qSubEl.classList.add("hidden"); }
                 const qImgSrc = achImg(index);
                 document.getElementById("modal-question").style.setProperty("--modal-poster", `url(${qImgSrc})`);
+                document.getElementById('q-validated-badge').classList.add('hidden');
+                document.getElementById('q-input-group').classList.remove('q-collapsed');
                 openAnimatedModal("modal-question", index, true);
                 startQuestionSequence();
             });

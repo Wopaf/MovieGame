@@ -2408,6 +2408,32 @@ body {
     font-size: 0.95rem;
 }
 
+.modal-question-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 480px;
+    gap: 10px;
+    z-index: 1;
+}
+
+.q-validated-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(40, 160, 80, 0.2);
+    color: #4caf7d;
+    border: 1px solid rgba(40, 160, 80, 0.5);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+.q-validated-badge.hidden { display: none; }
+
 .input-group {
     display: flex;
     flex-direction: column;
@@ -2505,6 +2531,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    width: 100%;
 }
 
 .q-title {
@@ -2554,6 +2581,14 @@ body {
 }
 .q-pending { opacity: 0; pointer-events: none; }
 .q-reveal  { animation: qReveal 0.35s ease forwards; }
+.q-collapsed {
+    max-height: 0 !important;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+#q-input-group { max-height: 200px; transition: max-height 0.4s ease, opacity 0.3s ease; }
 
 .question {
     color: var(--color-text) !important;
