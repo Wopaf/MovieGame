@@ -5,6 +5,31 @@ document.addEventListener('pointerdown', () => {
     else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
 }, { once: true });
 
+// Bouton plein écran toggle
+function toggleFullscreen() {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        const el = document.documentElement;
+        if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    } else {
+        if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    }
+}
+
+const ICON_FULLSCREEN  = `<path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>`;
+const ICON_EXIT_FULLSCREEN = `<path fill="currentColor" d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>`;
+
+document.addEventListener('fullscreenchange', updateFullscreenIcon);
+document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
+
+function updateFullscreenIcon() {
+    const icon = document.getElementById('fullscreen-icon');
+    if (!icon) return;
+    const isFS = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    icon.innerHTML = isFS ? ICON_EXIT_FULLSCREEN : ICON_FULLSCREEN;
+}
+
 // ============================================================
 //  CONFIGURATION FIREBASE — Remplacer par tes identifiants
 // ============================================================
@@ -147,17 +172,17 @@ function enableDebugMode() {
 //  PALIERS / OBJECTIFS — Modifier ici facilement
 // ============================================================
 const MILESTONES = [
-    { label: "Initié",               objectif: "Valider 1 films",  count: 1,  keys: 1,             icon: 2 },
-    { label: "Accro aux popcorns",   objectif: "Valider 3 films",  count: 3,  jokers: 1,           icon: 3 },
-    { label: "Amateur éclairé",      objectif: "Valider 10 films", count: 10, keys: 1,             icon: 4 },
-    { label: "Cinéphile du dimanche",objectif: "Valider 20 films", count: 20, keys: 2, jokers: 1,  icon: 5 },
-    { label: "Passionné",            objectif: "Valider 24 films", count: 24, keys: 3,             icon: 6 },
-    { label: "Critique en herbe",    objectif: "Valider 27 films", count: 27, keys: 3, jokers: 1,  icon: 7 },
-    { label: "Fin Connaisseur",      objectif: "Valider 30 films", count: 30, keys: 3,             icon: 8 },
-    { label: "Cinéphile",            objectif: "Valider 33 films", count: 33, keys: 3,             icon: 9 },
-    { label: "Déglingo",             objectif: "Valider 36 films", count: 36, keys: 3, secretFilm: 39, icon: 10 },
-    { label: "Collectionneur",       objectif: "Valider 39 films", count: 39, secretFilm: 40,      icon: 11 },
-    { label: "???",                  objectif: "Valider 40 films", count: 40, rewards: ["?"],      icon: 12 },
+    { label: "Initié",               objectif: "Valider 1 Défi",  count: 1,  keys: 1,             icon: 2 },
+    { label: "Accro aux popcorns",   objectif: "Valider 3 Défis",  count: 3,  jokers: 1,           icon: 3 },
+    { label: "Amateur éclairé",      objectif: "Valider 10 Défis", count: 10, keys: 1,             icon: 4 },
+    { label: "Cinéphile du dimanche",objectif: "Valider 20 Défis", count: 20, keys: 2, jokers: 1,  icon: 5 },
+    { label: "Passionné",            objectif: "Valider 24 Défis", count: 24, keys: 3,             icon: 6 },
+    { label: "Critique en herbe",    objectif: "Valider 27 Défis", count: 27, keys: 3, jokers: 1,  icon: 7 },
+    { label: "Fin Connaisseur",      objectif: "Valider 30 Défis", count: 30, keys: 3,             icon: 8 },
+    { label: "Cinéphile",            objectif: "Valider 33 Défis", count: 33, keys: 3,             icon: 9 },
+    { label: "Déglingo",             objectif: "Valider 36 Défis", count: 36, keys: 3, secretFilm: 38, icon: 10 },
+    { label: "Collectionneur",       objectif: "Valider 39 Défis", count: 39, secretFilm: 39,      icon: 11 },
+    { label: "???",                  objectif: "Valider 40 Défis", count: 40, rewards: ["?"],      icon: 12 },
 ];
 
 // ============================================================
@@ -355,6 +380,12 @@ const ACHIEVEMENTS = [
     genres: ["Science-fiction", "Thriller", "Sous-coté"],
     imdb: "https://www.imdb.com/title/tt2209764/", rating: "6.2", verrouille: true },
 
+    { title: "Mommy", img: "56.png", password: "1xQ", rebus: "medias/r24.png",
+    question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
+    realisateur: "Xavier Dolan", description: "Une veuve mono-parentale hérite de la garde de son fils, un adolescent TDAH impulsif et violent. Au coeur de leurs emportements et difficultés, ils tentent de joindre les deux bouts, notamment grâce à l’aide inattendue de l’énigmatique voisine d’en face, Kyla. Tous les trois, ils retrouvent une forme d’équilibre et, bientôt, d’espoir.",
+    genres: ["Drame", "Bouleversant", "Beau"],
+    imdb: "https://www.imdb.com/fr/title/tt3612616/", rating: "8.0", verrouille: true },
+
     { title: "Jumper", img: "22.png", password: "4uG", rebus: "medias/r25.png",
     question: "Où se trouve la 'bibliothèque' secrète de Griffin, là où il garde ses preuves sur les Paladins ?", answer: "Dans le Colisée",
     realisateur: "Doug Liman", description: "David Rice peut se téléporter instantanément n'importe où. Cette liberté absolue prend fin quand les Paladins, une organisation secrète qui traque les Jumpers, se lance à ses trousses.",
@@ -373,23 +404,17 @@ const ACHIEVEMENTS = [
     genres: ["Documentaire", "Gauchiasse !"],
     imdb: "https://www.imdb.com/title/tt33350039/", rating: "6.9", verrouille: true },
 
-    { title: "Ill Manors", img: "32.png", password: "2pT", rebus: "medias/r33.png",
-    question: "Quel est le prénom du bébé abandonné dans le sac que les dealers trouvent ?", answer: "Michelle",
-    realisateur: "Ben Drew", description: "Dans les rues de Forest Gate, à l'est de Londres, plusieurs destins marginaux se croisent dans une spirale de violence, de trafics et de misère sociale, sans issue apparente.",
-    genres: ["Drame", "Crime", "Film vraiment pas drôle"],
-    imdb: "https://www.imdb.com/title/tt1760967/", rating: "6.6", verrouille: true },
-
     { title: "Looper", img: "36.png", password: "1zL", rebus: "medias/r34.png",
     question: "Quel est le surnom du futur chef de la pègre qui envoie les victimes dans le passé ?", answer: "Le Maître des Pluies",
     realisateur: "Rian Johnson", description: "En 2044, Joe est un Looper : il élimine des victimes envoyées du futur par un syndicat du crime. Sa vie bascule quand sa prochaine cible est sa propre version vieillie.",
     genres: ["Action", "Science-fiction", "Un bon film !"],
     imdb: "https://www.imdb.com/title/tt1276104/", rating: "7.4", verrouille: true },
 
-    { title: "Tarzan", img: "41.png", password: "5vW", rebus: "medias/r35.png",
-    question: "Quel est le nom de l'explorateur qui veut capturer les gorilles pour les vendre ?", answer: "Clayton",
-    realisateur: "Kevin Lima et Chris Buck", description: "Orphelin recueilli et élevé par des gorilles, Tarzan découvre ses origines humaines à l'arrivée d'une expédition dans la jungle africaine. Il doit choisir son monde.",
-    genres: ["Animation", "Aventure", "Une belle histoire", "Une belle bande original"],
-    imdb: "https://www.imdb.com/title/tt0120855/", rating: "7.1", verrouille: true },
+    { title: "Ma Mère, Dieu et Sylvie Vartan", img: "55.png", password: "1xQ", rebus: "medias/r24.png",
+    question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
+    realisateur: "Ken Scott", description: "En 1963, Esther met au monde Roland, petit dernier d’une famille nombreuse. Roland naît avec un pied-bot qui l’empêche de se tenir debout. Contre l’avis de tous, elle promet à son fils qu’il marchera comme les autres et qu’il aura une vie fabuleuse. Dès lors, Esther n’aura de cesse de tout mettre en œuvre pour tenir cette promesse. À travers des décennies d’épreuves et de miracles de la vie, ce film est le récit d’une histoire vraie, drôle et bouleversante, celle d’un destin incroyable et du plus grand amour qui soit : celui d’une mère pour son enfant.",
+    genres: ["Comédie dramatique"],
+    imdb: "https://www.imdb.com/fr/title/tt29927144/", rating: "7.0", verrouille: true },
 
     { title: "Abysse", img: "15.png", password: "8rA", rebus: "medias/r36.png",
     question: "Quel message Bud écrit-il sur son ardoise à sa femme alors qu'il manque d'oxygène au fond ?", answer: "Je t'aime",
@@ -414,6 +439,14 @@ const ACHIEVEMENTS = [
     realisateur: "Alexandre Astier", description: "Le roi Arthur revient d'exil pour reprendre Kaamelott des mains de Lancelot. Il rassemble ses chevaliers pour une reconquère contre Arthur ! Après la destruction de Kaamelott, son refus obstiné de tuer Lancelot précipite le Royaume de Logres à sa perte. Il réunit ses Chevaliers, novices téméraires et vétérans désabusés, autour de la Nouvelle Table Ronde et les envoie prouver leur valeur aux quatre coins du Monde, des Marais Orcaniens aux terres glacées du DRAGON_END_PLACEHOLDER",
     genres: ["Aventure", "Fantastique", "L'excelente suite d'un film moyen"],
     imdb: "https://www.imdb.com/title/tt9844322/", rating: "7.2", verrouille: true },
+
+
+    { title: "Ill Manors", img: "32.png", password: "2pT", rebus: "medias/r33.png",
+    question: "Quel est le prénom du bébé abandonné dans le sac que les dealers trouvent ?", answer: "Michelle",
+    realisateur: "Ben Drew", description: "Dans les rues de Forest Gate, à l'est de Londres, plusieurs destins marginaux se croisent dans une spirale de violence, de trafics et de misère sociale, sans issue apparente.",
+    genres: ["Drame", "Crime", "Film vraiment pas drôle"],
+    imdb: "https://www.imdb.com/title/tt1760967/", rating: "6.6", verrouille: true },
+
 
     { title: "10 Cloverfield Lane", img: "10.png", password: "9jN", rebus: "medias/r40.png",
     question: "À quel jeu de société Howard, Emmett et Michelle jouent-ils dans le bunker ?", answer: "Le jeu de la vie",
@@ -1663,6 +1696,11 @@ function revealInput(inputGroup) {
 function openChallengeDirectly(index) {
     currentIndex = index;
     setMenuVisible(false);
+    if (index === DALI_INDEX) {
+        const validated = getValidated();
+        openDaliModal(validated.includes(index));
+        return;
+    }
     document.getElementById("answer-input").value = "";
     document.getElementById("answer-error").classList.add("hidden");
 
@@ -1705,6 +1743,10 @@ function proceedFromInfo() {
     document.getElementById("answer-error").classList.add("hidden");
 
     if (validated.includes(index)) {
+        if (index === DALI_INDEX) {
+            closeAnimatedModal(() => openDaliModal(true));
+            return;
+        }
         closeAnimatedModal(() => {
             const ach = ACHIEVEMENTS[index];
             const questionEl = document.getElementById("question-text");
@@ -1743,6 +1785,10 @@ function proceedFromInfo() {
         const ach = ACHIEVEMENTS[index];
         if (ach.title && ach.title.includes('Tenacious')) {
             window.location.href = 'gh-index.html';
+            return;
+        }
+        if (index === DALI_INDEX) {
+            closeAnimatedModal(() => openDaliModal(false));
             return;
         }
         closeAnimatedModal(() => {
@@ -1874,6 +1920,81 @@ document.querySelectorAll(".modal-overlay").forEach(o => o.addEventListener("cli
 document.getElementById("info-cta").addEventListener("click", proceedFromInfo);
 
 if (DEBUG_MODE) initDebugUI();
+
+// ============================================================
+//  MODAL DALI — Où est Dali ?
+// ============================================================
+const DALI_INDEX = 37;
+// ── Coordonnées de la cible (0 = gauche/haut, 1 = droite/bas) — à ajuster ──
+const DALI_TARGET_X  = 0.95;
+const DALI_TARGET_Y  = 0.54;
+const DALI_TOLERANCE = 0.02; // 2% de tolérance
+
+function openDaliModal(isValidated) {
+    currentIndex = DALI_INDEX;
+    const modal      = document.getElementById('modal-dali');
+    const badge      = document.getElementById('dali-validated-badge');
+    const validateBtn = document.getElementById('dali-validate-btn');
+
+    // Reset sliders au centre
+    document.getElementById('dali-slider-h').value = 50;
+    document.getElementById('dali-slider-v').value = 50;
+    updateDaliCrosshair();
+
+    badge.classList.toggle('hidden', !isValidated);
+    validateBtn.classList.toggle('hidden', isValidated);
+
+    modal.classList.remove('hidden');
+    requestAnimationFrame(() => requestAnimationFrame(() => modal.classList.add('dali-visible')));
+}
+
+function closeDaliModal() {
+    const modal = document.getElementById('modal-dali');
+    modal.classList.remove('dali-visible');
+    modal.addEventListener('transitionend', () => modal.classList.add('hidden'), { once: true });
+    currentIndex = null;
+}
+
+function updateDaliCrosshair() {
+    const xPct = parseInt(document.getElementById('dali-slider-h').value);
+    const yPct = parseInt(document.getElementById('dali-slider-v').value);
+    const crosshair = document.getElementById('dali-crosshair');
+    crosshair.style.left = xPct + '%';
+    crosshair.style.top  = yPct + '%';
+}
+
+function validateDaliAnswer() {
+    const xPct = parseInt(document.getElementById('dali-slider-h').value) / 100;
+    const yPct = parseInt(document.getElementById('dali-slider-v').value) / 100;
+
+    if (Math.abs(xPct - DALI_TARGET_X) <= DALI_TOLERANCE &&
+        Math.abs(yPct - DALI_TARGET_Y) <= DALI_TOLERANCE) {
+        playSound("success");
+        const validated = getValidated();
+        if (!validated.includes(DALI_INDEX)) {
+            validated.push(DALI_INDEX);
+            saveValidated(validated);
+        }
+        closeDaliModal();
+        buildGrid();
+        showSuccessAnimation(DALI_INDEX);
+    } else {
+        playSound("fail");
+        const wrap = document.getElementById('dali-image-wrap');
+        wrap.classList.remove('dali-fail-flash');
+        void wrap.offsetWidth;
+        wrap.classList.add('dali-fail-flash');
+        wrap.addEventListener('animationend', () => wrap.classList.remove('dali-fail-flash'), { once: true });
+    }
+}
+
+document.getElementById('dali-slider-h').addEventListener('input', updateDaliCrosshair);
+document.getElementById('dali-slider-v').addEventListener('input', updateDaliCrosshair);
+document.getElementById('dali-validate-btn').addEventListener('click', validateDaliAnswer);
+document.querySelector('.dali-close-btn').addEventListener('click', () => {
+    closeDaliModal();
+    buildGrid();
+});
 
 // ============================================================
 //  MODAL JUMANJI
