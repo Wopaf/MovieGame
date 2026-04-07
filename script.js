@@ -1747,6 +1747,10 @@ function proceedFromInfo() {
             closeAnimatedModal(() => openDaliModal(true));
             return;
         }
+        if (index === AU_BOULOT_INDEX) {
+            closeAnimatedModal(() => BARBIE_GAME.open());
+            return;
+        }
         closeAnimatedModal(() => {
             const ach = ACHIEVEMENTS[index];
             const questionEl = document.getElementById("question-text");
@@ -1789,6 +1793,10 @@ function proceedFromInfo() {
         }
         if (index === DALI_INDEX) {
             closeAnimatedModal(() => openDaliModal(false));
+            return;
+        }
+        if (index === AU_BOULOT_INDEX) {
+            closeAnimatedModal(() => BARBIE_GAME.open());
             return;
         }
         closeAnimatedModal(() => {
@@ -1924,7 +1932,7 @@ if (DEBUG_MODE) initDebugUI();
 // ============================================================
 //  MODAL DALI — Où est Dali ?
 // ============================================================
-const DALI_INDEX = 37;
+const DALI_INDEX = 38;
 // ── Coordonnées de la cible (0 = gauche/haut, 1 = droite/bas) — à ajuster ──
 const DALI_TARGET_X  = 0.95;
 const DALI_TARGET_Y  = 0.54;
@@ -1995,6 +2003,499 @@ document.querySelector('.dali-close-btn').addEventListener('click', () => {
     closeDaliModal();
     buildGrid();
 });
+
+// ============================================================
+//  MODAL AU BOULOT — Jeu Barbie à cheval
+// ============================================================
+const AU_BOULOT_INDEX = 27;
+
+const BARBIE_GAME = (() => {
+    // ── Constantes ──
+    const MAX_LIVES        = 5;
+    const FLOOR_RATIO      = 0.72;    // hauteur du sol (fraction de H)
+    const BARBIE_W_RATIO   = 0.28;    // largeur de Barbie (fraction de W)
+    const BARBIE_X_RATIO   = 0.10;    // position X de Barbie (fraction de W)
+    const BARBIE_Y_OFFSET  = -0.09;    // décalage vertical de Barbie ET des obstacles (fraction de H, positif = vers le bas)
+    const BEAUTE_HIT_LOSS  = 10;      // beauté perdue par collision obstacle
+    const COLL_Y_OFFSET    = -0.10;    // décalage hauteur collectibles depuis le pic du saut (positif = vers le bas)
+    const DIALOGUES = [
+        "Oh mince alors !",
+        "Je suis vraiment cloche !",
+        "Hmm rien ne peut me détourner de mes objectifs",
+        "Houlala j'ai failli me faire super mal !",
+        "Si je continue comme ça, je risque de perdre tout héritage",
+        "Aïe !",
+        "Flûte !",
+    ];
+    let bubbleTimeout = null;
+    let pops   = []; // { x, y, text, color, img, age, maxAge }
+    let sparks = []; // { x, y, size, vx, vy, age, maxAge }
+
+    function spawnSparks(W, H) {
+        const count = 8 + Math.floor(Math.random() * 6);
+        for (let i = 0; i < count; i++) {
+            const size = 18 + Math.random() * 22;
+            sparks.push({
+                x: Math.random() * W,
+                y: Math.random() * H * 0.85,
+                size,
+                vx: (Math.random() - 0.5) * 2,
+                vy: -1 - Math.random() * 2,
+                age: 0,
+                maxAge: 500 + Math.random() * 300,
+            });
+        }
+    }
+
+    function showBubble() {
+        const el = document.getElementById('auboulot-bubble');
+        if (!el) return;
+        el.textContent = DIALOGUES[Math.floor(Math.random() * DIALOGUES.length)];
+        el.classList.remove('auboulot-bubble-hidden');
+        if (bubbleTimeout) clearTimeout(bubbleTimeout);
+        bubbleTimeout = setTimeout(() => el.classList.add('auboulot-bubble-hidden'), 2000);
+    }
+    const IDLE_INTERVAL    = 180;     // ms entre les frames idle
+    const JUMP_DURATION    = 1000;    // durée du saut en ms
+    const JUMP_HEIGHT      = 0.15;    // hauteur max du saut (fraction de H)
+    const BASE_SPEED       = 0.03;   // vitesse initiale (fraction de largeur / tick)
+    const SPEED_INCREMENT  = 0.0003;  // accélération par obstacle évité
+
+    // ── Images ──
+    const imgBg       = new Image(); imgBg.src       = 'medias/barbie_background.png';
+    const imgLoop     = new Image(); imgLoop.src     = 'medias/barbie_background_loop.png';
+    const imgIdle1    = new Image(); imgIdle1.src    = 'medias/barbie_idle1.png';
+    const imgIdle2    = new Image(); imgIdle2.src    = 'medias/barbie_idle2.png';
+    const imgJump     = new Image(); imgJump.src     = 'medias/barbie_jump.png';
+    const imgObs      = new Image(); imgObs.src      = 'medias/barbie_obstacle.png';
+    const imgLiasse   = new Image(); imgLiasse.src   = 'medias/liasse.png';
+    const imgMontre   = new Image(); imgMontre.src   = 'medias/montre.png';
+    const imgCollier  = new Image(); imgCollier.src  = 'medias/collier.png';
+    const imgFondTeint= new Image(); imgFondTeint.src= 'medias/fonddeteint.png';
+    const imgSpark    = new Image(); imgSpark.src    = 'medias/spark.png';
+
+    // ── Types de collectibles (rarity = probabilité de tirage) ──
+    const COLL_TYPES = [
+        { id: 'liasse',    img: () => imgLiasse,    richesse: 50,  beaute: 0,  rarity: 0.60 },
+        { id: 'montre',    img: () => imgMontre,    richesse: 200, beaute: 0,  rarity: 0.25 },
+        { id: 'collier',   img: () => imgCollier,   richesse: 500, beaute: 0,  rarity: 0.10 },
+        { id: 'fondteint', img: () => imgFondTeint, richesse: 0,   beaute: 10, rarity: 0.05 },
+    ];
+
+    // ── État ──
+    let canvas, ctx;
+    let animId       = null;
+    let lives        = MAX_LIVES;
+    let score        = 0;
+    let speed        = BASE_SPEED;
+    let lastTime     = 0;
+    let idleFrame    = 0;
+    let idleTimer    = 0;
+    let loopX        = 0;          // position X du sol défilant
+    let isJumping    = false;
+    let jumpStartTime = 0;
+    let barbieY      = 0;        // Y relatif (0 = sur le sol, négatif = en l'air)
+    let obstacles    = [];
+    let nextObsDist  = 0;
+    let collectibles = [];
+    let nextCollDist = 0;
+    let richesse     = 0;
+    let beaute       = 100;
+    let invincible   = false;
+    let invincibleTimer = 0;
+    let gameRunning  = false;
+
+    function floorY(h) { return h * FLOOR_RATIO; }
+
+    function spawnObstacle(w) {
+        // Taille de l'obstacle calculée relativement à Barbie (même échelle d'asset)
+        const barbieCanvasW = w * BARBIE_W_RATIO;
+        const scale = barbieCanvasW / (imgIdle1.naturalWidth || 1);
+        const ow = imgObs.naturalWidth  * scale;
+        const oh = imgObs.naturalHeight * scale;
+        obstacles.push({ x: w, w: ow, h: oh });
+        // Délai aléatoire avant le prochain obstacle : entre 1.2s et 2.8s de distance en pixels
+        const gap = w * (0.5 + Math.random() * 0.9);
+        nextObsDist = gap;
+    }
+
+    function resetState() {
+        obstacles     = [];
+        collectibles  = [];
+        sparks        = [];
+        pops          = [];
+        score         = 0;
+        richesse      = 0;
+        beaute        = 100;
+        lives         = MAX_LIVES;
+        speed         = BASE_SPEED;
+        loopX         = 0;
+        isJumping     = false;
+        jumpStartTime = 0;
+        barbieY       = 0;
+        idleFrame     = 0;
+        idleTimer     = 0;
+        invincible    = false;
+        invincibleTimer = 0;
+        gameRunning   = true;
+        lastTime      = 0;
+        if (canvas) {
+            nextObsDist  = canvas.width * (0.6 + Math.random() * 0.6);
+            nextCollDist = canvas.width * (0.8 + Math.random() * 1.2);
+        }
+        updateHUD();
+    }
+
+    function updateHUD() {
+        const el = document.getElementById('auboulot-lives');
+        if (el) el.innerHTML = Array.from({ length: MAX_LIVES }, (_, i) =>
+            `<img src="medias/${i < lives ? 'c-plein' : 'c-vide'}.png" class="auboulot-heart-icon">`).join('');
+        const sc = document.getElementById('auboulot-score');
+        if (sc) sc.textContent = score;
+        const ri = document.getElementById('auboulot-richesse');
+        if (ri) ri.textContent = richesse;
+        const be = document.getElementById('auboulot-beaute');
+        if (be) be.textContent = beaute;
+    }
+
+    function spawnCollectible(w, H) {
+        // Tirage pondéré par rareté
+        const rand = Math.random();
+        let cumul = 0;
+        let chosen = COLL_TYPES[0];
+        for (const t of COLL_TYPES) {
+            cumul += t.rarity;
+            if (rand < cumul) { chosen = t; break; }
+        }
+        const scale = (w * BARBIE_W_RATIO * 0.22) / (chosen.img().naturalWidth || 50);
+        const cw = (chosen.img().naturalWidth  || 50) * scale;
+        const ch = (chosen.img().naturalHeight || 50) * scale;
+        // Placé à la hauteur de saut max de Barbie + offset réglable
+        const peakY = floorY(H) - H * JUMP_HEIGHT + H * BARBIE_Y_OFFSET + H * COLL_Y_OFFSET;
+        const cy = peakY - ch * 0.5;
+        collectibles.push({ x: w, w: cw, h: ch, y: cy, type: chosen });
+        nextCollDist = w * (1.0 + Math.random() * 1.5);
+    }
+
+    function jump() {
+        if (!gameRunning || isJumping) return;
+        isJumping     = true;
+        jumpStartTime = performance.now();
+        playSound && playSound('click');
+    }
+
+    function gameLoop(ts) {
+        if (!gameRunning) return;
+        const dt = lastTime ? Math.min(ts - lastTime, 50) : 16;
+        lastTime = ts;
+
+        const W = canvas.width, H = canvas.height;
+        const floor = floorY(H);
+        const bW    = W * BARBIE_W_RATIO;
+        const bH    = bW * (imgIdle1.naturalHeight / (imgIdle1.naturalWidth || 1));
+        const bX    = W * BARBIE_X_RATIO;
+
+        // ── Physique barbie ──
+        if (isJumping) {
+            const elapsed = performance.now() - jumpStartTime;
+            if (elapsed >= JUMP_DURATION) {
+                isJumping = false;
+                barbieY   = 0;
+            } else {
+                const t = elapsed / JUMP_DURATION;
+                barbieY = -Math.sin(Math.PI * t) * H * JUMP_HEIGHT;
+            }
+        }
+
+        // ── Animation idle ──
+        idleTimer += dt;
+        if (idleTimer >= IDLE_INTERVAL) { idleTimer = 0; idleFrame = 1 - idleFrame; }
+
+        // ── Invincibilité ──
+        if (invincible) {
+            invincibleTimer -= dt;
+            if (invincibleTimer <= 0) invincible = false;
+        }
+
+        const spd = speed * W * dt * 0.016;
+
+        // ── Obstacles ──
+        nextObsDist -= spd;
+        if (nextObsDist <= 0) spawnObstacle(W);
+
+        for (let i = obstacles.length - 1; i >= 0; i--) {
+            obstacles[i].x -= spd;
+            if (obstacles[i].x + obstacles[i].w < 0) {
+                obstacles.splice(i, 1);
+                score++;
+                speed += SPEED_INCREMENT;
+                updateHUD();
+            }
+        }
+
+        // ── Collectibles ──
+        nextCollDist -= spd;
+        if (nextCollDist <= 0) spawnCollectible(W, H);
+
+        const barbieCX = bX + bW * 0.5;
+        const barbieCY = floor + barbieY - bH * 0.5 + H * BARBIE_Y_OFFSET;
+        for (let i = collectibles.length - 1; i >= 0; i--) {
+            collectibles[i].x -= spd;
+            const c = collectibles[i];
+            if (c.x + c.w < 0) { collectibles.splice(i, 1); continue; }
+            // Détection de collecte (distance centre à centre)
+            const cx = c.x + c.w * 0.5;
+            const cy = c.y + c.h * 0.5;
+            if (Math.abs(barbieCX - cx) < (bW * 0.4 + c.w * 0.4) &&
+                Math.abs(barbieCY - cy) < (bH * 0.4 + c.h * 0.4)) {
+                collectibles.splice(i, 1);
+                if (c.type.richesse) { richesse += c.type.richesse; }
+                if (c.type.beaute)   { beaute = 100; }
+                playSound && playSound('click');
+                updateHUD();
+                const popText  = c.type.richesse ? `+${c.type.richesse}` : `+${c.type.beaute}`;
+                const popColor = c.type.richesse ? '#ffd700' : '#ff6ec7';
+                const popImg   = c.type.richesse ? imgLiasse : imgFondTeint;
+                pops.push({ x: cx, y: cy, text: popText, color: popColor, img: popImg, age: 0, maxAge: 700 });
+                spawnSparks(W, H);
+            }
+        }
+
+        // ── Collision obstacles ──
+        if (!invincible) {
+            const barbieBottom = floor + barbieY - bH * 0.10 + H * BARBIE_Y_OFFSET;
+            const barbieTop    = barbieBottom - bH * 0.55;
+            const barbieLeft   = bX + bW * 0.32;
+            const barbieRight  = bX + bW * 0.68;
+            for (const obs of obstacles) {
+                const obsBottom = floor + H * BARBIE_Y_OFFSET;
+                const obsTop    = obsBottom - obs.h * 0.75;
+                const obsLeft   = obs.x + obs.w * 0.15;
+                const obsRight  = obs.x + obs.w * 0.85;
+                if (barbieRight > obsLeft && barbieLeft < obsRight &&
+                    barbieBottom > obsTop  && barbieTop  < obsBottom) {
+                    lives--;
+                    beaute = Math.max(0, beaute - BEAUTE_HIT_LOSS);
+                    updateHUD();
+                    invincible      = true;
+                    invincibleTimer = 1200;
+                    playSound && playSound('fail');
+                    showBubble();
+                    if (lives <= 0) { triggerGameOver(); return; }
+                }
+            }
+        }
+
+        // ── Défilement du sol ──
+        loopX -= spd;
+        const loopW    = imgLoop.naturalWidth ? imgLoop.naturalWidth * (H / imgLoop.naturalHeight) : W;
+        const loopStep = loopW * 0.80;
+        if (loopX <= -loopStep) loopX += loopStep;
+
+        // ── Dessin ──
+        ctx.clearRect(0, 0, W, H);
+
+        for (let i = 0; i < 4; i++) {
+            ctx.drawImage(imgLoop, loopX + i * loopStep, 0, loopW, H);
+        }
+
+        // Collectibles
+        for (const c of collectibles) {
+            ctx.drawImage(c.type.img(), c.x, c.y, c.w, c.h);
+        }
+
+        // Pops
+        for (let i = pops.length - 1; i >= 0; i--) {
+            const p = pops[i];
+            p.age += dt;
+            if (p.age >= p.maxAge) { pops.splice(i, 1); continue; }
+            const t       = p.age / p.maxAge;
+            const opacity = 1 - t;
+            const scale   = 1 + t * 0.6;
+            const yOff    = -40 * t;
+            ctx.save();
+            ctx.globalAlpha = opacity;
+            const fontSize = Math.round(13 * scale);
+            ctx.font = `bold ${fontSize}px 'Press Start 2P', monospace`;
+            ctx.fillStyle = p.color;
+            ctx.strokeStyle = 'rgba(0,0,0,0.6)';
+            ctx.lineWidth = 3;
+            ctx.textAlign = 'left';
+            const iconSize = fontSize * 1.4;
+            const textW    = ctx.measureText(p.text).width;
+            const totalW   = iconSize + 4 + textW;
+            const drawX    = p.x - totalW * 0.5;
+            const drawY    = p.y + yOff;
+            // Icône
+            ctx.drawImage(p.img, drawX, drawY - iconSize * 0.85, iconSize, iconSize);
+            // Texte
+            ctx.strokeText(p.text, drawX + iconSize + 4, drawY);
+            ctx.fillText(p.text,   drawX + iconSize + 4, drawY);
+            ctx.restore();
+        }
+
+        // Sparks
+        for (let i = sparks.length - 1; i >= 0; i--) {
+            const s = sparks[i];
+            s.age += dt;
+            if (s.age >= s.maxAge) { sparks.splice(i, 1); continue; }
+            s.x += s.vx;
+            s.y += s.vy;
+            const t = s.age / s.maxAge;
+            ctx.save();
+            ctx.globalAlpha = 1 - t;
+            ctx.drawImage(imgSpark, s.x - s.size * 0.5, s.y - s.size * 0.5, s.size, s.size);
+            ctx.restore();
+        }
+
+        // Obstacles
+        for (const obs of obstacles) {
+            ctx.drawImage(imgObs, obs.x, floor - obs.h + H * BARBIE_Y_OFFSET, obs.w, obs.h);
+        }
+
+        // Barbie
+        const showBarbie = !invincible || Math.floor(invincibleTimer / 120) % 2 === 0;
+        if (showBarbie) {
+            const sprite = isJumping ? imgJump : (idleFrame === 0 ? imgIdle1 : imgIdle2);
+            ctx.drawImage(sprite, bX, floor + barbieY - bH + H * BARBIE_Y_OFFSET, bW, bH);
+        }
+
+        animId = requestAnimationFrame(gameLoop);
+    }
+
+    function triggerGameOver() {
+        gameRunning = false;
+        cancelAnimationFrame(animId);
+        // Valider le film à la première partie terminée
+        const validated = getValidated();
+        if (!validated.includes(AU_BOULOT_INDEX)) {
+            validated.push(AU_BOULOT_INDEX);
+            saveValidated(validated);
+        }
+        showGameOver();
+    }
+
+    function animateCount(elId, from, to, duration, onDone) {
+        const el = document.getElementById(elId);
+        const start = performance.now();
+        function tick(ts) {
+            const t = Math.min((ts - start) / duration, 1);
+            el.textContent = Math.floor(from + (to - from) * t);
+            if (t < 1) requestAnimationFrame(tick);
+            else if (onDone) onDone();
+        }
+        requestAnimationFrame(tick);
+    }
+
+    function showRow(id, delay, cb) {
+        setTimeout(() => {
+            const el = document.getElementById(id);
+            el.classList.remove('auboulot-res-hidden');
+            if (cb) cb();
+        }, delay);
+    }
+
+    function showGameOver() {
+        document.getElementById('auboulot-game').classList.add('hidden');
+        const over = document.getElementById('auboulot-gameover');
+        // reset visibility de toutes les lignes
+        ['auboulot-res-rich-row','auboulot-res-beau-row','auboulot-res-total-row',
+         'auboulot-res-best-row','auboulot-over-btns'].forEach(id =>
+            document.getElementById(id).classList.add('auboulot-res-hidden'));
+        over.classList.remove('hidden');
+
+        document.getElementById('auboulot-res-score').textContent   = score;
+        document.getElementById('auboulot-res-richval').textContent  = richesse;
+        document.getElementById('auboulot-res-beauval').textContent  = Math.max(beaute, 1);
+
+        const afterRich  = score * Math.max(richesse, 1);
+        const finalScore = Math.floor(afterRich / Math.max(beaute, 1));
+
+        // Phase 1 : obstacles (déjà visible)
+        // Phase 2 : × richesse
+        showRow('auboulot-res-rich-row', 1000);
+        // Phase 3 : ÷ beauté
+        showRow('auboulot-res-beau-row', 2000);
+        // Phase 4 : total animé
+        showRow('auboulot-res-total-row', 3000, () => {
+            animateCount('auboulot-res-totalval', 0, finalScore, 1400, () => {
+                // Meilleur score
+                db.ref('game/barbieBestScore').once('value', snap => {
+                    const prev = snap.val() || 0;
+                    const best = Math.max(prev, finalScore);
+                    if (finalScore > prev) db.ref('game/barbieBestScore').set(finalScore);
+                    document.getElementById('auboulot-best-val').textContent = best;
+                    showRow('auboulot-res-best-row', 0);
+                    showRow('auboulot-over-btns', 600);
+                });
+            });
+        });
+    }
+
+    function startGame() {
+        canvas = document.getElementById('auboulot-canvas');
+        ctx    = canvas.getContext('2d');
+        // Ajuste la résolution du canvas à l'affichage réel
+        const rect = canvas.getBoundingClientRect();
+        canvas.width  = rect.width  || canvas.offsetWidth  || 400;
+        canvas.height = rect.height || canvas.offsetHeight || 600;
+        resetState();
+        cancelAnimationFrame(animId);
+        animId = requestAnimationFrame(gameLoop);
+    }
+
+    function openModal() {
+        const modal = document.getElementById('modal-auboulot');
+        modal.classList.remove('hidden');
+        // Affiche le menu, cache jeu + gameover
+        document.getElementById('auboulot-menu').classList.remove('hidden');
+        document.getElementById('auboulot-game').classList.add('hidden');
+        document.getElementById('auboulot-gameover').classList.add('hidden');
+    }
+
+    function closeModal() {
+        gameRunning = false;
+        cancelAnimationFrame(animId);
+        document.getElementById('modal-auboulot').classList.add('hidden');
+        buildGrid();
+        setMenuVisible(true);
+    }
+
+    // ── Listeners boutons ──
+    document.getElementById('auboulot-play-btn').addEventListener('click', () => {
+        document.getElementById('auboulot-menu').classList.add('hidden');
+        document.getElementById('auboulot-gameover').classList.add('hidden');
+        document.getElementById('auboulot-game').classList.remove('hidden');
+        // Attendre le prochain frame pour que le canvas ait sa taille
+        requestAnimationFrame(() => startGame());
+    });
+
+    document.getElementById('auboulot-quit-btn').addEventListener('click', closeModal);
+    document.getElementById('auboulot-menu-btn').addEventListener('click', () => {
+        document.getElementById('auboulot-gameover').classList.add('hidden');
+        document.getElementById('auboulot-menu').classList.remove('hidden');
+    });
+    document.getElementById('auboulot-retry-btn').addEventListener('click', () => {
+        document.getElementById('auboulot-gameover').classList.add('hidden');
+        document.getElementById('auboulot-game').classList.remove('hidden');
+        requestAnimationFrame(() => startGame());
+    });
+
+    // Bouton + espace + touche haut pour sauter
+    document.getElementById('auboulot-jump-btn').addEventListener('pointerdown', e => {
+        e.preventDefault();
+        jump();
+    });
+    document.addEventListener('keydown', e => {
+        if ((e.code === 'Space' || e.code === 'ArrowUp') &&
+            !document.getElementById('modal-auboulot').classList.contains('hidden')) {
+            e.preventDefault();
+            jump();
+        }
+    });
+
+    return { open: openModal };
+})();
 
 // ============================================================
 //  MODAL JUMANJI
@@ -2095,7 +2596,7 @@ function handleJumanjiResult(sum) {
         }, 1400);
     } else {
         sumEl.textContent = `${sum}`;
-        const nextRoll = Date.now() + 5 * 60 * 1000;
+        const nextRoll = Date.now() + 2 * 60 * 1000;
         refJumanjiNextRoll.set(nextRoll);
         updateJumanjiRollState(nextRoll);
     }
