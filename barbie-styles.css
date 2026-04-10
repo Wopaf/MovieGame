@@ -1,0 +1,689 @@
+/* ── MODAL AU BOULOT — Barbie Horse Game ──────────────────────────────────── */
+.auboulot-modal {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 600px;
+    z-index: 20000;
+    background: #000;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    overflow: hidden;
+}
+.auboulot-modal.hidden { display: none; }
+
+.auboulot-screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.auboulot-screen.hidden { display: none; }
+
+/* Menu + Game Over */
+@keyframes bgPulse {
+    0%   { transform: scale(1);    filter: brightness(0.45); }
+    25%  { transform: scale(1.03); filter: brightness(0.50); }
+    100% { transform: scale(1);    filter: brightness(0.45); }
+}
+.auboulot-menu-bg {
+    position: absolute;
+    inset: -10%;
+    background: url('medias/barbie_background.png') center / cover no-repeat;
+    filter: brightness(0.45);
+    animation: bgPulse 0.45s cubic-bezier(0.25, 0, 0.6, 1) infinite;
+    transform-origin: center;
+}
+.auboulot-menu-bg.auboulot-bg--paused {
+    animation-play-state: paused;
+}
+.auboulot-ruban {
+    position: absolute;
+    width: 420px;
+    z-index: 10;
+    pointer-events: none;
+}
+.auboulot-ruban--tl {
+    top: -100px;
+    right: -100px;
+    transform: rotate(45deg);
+    transform-origin: center;
+}
+.auboulot-ruban--br {
+    bottom: -100px;
+    left: -100px;
+    transform: rotate(45deg);
+    transform-origin: center;
+}
+.auboulot-menu-inner {
+    width: 100%;
+    position: relative;
+    margin-left: 20px;
+    margin-right: 20px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 40px 28px;
+    text-align: center;
+}
+.auboulot-menu-logo {
+    width: 80%;
+    max-width: 380px;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+.auboulot-menu-scores {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 420px;
+}
+.auboulot-menu-score-box {
+    flex: 1;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.75rem;
+    color: #ffd700;
+    text-align: center;
+    background: #3a1a2e;
+    outline: 3px solid #7a0040;
+    box-shadow: 3px 3px 0 #000;
+    padding: 8px 10px;
+}
+.auboulot-menu-score-target {
+    color: #ff9de2;
+    outline-color: #ff6ec7;
+}
+
+/* ── Animations ouverture menu ── */
+@keyframes menuFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes logoBounce {
+    0%   { transform: scale(0) rotate(-8deg); opacity: 0; }
+    55%  { transform: scale(1.18) rotate(4deg); opacity: 1; }
+    70%  { transform: scale(0.92) rotate(-2deg); }
+    82%  { transform: scale(1.10) rotate(1deg); }
+    91%  { transform: scale(0.97) rotate(0deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+.auboulot-menu--entering {
+    animation: menuFadeIn 0.5s ease forwards;
+}
+.auboulot-menu--entering .auboulot-menu-logo {
+    animation: logoBounce 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s both;
+}
+.auboulot-menu--entering .auboulot-menu-objectives,
+.auboulot-menu--entering .auboulot-menu-btns {
+    animation: menuFadeIn 0.5s ease 0.7s both;
+}
+.auboulot-menu-objectives {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.68rem;
+    color: #fff;
+    line-height: 2.4;
+    opacity: 0.92;
+    text-align: left;
+    padding-left: 18px;
+    margin: 0;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.auboulot-menu-objectives li {
+    padding-left: 6px;
+}
+.auboulot-over-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5rem;
+    color: #ff6ec7;
+    text-shadow: 0 0 16px #ff6ec7, 3px 3px 0 #9b0054;
+    line-height: 1.4;
+}
+.auboulot-results {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 480px;
+    margin: 8px 0;
+}
+.auboulot-result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.75rem;
+    color: #fff;
+    background: #3a1a2e;
+    border: none;
+    outline: 3px solid #000;
+    box-shadow: 4px 4px 0 #000, inset -2px -2px 0 #2a0a1e, inset 2px 2px 0 #5a2a4e;
+    padding: 12px 18px;
+    animation: auboulotRowIn 0.4s ease forwards;
+}
+.auboulot-result-row .auboulot-res-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.auboulot-result-row .auboulot-res-label img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+.auboulot-result-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.85rem;
+    color: #ff6ec7;
+    text-shadow: 0 0 10px #ff6ec7;
+    background: #5a1040;
+    border: none;
+    outline: 3px solid #ff6ec7;
+    box-shadow: 4px 4px 0 #7a0040, inset -2px -2px 0 #3a0020, inset 2px 2px 0 #7a2060;
+    padding: 14px 18px;
+    animation: auboulotRowIn 0.4s ease forwards;
+}
+.auboulot-result-best {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.6rem;
+    color: #ffd700;
+    text-align: center;
+    background: #3a2a00;
+    outline: 3px solid #ffd700;
+    box-shadow: 4px 4px 0 #7a6000;
+    padding: 10px 18px;
+    text-shadow: 0 0 8px #ffd700;
+    animation: auboulotRowIn 0.4s ease forwards;
+}
+.auboulot-result-target {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.6rem;
+    color: #ff9de2;
+    text-align: center;
+    background: #3a1a2e;
+    outline: 3px solid #ff6ec7;
+    box-shadow: 4px 4px 0 #7a0040;
+    padding: 10px 18px;
+    animation: auboulotRowIn 0.4s ease forwards;
+}
+.auboulot-result-challenge-won {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    color: #fff;
+    text-align: center;
+    background: linear-gradient(135deg, #ff6ec7, #ffb3e6);
+    outline: 3px solid #fff;
+    box-shadow: 4px 4px 0 #7a0040;
+    padding: 14px 18px;
+    text-shadow: 2px 2px 0 #7a0040;
+    animation: auboulotRowIn 0.4s ease forwards;
+}
+.auboulot-res-label { opacity: 0.92; }
+.auboulot-res-value { font-size: 1.3em; }
+.auboulot-res-hidden { display: none; }
+@keyframes auboulotRowIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.auboulot-menu-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 8px;
+    width: 100%;
+    max-width: 420px;
+}
+/* ── Style pixel art partagé ── */
+.auboulot-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.7rem;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    letter-spacing: 1px;
+    image-rendering: pixelated;
+    transition: transform 0.08s;
+    /* Bordure pixel art 3D */
+    outline: 3px solid #000;
+}
+.auboulot-btn:active { transform: translateY(3px); }
+.auboulot-btn-play {
+    background: #ff6ec7;
+    color: #fff;
+    box-shadow: 4px 4px 0 #7a0040, inset -2px -2px 0 #c0408a, inset 2px 2px 0 #ffaee0;
+}
+.auboulot-btn-play:hover { filter: brightness(1.08); }
+.auboulot-btn-play-big {
+    width: 100%;
+    padding: 20px 24px;
+    font-size: 0.85rem;
+}
+.auboulot-btn-quit {
+    background: #555;
+    color: #ddd;
+    box-shadow: 4px 4px 0 #111, inset -2px -2px 0 #333, inset 2px 2px 0 #888;
+}
+.auboulot-btn-quit:hover { filter: brightness(1.15); }
+.auboulot-btn-quit-wide {
+    width: 100%;
+}
+.auboulot-btn-makeup {
+    background: #b450b4;
+    color: #fff;
+    box-shadow: 4px 4px 0 #4a004a, inset -2px -2px 0 #7a2080, inset 2px 2px 0 #e080e0;
+    animation: makeupPulse 0.9s ease-in-out infinite alternate;
+}
+.auboulot-btn-makeup:hover { filter: brightness(1.1); }
+.auboulot-btn-makeup-disabled {
+    background: #555 !important;
+    color: rgba(255,255,255,0.3) !important;
+    box-shadow: 2px 2px 0 #222 !important;
+    animation: none !important;
+    cursor: not-allowed !important;
+}
+@keyframes makeupPulse {
+    from { transform: scale(1); }
+    to   { transform: scale(1.04); }
+}
+
+/* HUD box (vies + scores) dans la barre bas */
+.auboulot-hud-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #3a1a2e;
+    border: 3px solid #000;
+    box-shadow: 3px 3px 0 #000, inset 1px 1px 0 rgba(255,255,255,0.15);
+    padding: 8px 12px;
+    flex: 0 0 auto;
+    align-self: flex-start;
+    image-rendering: pixelated;
+}
+.auboulot-lives {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+.auboulot-heart-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+.auboulot-hud-scores {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: stretch;
+}
+.auboulot-score-richesse {
+    font-size: 1.2rem !important;
+}
+.auboulot-beaute-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.auboulot-job-row {
+    width: 100%;
+    margin-top: 2px;
+}
+.auboulot-job {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.65rem;
+    color: #ffb3e6;
+    text-shadow: 1px 1px 0 #000;
+    white-space: nowrap;
+}
+.auboulot-job--chomage {
+    color: #aaa;
+    text-decoration: line-through;
+}
+.auboulot-beaute-bar {
+    position: relative;
+    flex: 1;
+    height: 18px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 9px;
+    border: 1px solid rgba(255,255,255,0.4);
+    overflow: hidden;
+    min-width: 90px;
+}
+.auboulot-beaute-fill {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    background: linear-gradient(90deg, #ff6ec7, #ff9de2);
+    border-radius: 9px;
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+.auboulot-beaute-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.55rem;
+    color: #fff;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.6);
+    z-index: 1;
+}
+.auboulot-score-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.85rem;
+    color: #fff;
+    text-shadow: 1px 1px 0 #000;
+}
+.auboulot-hud-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+/* Score distance — centré en haut */
+.auboulot-jump-score {
+    position: absolute;
+    width: 100px;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    gap: 6px;
+    background: #3a1a2e;
+    border: 3px solid #000;
+    box-shadow: 3px 3px 0 #000;
+    padding: 6px 10px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.85rem;
+    color: #fff;
+    text-shadow: 1px 1px 0 #000;
+    image-rendering: pixelated;
+}
+.auboulot-jump-score img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+/* Fond en jeu (comme menu mais sans filtre) */
+.auboulot-game-bg {
+    position: absolute;
+    inset: 0;
+    background: url('medias/barbie_background.png') center / cover no-repeat;
+}
+
+/* Canvas */
+.auboulot-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+}
+
+/* Barre bas (hud-box + boutons) */
+.auboulot-bottom-bar {
+    max-width: 500px !important;
+    position: fixed;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    z-index: 3;
+    display: flex;
+    gap: 10px;
+}
+.auboulot-action-col {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    flex-shrink: 0;
+    align-self: stretch;
+}
+
+#auboulot-res-best-row {
+    margin-top: 20px;
+}
+
+.auboulot-action-col .auboulot-btn,
+.auboulot-action-col .auboulot-jump-btn {
+    flex: 1;
+    width: 100%;
+}
+
+/* Bulle de dialogue — sous le score */
+.auboulot-bubble {
+    position: absolute;
+    top: 72px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    background: #fff;
+    color: #333;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem;
+    line-height: 1.6;
+    padding: 10px 16px;
+    border-radius: 0;
+    border: none;
+    outline: 3px solid #000;
+    max-width: 80%;
+    text-align: center;
+    box-shadow: 4px 4px 0 #000, inset -2px -2px 0 #ddd, inset 2px 2px 0 #fff;
+    transition: opacity 0.3s, transform 0.3s;
+    white-space: nowrap;
+}
+.auboulot-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 20%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 10px;
+    background: #fff;
+    outline: 3px solid #000;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.auboulot-bubble-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(6px);
+}
+
+/* ── Overlay question Pascal ── */
+@keyframes pascalPanelIn {
+    0%   { opacity: 0; transform: scale(0.7) translateY(30px); }
+    60%  { opacity: 1; transform: scale(1.04) translateY(-6px); }
+    80%  { transform: scale(0.97) translateY(2px); }
+    100% { transform: scale(1) translateY(0); }
+}
+@keyframes pascalImgPop {
+    0%   { opacity: 0; transform: scale(0) rotate(-15deg); }
+    55%  { opacity: 1; transform: scale(1.25) rotate(6deg); }
+    70%  { transform: scale(0.9) rotate(-3deg); }
+    84%  { transform: scale(1.1) rotate(2deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+@keyframes pascalBackdropIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+.auboulot-pascal-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.auboulot-pascal-overlay.hidden { display: none; }
+.auboulot-pascal-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: rgba(10, 0, 10, 0.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    animation: pascalBackdropIn 0.3s ease forwards;
+}
+.auboulot-pascal-panel {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    width: 88%;
+    max-width: 400px;
+    background: #2a0a20;
+    outline: 3px solid #ff6ec7;
+    box-shadow: 6px 6px 0 #000, inset -2px -2px 0 #1a0010, inset 2px 2px 0 #4a1a3a;
+    padding: 24px 28px 28px;
+    animation: pascalPanelIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.auboulot-pascal-img {
+    width: 200px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    position: absolute;
+    z-index: 1;
+    bottom: 50%;
+    right: 15%;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+    transform-origin: bottom center;
+    animation: pascalImgPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s both;
+}
+.auboulot-pascal-timer-bar {
+    width: 100%;
+    height: 8px;
+    background: #3a1a2e;
+    outline: 2px solid #000;
+}
+.auboulot-pascal-timer-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6ec7, #ffb3e6);
+    transform-origin: left;
+    transition: transform 0.1s linear;
+}
+.auboulot-pascal-question {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem;
+    color: #fff;
+    text-align: center;
+    line-height: 1.5;
+}
+.auboulot-pascal-answers {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+.auboulot-pascal-ans-btn {
+    flex: 1;
+    font-size: 0.8rem;
+    padding: 12px 8px;
+    background: #ff6ec7;
+    color: #fff;
+    box-shadow: 4px 4px 0 #7a0040, inset -2px -2px 0 #c0408a, inset 2px 2px 0 #ffaee0;
+}
+.auboulot-pascal-ans-btn:hover { filter: brightness(1.08); }
+.auboulot-pascal-ans-btn:hover { filter: brightness(1.2); }
+.auboulot-pascal-ans-btn.correct {
+    background: #1a5a1a;
+    outline-color: #4cff4c;
+    box-shadow: 3px 3px 0 #000, inset 2px 2px 0 #2a8a2a;
+}
+.auboulot-pascal-ans-btn.wrong {
+    background: #5a1a1a;
+    outline-color: #ff4c4c;
+    box-shadow: 3px 3px 0 #000, inset 2px 2px 0 #8a2a2a;
+}
+
+/* Bouton sauter */
+.auboulot-jump-btn {
+    flex-shrink: 0;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.7rem;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    transition: transform 0.08s, box-shadow 0.08s;
+    outline: 3px solid #000;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    background: #ff6ec7;
+    color: #fff;
+    box-shadow: 4px 4px 0 #7a0040, inset -2px -2px 0 #c0408a, inset 2px 2px 0 #ffaee0;
+}
+.auboulot-jump-btn:hover { filter: brightness(1.08); }
+.auboulot-jump-btn:active {
+    transform: translateY(3px);
+    box-shadow: 1px 1px 0 #7a0040, inset -2px -2px 0 #c0408a, inset 2px 2px 0 #ffaee0;
+}
+
+/* ── Bouton Didacticiel ── */
+.auboulot-btn-tuto {
+    background: #ffd700;
+    color: #4a2800;
+    box-shadow: 4px 4px 0 #7a6000, inset -2px -2px 0 #c0a000, inset 2px 2px 0 #ffe880;
+}
+.auboulot-btn-tuto:hover { filter: brightness(1.08); }
+
+/* ── Infobulle tutoriel ── */
+.auboulot-tuto-box {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 6;
+    width: 90%;
+    max-width: 500px;
+    background: rgba(20, 0, 30, 0.94);
+    outline: 3px solid #ffd700;
+    box-shadow: 4px 4px 0 #000, inset 2px 2px 0 rgba(255,255,255,0.05);
+    padding: 18px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+.auboulot-tuto-box.hidden { display: none; }
+#auboulot-tuto-text {
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.78rem;
+    color: #fff;
+    text-align: center;
+    line-height: 1.65;
+    white-space: normal;
+}
+#auboulot-tuto-next {
+    padding: 10px 28px;
+    font-size: 0.72rem;
+}

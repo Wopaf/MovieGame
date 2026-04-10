@@ -7,7 +7,7 @@
     <link rel="icon" href="medias/fav.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Jim+Nightshade&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Jim+Nightshade&family=Fredoka+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="splash-active">
@@ -435,73 +435,6 @@
         </div>
     </div>
 
-    <!-- Modal Au Boulot — Jeu Barbie à cheval -->
-    <div id="modal-auboulot" class="auboulot-modal hidden">
-        <!-- MENU -->
-        <div id="auboulot-menu" class="auboulot-screen">
-            <div class="auboulot-menu-bg"></div>
-            <div class="auboulot-menu-inner">
-                <img src="medias/barbie_logo.png" class="auboulot-menu-logo" alt="Au Boulot !">
-                <h1 class="auboulot-menu-title">AU BOULOT !</h1>
-                <p class="auboulot-menu-sub">Barbie à cheval<br>Évite les obstacles !</p>
-                <div class="auboulot-menu-btns">
-                    <button id="auboulot-play-btn" class="auboulot-btn auboulot-btn-play">▶ JOUER</button>
-                    <button id="auboulot-quit-btn" class="auboulot-btn auboulot-btn-quit">✕ QUITTER</button>
-                </div>
-            </div>
-        </div>
-        <!-- JEU -->
-        <div id="auboulot-game" class="auboulot-screen hidden">
-            <div class="auboulot-game-bg"></div>
-            <!-- Bulle de dialogue en haut -->
-            <div id="auboulot-bubble" class="auboulot-bubble auboulot-bubble-hidden"></div>
-            <canvas id="auboulot-canvas" class="auboulot-canvas"></canvas>
-            <!-- Barre bas : vies + scores + bouton -->
-            <div class="auboulot-bottom-bar">
-                <div class="auboulot-hud-box">
-                    <div class="auboulot-lives" id="auboulot-lives"></div>
-                    <div class="auboulot-hud-scores">
-                        <div class="auboulot-score-box">🏇 <span id="auboulot-score">0</span></div>
-                        <div class="auboulot-score-box"><img src="medias/liasse.png" class="auboulot-hud-icon"> <span id="auboulot-richesse">0</span></div>
-                        <div class="auboulot-score-box"><img src="medias/fonddeteint.png" class="auboulot-hud-icon"> <span id="auboulot-beaute">100</span></div>
-                    </div>
-                </div>
-                <button id="auboulot-jump-btn" class="auboulot-jump-btn">SAUTER</button>
-            </div>
-        </div>
-        <!-- GAME OVER -->
-        <div id="auboulot-gameover" class="auboulot-screen hidden">
-            <div class="auboulot-menu-bg"></div>
-            <div class="auboulot-menu-inner">
-                <h2 class="auboulot-over-title">GAME OVER</h2>
-                <div class="auboulot-results">
-                    <div class="auboulot-result-row" id="auboulot-res-obstacles">
-                        <span class="auboulot-res-label">🏇 OBSTACLES</span>
-                        <span class="auboulot-res-value" id="auboulot-res-score">0</span>
-                    </div>
-                    <div class="auboulot-result-row auboulot-res-hidden" id="auboulot-res-rich-row">
-                        <span class="auboulot-res-label">💰 × RICHESSE</span>
-                        <span class="auboulot-res-value" id="auboulot-res-richval">0</span>
-                    </div>
-                    <div class="auboulot-result-row auboulot-res-hidden" id="auboulot-res-beau-row">
-                        <span class="auboulot-res-label">💄 ÷ BEAUTÉ</span>
-                        <span class="auboulot-res-value" id="auboulot-res-beauval">100</span>
-                    </div>
-                    <div class="auboulot-result-total auboulot-res-hidden" id="auboulot-res-total-row">
-                        <span class="auboulot-res-label">✨ TOTAL</span>
-                        <span class="auboulot-res-value" id="auboulot-res-totalval">0</span>
-                    </div>
-                    <div class="auboulot-result-best auboulot-res-hidden" id="auboulot-res-best-row">
-                        🏆 MEILLEUR : <span id="auboulot-best-val">0</span>
-                    </div>
-                </div>
-                <div class="auboulot-menu-btns auboulot-res-hidden" id="auboulot-over-btns">
-                    <button id="auboulot-retry-btn" class="auboulot-btn auboulot-btn-play">↺ REJOUER</button>
-                    <button id="auboulot-menu-btn" class="auboulot-btn auboulot-btn-quit">☰ MENU</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Modal Jumanji — Piège de la jungle -->
     <div id="modal-jumanji" class="jumanji-modal hidden">

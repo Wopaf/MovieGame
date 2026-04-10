@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Au Boulot ! — Barbie Sarah Passion Cheval</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="barbie-styles.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+    </style>
+</head>
+<body>
+
+    <!-- Modal Au Boulot — visible par défaut en mode standalone -->
+    <div id="modal-auboulot" class="auboulot-modal">
+        <!-- MENU -->
+        <div id="auboulot-menu" class="auboulot-screen">
+            <div class="auboulot-menu-bg"></div>
+            <img src="medias/barbie_ruban.png" class="auboulot-ruban auboulot-ruban--tl" alt="">
+            <img src="medias/barbie_ruban.png" class="auboulot-ruban auboulot-ruban--br" alt="">
+            <div class="auboulot-menu-inner">
+                <img src="medias/barbie_logo.png" class="auboulot-menu-logo" alt="Au Boulot !">
+                <div class="auboulot-menu-scores">
+                    <div class="auboulot-menu-score-box">
+                        🏆 MEILLEUR : <span id="auboulot-menu-best">—</span>
+                    </div>
+                    <div class="auboulot-menu-score-box auboulot-menu-score-target">
+                        🎯 À BATTRE : <span id="auboulot-menu-target">0</span>
+                    </div>
+                </div>
+                <ol class="auboulot-menu-objectives">
+                    <li>Saute chaque obstacle pour devenir une championne de cheval</li>
+                    <li>Récupère des objets de valeur pour augmenter ton niveau de richesse</li>
+                    <li>Pense à te maquiller régulièrement pour être la reine que tu penses être</li>
+                </ol>
+                <div class="auboulot-menu-btns">
+                    <button id="auboulot-tuto-btn" class="auboulot-btn auboulot-btn-tuto auboulot-btn-play-big">? DIDACTICIEL</button>
+                    <button id="auboulot-play-btn" class="auboulot-btn auboulot-btn-play auboulot-btn-play-big">▶ JOUER</button>
+                    <button id="auboulot-quit-btn" class="auboulot-btn auboulot-btn-quit auboulot-btn-quit-wide">✕ QUITTER</button>
+                </div>
+            </div>
+        </div>
+        <!-- JEU -->
+        <div id="auboulot-game" class="auboulot-screen hidden">
+            <div class="auboulot-game-bg"></div>
+            <!-- Score sauts — coin haut gauche -->
+            <div class="auboulot-jump-score">
+                <img src="medias/barbie_jump.png" class="auboulot-hud-icon">
+                <span id="auboulot-score">0</span>
+            </div>
+            <!-- Bulle de dialogue en haut -->
+            <div id="auboulot-bubble" class="auboulot-bubble auboulot-bubble-hidden"></div>
+            <!-- Overlay question Pascal -->
+            <div id="auboulot-pascal-overlay" class="auboulot-pascal-overlay hidden">
+                <div class="auboulot-pascal-backdrop"></div>
+                <img src="medias/barbie_pascal2.png" class="auboulot-pascal-img" alt="Pascal">
+                <div class="auboulot-pascal-panel">
+                    <div class="auboulot-pascal-timer-bar"><div id="auboulot-pascal-timer-fill" class="auboulot-pascal-timer-fill"></div></div>
+                    <div id="auboulot-pascal-question" class="auboulot-pascal-question"></div>
+                    <div class="auboulot-pascal-answers">
+                        <button id="auboulot-pascal-ans1" class="auboulot-btn auboulot-pascal-ans-btn"></button>
+                        <button id="auboulot-pascal-ans2" class="auboulot-btn auboulot-pascal-ans-btn"></button>
+                    </div>
+                </div>
+            </div>
+            <!-- Infobulle tutoriel -->
+            <div id="auboulot-tuto-box" class="auboulot-tuto-box hidden">
+                <p id="auboulot-tuto-text"></p>
+                <button id="auboulot-tuto-next" class="auboulot-btn auboulot-btn-play">SUIVANT →</button>
+            </div>
+            <canvas id="auboulot-canvas" class="auboulot-canvas"></canvas>
+            <!-- Barre bas : vies + scores + bouton -->
+            <div class="auboulot-bottom-bar">
+                <div class="auboulot-hud-box">
+                    <div class="auboulot-lives" id="auboulot-lives"></div>
+                    <div class="auboulot-hud-scores">
+                        <div class="auboulot-score-box auboulot-score-richesse"><img src="medias/liasse.png" class="auboulot-hud-icon"> <span id="auboulot-richesse">0</span></div>
+                        <div class="auboulot-beaute-bar-wrap">
+                            <img src="medias/fonddeteint.png" class="auboulot-hud-icon">
+                            <div class="auboulot-beaute-bar">
+                                <div class="auboulot-beaute-fill" id="auboulot-beaute-fill"></div>
+                                <span class="auboulot-beaute-label" id="auboulot-beaute">100</span>
+                            </div>
+                        </div>
+                        <div class="auboulot-job-row">
+                            <span class="auboulot-job" id="auboulot-job">Job : Chroniqueuse</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="auboulot-action-col">
+                    <button id="auboulot-makeup-btn" class="auboulot-btn auboulot-btn-makeup auboulot-btn-makeup-disabled" disabled>SE MAQUILLER</button>
+                    <button id="auboulot-jump-btn" class="auboulot-jump-btn">SAUTER</button>
+                </div>
+            </div>
+        </div>
+        <!-- GAME OVER -->
+        <div id="auboulot-gameover" class="auboulot-screen hidden">
+            <div class="auboulot-menu-bg"></div>
+            <img src="medias/barbie_ruban.png" class="auboulot-ruban auboulot-ruban--tl" alt="">
+            <img src="medias/barbie_ruban.png" class="auboulot-ruban auboulot-ruban--br" alt="">
+            <div class="auboulot-menu-inner">
+                <h2 class="auboulot-over-title">GAME OVER</h2>
+                <div class="auboulot-results">
+                    <div class="auboulot-result-row" id="auboulot-res-obstacles">
+                        <span class="auboulot-res-label"><img src="medias/barbie_jump.png" alt="">DISTANCE</span>
+                        <span class="auboulot-res-value" id="auboulot-res-score">0</span>
+                    </div>
+                    <div class="auboulot-result-row auboulot-res-hidden" id="auboulot-res-rich-row">
+                        <span class="auboulot-res-label"><img src="medias/liasse.png" alt="">× RICHESSE</span>
+                        <span class="auboulot-res-value" id="auboulot-res-richval">0</span>
+                    </div>
+                    <div class="auboulot-result-row auboulot-res-hidden" id="auboulot-res-beau-row">
+                        <span class="auboulot-res-label"><img src="medias/fonddeteint.png" alt="">÷ BEAUTÉ</span>
+                        <span class="auboulot-res-value" id="auboulot-res-beauval">100</span>
+                    </div>
+                    <div class="auboulot-result-total auboulot-res-hidden" id="auboulot-res-total-row">
+                        <span class="auboulot-res-label">✨ TOTAL</span>
+                        <span class="auboulot-res-value" id="auboulot-res-totalval">0</span>
+                    </div>
+                    <div class="auboulot-result-best auboulot-res-hidden" id="auboulot-res-best-row">
+                        🏆 MEILLEUR : <span id="auboulot-best-val">0</span>
+                    </div>
+                    <div class="auboulot-result-target auboulot-res-hidden" id="auboulot-res-target-row">
+                        🎯 SCORE À BATTRE : <span id="auboulot-target-val">0</span>
+                    </div>
+                    <div class="auboulot-result-challenge-won auboulot-res-hidden" id="auboulot-res-challenge-row">
+                        🎉 DÉFI RELEVÉ !
+                    </div>
+                </div>
+                <div class="auboulot-menu-btns auboulot-res-hidden" id="auboulot-over-btns">
+                    <button id="auboulot-retry-btn" class="auboulot-btn auboulot-btn-play">↺ REJOUER</button>
+                    <button id="auboulot-menu-btn" class="auboulot-btn auboulot-btn-quit">☰ MENU</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+    <script>
+        // ── Firebase init ──
+        const FIREBASE_CONFIG = {
+            apiKey: "AIzaSyBsjr0peOj1jFPhAA080MWuUGlyYapjxn0",
+            authDomain: "moviegame-1b838.firebaseapp.com",
+            databaseURL: "https://moviegame-1b838-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "moviegame-1b838",
+            storageBucket: "moviegame-1b838.firebasestorage.app",
+            messagingSenderId: "448540908211",
+            appId: "1:448540908211:web:894cb1e8c38d59c4a9eec6"
+        };
+        firebase.initializeApp(FIREBASE_CONFIG);
+        const db = firebase.database();
+
+        // ── Validated (Firebase) ──
+        let cachedValidated = [];
+        db.ref('game/validated').on('value', snap => {
+            cachedValidated = snap.val() || [];
+        });
+        function getValidated() { return cachedValidated; }
+        function saveValidated(arr) {
+            cachedValidated = arr;
+            db.ref('game/validated').set(arr.length ? arr : null);
+        }
+        // En mode standalone, "quitter" recharge simplement la page
+        function buildGrid() {}
+        function setMenuVisible(v) {
+            if (v) location.href = 'index.html';
+        }
+    </script>
+
+    <!-- Jeu Barbie -->
+    <script src="barbie-script.js" charset="UTF-8"></script>
+
+    <script>
+        // Ouvre le jeu automatiquement au chargement
+        BARBIE_GAME.open();
+    </script>
+
+</body>
+</html>
