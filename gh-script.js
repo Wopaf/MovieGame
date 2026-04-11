@@ -24,7 +24,7 @@ const validatedRef = db.ref('game/validated');
 
 // ── SEUIL DE DÉFI ─────────────────────────────────────────────────────────────
 // Dépasser ce score valide le défi Tenacious D (index 8 dans ACHIEVEMENTS)
-const SCORE_UNLOCK_THRESHOLD = 100000;
+const SCORE_UNLOCK_THRESHOLD = 250000;
 const TENACIOUS_INDEX = 8;
 
 // ── BOUTON ENREGISTRER ────────────────────────────────────────────────────────
@@ -786,11 +786,19 @@ function fadeTransition(callback) {
     }, { once: true });
 }
 
+document.getElementById('gh-splash-btn').addEventListener('click', () => {
+    document.getElementById('gh-splash').classList.add('hidden');
+    menuAudio.currentTime = 0;
+    menuAudio.play().catch(() => {});
+});
+
 document.getElementById('btn-start').addEventListener('click', () => fadeTransition(startGame));
 document.getElementById('btn-retry').addEventListener('click', () => fadeTransition(startGame));
 document.getElementById('btn-back-menu').addEventListener('click', () => {
     screenResult.classList.add('hidden');
     screenStart.classList.remove('hidden'); screenStart.classList.add('active');
+    menuAudio.currentTime = 0;
+    menuAudio.play().catch(() => {});
     drawFlames();
 });
 document.getElementById('btn-quit').addEventListener('click', () => {
@@ -806,6 +814,8 @@ document.getElementById('btn-back-start').addEventListener('click', () => {
 });
 
 function startGame() {
+    menuAudio.pause();
+    menuAudio.currentTime = 0;
     screenStart.classList.add('hidden'); screenStart.classList.remove('active'); screenResult.classList.add('hidden');
     screenGame.classList.remove('hidden');
     initNotes(); pressedLanes.fill(false); heldNotes.fill(null); particles.length = 0; hitFlashes.length = 0; hitTexts.length = 0;
@@ -839,11 +849,13 @@ function endGame() {
     saveBestScore(score);
     screenGame.classList.add('hidden'); screenResult.classList.remove('hidden');
     const pct = totalNotes > 0 ? Math.round((hitNotes / totalNotes) * 100) : 0;
-    document.getElementById('res-score').textContent = score.toLocaleString('fr');
-    document.getElementById('res-combo').textContent = maxCombo;
-    document.getElementById('res-pct').textContent   = pct + '%';
-    document.getElementById('result-grade').textContent =
+    document.getElementById('res-score').textContent      = score.toLocaleString('fr');
+    document.getElementById('res-combo').textContent      = maxCombo;
+    document.getElementById('res-pct').textContent        = pct + '%';
+    document.getElementById('result-grade').textContent   =
         pct >= 95 ? 'S' : pct >= 85 ? 'A' : pct >= 70 ? 'B' : pct >= 50 ? 'C' : 'D';
+    document.getElementById('res-target-val').textContent = SCORE_UNLOCK_THRESHOLD.toLocaleString('fr');
+    document.getElementById('result-challenge-won').classList.toggle('hidden', score < SCORE_UNLOCK_THRESHOLD);
 }
 
 // ── RECORD MODE ───────────────────────────────────────────────────────────────

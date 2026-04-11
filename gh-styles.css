@@ -1,5 +1,63 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ── SPLASH ────────────────────────────────────────────────────────────────── */
+.gh-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: radial-gradient(ellipse at 50% 60%, #2a0000 0%, #0a0000 70%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 56px;
+}
+.gh-splash.hidden { display: none; }
+.gh-splash-title {
+    font-family: 'Metal Mania', 'MedievalSharp', 'Arial Black', Arial, sans-serif;
+    font-size: clamp(44px, 11vw, 88px);
+    font-weight: 400;
+    line-height: 1.1;
+    text-align: center;
+    letter-spacing: 3px;
+    background: linear-gradient(180deg, #ff7700 0%, #cc1100 60%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px rgba(255, 60, 0, 0.7));
+    animation: ghSplashIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+.gh-splash-hero {
+    font-size: 0.55em;
+    letter-spacing: 14px;
+    background: linear-gradient(180deg, #fff 0%, #ffbbaa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.gh-splash-btn {
+    font-family: 'Metal Mania', 'MedievalSharp', Arial, sans-serif;
+    font-size: 18px;
+    letter-spacing: 4px;
+    padding: 18px 56px;
+    background: transparent;
+    color: #ff7700;
+    border: 2px solid #cc4400;
+    box-shadow: 0 0 20px rgba(255, 80, 0, 0.4), inset 0 0 12px rgba(255, 40, 0, 0.1);
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: box-shadow 0.15s, color 0.15s;
+    animation: ghSplashIn 0.6s ease 0.5s both;
+}
+.gh-splash-btn:hover {
+    color: #ffaa44;
+    box-shadow: 0 0 32px rgba(255, 100, 0, 0.7), inset 0 0 16px rgba(255, 60, 0, 0.2);
+}
+@keyframes ghSplashIn {
+    from { opacity: 0; transform: scale(0.85) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
 :root {
     --lane-0: #ff1a00;
     --lane-1: #ffbf00;
@@ -438,3 +496,17 @@ kbd {
 .result-stat { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .stat-val { font-size: 28px; font-weight: 900; color: #ffddcc; }
 .stat-label { font-size: 10px; letter-spacing: 3px; color: #6a2222; }
+.result-threshold-row {
+    display: flex; gap: 12px; align-items: center;
+    font-size: 11px; letter-spacing: 3px; color: #663333; text-transform: uppercase;
+}
+.result-threshold-val { color: #cc4400; font-size: 15px; font-weight: 900; }
+.result-challenge-won {
+    font-family: 'Metal Mania', 'MedievalSharp', Arial, sans-serif;
+    font-size: 18px; letter-spacing: 4px;
+    color: #ff7700;
+    text-shadow: 0 0 20px rgba(255,80,0,0.9);
+    border: 2px solid #cc4400;
+    padding: 10px 20px;
+}
+.result-challenge-won.hidden { display: none; }

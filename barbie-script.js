@@ -2,7 +2,7 @@
 //  MODAL AU BOULOT — Jeu Barbie à cheval
 // ============================================================
 const AU_BOULOT_INDEX = 27;
-const TARGET_SCORE    = 1000; // Score à battre pour valider le défi
+const TARGET_SCORE    = 100000; // Score à battre pour valider le défi
 
 // ── Questions Pascal (éditable librement) ──
 const PASCAL_QUESTIONS = [
@@ -18,17 +18,32 @@ const PASCAL_QUESTIONS = [
     { question: "C'est quoi la vérité ?",
     answers: ["la vérité", "ma vérité"], correct: 1, },
 
-    { question: "Trump il est ...",
+    { question: "Danold Trumb il est ...",
     answers: ["Viril", "Grossier"], correct: 0, },
 
     { question: "Les Schtroumpfs sont ...",
     answers: ["Une richesse", "Un problème"], correct: 1, },
 
     { question: "La france c'est ...",
-    answers: ["Paté et couscous", "Fromage et Paté"], correct: 0, },
+    answers: ["Paté et couscous", "Fromage et Paté"], correct: 1, },
 
     { question: "Mais oui enfin ! Mais oui !",
     answers: ["Hmm ...", "Mais oui Pascal !"], correct: 1, },
+
+    { question: "Dans le Rap il y a trop de ...",
+    answers: ["Wesh yoh la drogue", "Blanc"], correct: 0, },
+
+    { question: "J'invite trop souvent Bardelini ?",
+    answers: ["Oui trop !", "Mais non enfin !"], correct: 1, },
+
+    { question: "Je respect toujours le plurisme non ?",
+    answers: ["Oui Pascal !", "Pas toujours ..."], correct: 0, },
+
+    { question: "Une fois j'ai embrassé ma soeur.",
+    answers: ["Ok !", "C'est déguelasse !"], correct: 0, },
+
+    { question: "Qui est votre chanteur préféré ?",
+    answers: ["Manuel Ciao", "Michel Sardoche"], correct: 1, },
 ];
 
 const TUTORIAL_STEPS = [
@@ -121,9 +136,9 @@ const COLL_Y_OFFSET    = -0.10;    // décalage hauteur collectibles depuis le p
     const DIALOGUES = [
         "Oh mince alors !",
         "Je suis vraiment cloche !",
-        "Hmm rien ne peut me détourner de mes objectifs",
+        "Rien ne peut me détourner de mes objectifs",
         "Houlala j'ai failli me faire super mal !",
-        "Si je continue comme ça, je risque de perdre tout héritage",
+        "Je risque de perdre tout héritage !",
         "Aïe !",
         "Flûte !",
     ];
@@ -951,14 +966,18 @@ const COLL_Y_OFFSET    = -0.10;    // décalage hauteur collectibles depuis le p
 
     function showMenuWithAnim() {
         const menu = document.getElementById('auboulot-menu');
+        const logo = menu.querySelector('.auboulot-menu-logo');
         menu.classList.remove('hidden');
         menu.classList.remove('auboulot-menu--entering');
-        // Force reflow pour relancer l'animation
+        logo.classList.remove('auboulot-logo-loop');
         void menu.offsetWidth;
         menu.classList.add('auboulot-menu--entering');
-        menu.addEventListener('animationend', () => {
-            menu.classList.remove('auboulot-menu--entering');
+        // Retire la classe d'entrée sur la fin de l'animation du menu uniquement
+        menu.addEventListener('animationend', (e) => {
+            if (e.target === menu) menu.classList.remove('auboulot-menu--entering');
         }, { once: true });
+        // Lance la boucle après la fin du bounce initial (delay 0.25s + durée 0.9s)
+        setTimeout(() => logo.classList.add('auboulot-logo-loop'), 1200);
     }
 
     function openModal() {
@@ -966,14 +985,6 @@ const COLL_Y_OFFSET    = -0.10;    // décalage hauteur collectibles depuis le p
         modal.classList.remove('hidden');
         document.getElementById('auboulot-game').classList.add('hidden');
         document.getElementById('auboulot-gameover').classList.add('hidden');
-        sndSoundtrack.currentTime = 0;
-        sndSoundtrack.play().catch(() => {
-            const startOnGesture = () => {
-                sndSoundtrack.play().catch(() => {});
-                document.removeEventListener('pointerdown', startOnGesture);
-            };
-            document.addEventListener('pointerdown', startOnGesture);
-        });
         showMenuWithAnim();
         setBgPulse(true);
         // Affiche meilleur score + cible dans le menu
@@ -1014,9 +1025,14 @@ const COLL_Y_OFFSET    = -0.10;    // décalage hauteur collectibles depuis le p
         });
     }
 
-    document.getElementById('auboulot-tuto-btn').addEventListener('click', () => {
+    document.getElementById('barbie-splash-btn').addEventListener('click', () => {
+        document.getElementById('barbie-splash').classList.add('hidden');
         sndSoundtrack.currentTime = 0;
         sndSoundtrack.play().catch(() => {});
+    });
+
+    document.getElementById('auboulot-tuto-btn').addEventListener('click', () => {
+        if (sndSoundtrack.paused) { sndSoundtrack.currentTime = 0; sndSoundtrack.play().catch(() => {}); }
         startTutorial();
     });
 
@@ -1029,8 +1045,7 @@ const COLL_Y_OFFSET    = -0.10;    // décalage hauteur collectibles depuis le p
         document.getElementById('auboulot-gameover').classList.add('hidden');
         document.getElementById('auboulot-game').classList.remove('hidden');
         setBgPulse(false);
-        sndSoundtrack.currentTime = 0;
-        sndSoundtrack.play().catch(() => {});
+        if (sndSoundtrack.paused) { sndSoundtrack.currentTime = 0; sndSoundtrack.play().catch(() => {}); }
         requestAnimationFrame(() => startGame());
     });
 
@@ -1047,8 +1062,7 @@ const COLL_Y_OFFSET    = -0.10;    // décalage hauteur collectibles depuis le p
         document.getElementById('auboulot-gameover').classList.add('hidden');
         document.getElementById('auboulot-game').classList.remove('hidden');
         setBgPulse(false);
-        sndSoundtrack.currentTime = 0;
-        sndSoundtrack.play().catch(() => {});
+        if (sndSoundtrack.paused) { sndSoundtrack.currentTime = 0; sndSoundtrack.play().catch(() => {}); }
         requestAnimationFrame(() => startGame());
     });
 

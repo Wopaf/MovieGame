@@ -14,6 +14,12 @@
 </head>
 <body>
 <div id="app">
+    <!-- SPLASH -->
+    <div id="gh-splash" class="gh-splash">
+        <h1 class="gh-splash-title">MASTER<br>EXPLODER<br><span class="gh-splash-hero">HERO</span></h1>
+        <button id="gh-splash-btn" class="gh-splash-btn">COMMENCER</button>
+    </div>
+
     <div id="screen-start" class="screen active">
         <canvas id="flame-canvas"></canvas>
         <div class="start-content">
@@ -99,6 +105,11 @@
                 <div class="result-stat"><span class="stat-val" id="res-combo">0</span><span class="stat-label">COMBO MAX</span></div>
                 <div class="result-stat"><span class="stat-val" id="res-pct">0%</span><span class="stat-label">PRÉCISION</span></div>
             </div>
+            <div class="result-threshold-row">
+                <span class="result-threshold-label">🎯 À BATTRE</span>
+                <span id="res-target-val" class="result-threshold-val">0</span>
+            </div>
+            <div id="result-challenge-won" class="result-challenge-won hidden">🎉 DÉFI RELEVÉ !</div>
             <button id="btn-retry" class="btn-start">REJOUER</button>
             <button id="btn-back-menu" class="btn-record">← RETOUR AU MENU</button>
         </div>

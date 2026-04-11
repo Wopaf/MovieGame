@@ -249,12 +249,13 @@ const GENRES = {
 const GENRE_DEFAULT_COLOR = "#90a4ae";
 
 function buildGenreTags(genres) {
+    const section = document.getElementById("info-genres-section");
     const row = document.getElementById("info-genres-row");
-    if (!genres || genres.length === 0) { row.classList.add("hidden"); return; }
+    if (!genres || genres.length === 0) { section.classList.add("hidden"); return; }
     row.innerHTML = genres.map(g => {
         return `<span class="genre-tag" style="color:${GENRE_DEFAULT_COLOR};border-color:${GENRE_DEFAULT_COLOR}50;background:${GENRE_DEFAULT_COLOR}25">${g}</span>`;
     }).join("");
-    row.classList.remove("hidden");
+    section.classList.remove("hidden");
 }
 
 const ACHIEVEMENTS = [
@@ -321,7 +322,7 @@ const ACHIEVEMENTS = [
     { title: "Oss 117", sousTitre: "Rio ne répond plus", img: "18.png", password: "9pZ", rebus: "medias/r13.png",
     question: "Comment appelez-vous un pays qui a comme dirigeant un militaire avec les pleins pouvoirs, une police secrète, une seule chaîne de télévision et que toute l'information est contrôlée par l'État ?", answer: "La France du general de gaulle",
     realisateur: "Michel Hazanavicius", description: "En 1967, OSS 117 est envoyé au Brésil pour récupérer un microfilm compromettant sur des anciens nazis, tout en semant le chaos comme à son habitude.",
-    genres: ["Comédie", "Espionnage", "Celui ci est tout aussi bien"], imdb: "https://www.imdb.com/title/tt1167660/", rating: "6.8", verrouille: false },
+    genres: ["Comédie", "Espionnage", "Tout aussi bien"], imdb: "https://www.imdb.com/title/tt1167660/", rating: "6.8", verrouille: false },
 
     { title: "La cité de la peur", img: "19.png", password: "2hK", rebus: "medias/r14.png",
     question: "Quel est le titre du film d'Odile Deray ?", answer: "Red is Dead",
@@ -417,12 +418,6 @@ const ACHIEVEMENTS = [
     genres: ["Comédie dramatique"],
     imdb: "https://www.imdb.com/fr/title/tt29927144/", rating: "7.0", verrouille: true },
 
-    { title: "Abysse", img: "15.png", password: "8rA", rebus: "medias/r36.png",
-    question: "Quel message Bud écrit-il sur son ardoise à sa femme alors qu'il manque d'oxygène au fond ?", answer: "Je t'aime",
-    realisateur: "James Cameron", description: "Une équipe de plongeurs est envoyée chercher un sous-marin nucléaire naufragé dans les abysses. Leur mission prend une dimension inattendue lors d'une rencontre avec une vie extraterrestre.",
-    genres: ["Science-fiction", "Aventure", "Un bon film !"],
-    imdb: "https://www.imdb.com/title/tt0096754/", rating: "7.5", verrouille: true },
-
     { title: "L'amour Ouf", img: "20.png", password: "6lD", rebus: "medias/r37.png",
     question: "Sur quelle chanson de The Cure les deux protagonistes dansent-ils dans la cour d'école ?", answer: "A Forest",
     realisateur: "Gilles Lellouche", description: "Clotaire et Jackie se rencontrent adolescents dans les années 80. Leur amour passionnel résistera aux années, à la violence et à des chemins de vie radicalement différents.",
@@ -440,14 +435,6 @@ const ACHIEVEMENTS = [
     realisateur: "Alexandre Astier", description: "Le roi Arthur revient d'exil pour reprendre Kaamelott des mains de Lancelot. Il rassemble ses chevaliers pour une reconquère contre Arthur ! Après la destruction de Kaamelott, son refus obstiné de tuer Lancelot précipite le Royaume de Logres à sa perte. Il réunit ses Chevaliers, novices téméraires et vétérans désabusés, autour de la Nouvelle Table Ronde et les envoie prouver leur valeur aux quatre coins du Monde, des Marais Orcaniens aux terres glacées du DRAGON_END_PLACEHOLDER",
     genres: ["Aventure", "Fantastique", "L'excelente suite d'un film moyen"],
     imdb: "https://www.imdb.com/title/tt9844322/", rating: "7.2", verrouille: true },
-
-
-    { title: "Ill Manors", img: "32.png", password: "2pT", rebus: "medias/r33.png",
-    question: "Quel est le prénom du bébé abandonné dans le sac que les dealers trouvent ?", answer: "Michelle",
-    realisateur: "Ben Drew", description: "Dans les rues de Forest Gate, à l'est de Londres, plusieurs destins marginaux se croisent dans une spirale de violence, de trafics et de misère sociale, sans issue apparente.",
-    genres: ["Drame", "Crime", "Film vraiment pas drôle"],
-    imdb: "https://www.imdb.com/title/tt1760967/", rating: "6.6", verrouille: true },
-
 
     { title: "10 Cloverfield Lane", img: "10.png", password: "9jN", rebus: "medias/r40.png",
     question: "À quel jeu de société Howard, Emmett et Michelle jouent-ils dans le bunker ?", answer: "Le jeu de la vie",
@@ -1044,6 +1031,9 @@ function buildGrid() {
                     <span class="cell-number-tag">${i + 1}</span>
                 </div>
             </div>
+            ${isMystery    ? `<span class="cell-type-label cell-type-label--locked">Verrouillé</span>` : ""}
+            ${isSecret     ? `<span class="cell-type-label cell-type-label--secret">Film mystère</span>` : ""}
+            ${isValidated  ? `<span class="cell-type-label cell-type-label--validated">Défi validé</span>` : ""}
             <div class="cell-status">
             <div class="cell-background">
                 <span class="cell-status-label cell-lock-label">${isSecret ? "Secret" : "Verrouillé"}</span>
@@ -1195,7 +1185,9 @@ function closeAnimatedModal(callback) {
         modal.classList.remove("anim-out");
         activeModal = null;
         modal.removeEventListener("animationend", handler);
-        document.getElementById("joker-use-bar").classList.add("hidden");
+        hideJokerBar();
+        const mc = modal.querySelector(".modal-content");
+        if (mc) mc.style.transformOrigin = "center center";
         if (callback) callback();
         // Réafficher le menu si aucun nouveau modal n'a été ouvert par le callback
         if (!activeModal) setMenuVisible(true);
@@ -1273,14 +1265,16 @@ function openInfoModal(index, mysteryReveal = false) {
     if (keysRowExisting) keysRowExisting.style.display = "none";
     const descLabel = document.getElementById("info-desc-label");
     if (isSecret) {
-        dirRow.style.display      = "none";
+        dirRow.style.display      = "flex";
+        document.getElementById("info-director").textContent = "?";
         imdbEl.style.display      = "none";
         descEl.style.display      = "block";
         if (descLabel) descLabel.style.display = "none";
         descEl.textContent        = "Ce film se débloque en réclamant un palier de récompenses spécifique.";
         document.getElementById("info-desc-more").classList.add("hidden");
     } else if (isMystery) {
-        dirRow.style.display      = "none";
+        dirRow.style.display      = "flex";
+        document.getElementById("info-director").textContent = "?";
         imdbEl.style.display      = "none";
         descEl.style.display      = "block";
         if (descLabel) descLabel.style.display = "none";
@@ -1358,6 +1352,17 @@ function openInfoModal(index, mysteryReveal = false) {
     }
 
     const modal = document.getElementById("modal-info");
+    const modalContent = modal.querySelector(".modal-content");
+
+    // transform-origin depuis le centre de la cell cliquée
+    const cell = document.querySelector(`.cell[data-index="${index}"]`);
+    if (cell) {
+        const r = cell.getBoundingClientRect();
+        modalContent.style.transformOrigin = `${r.left + r.width / 2}px ${r.top + r.height / 2}px`;
+    } else {
+        modalContent.style.transformOrigin = "center center";
+    }
+
     modal.classList.remove("hidden", "anim-out", "anim-in", "anim-mystery-reveal");
     modal.classList.add(mysteryReveal ? "anim-mystery-reveal" : "anim-in");
     activeModal = modal;
@@ -1752,6 +1757,10 @@ function proceedFromInfo() {
             closeAnimatedModal(() => { location.href = 'barbie-index.html'; });
             return;
         }
+        if (ACHIEVEMENTS[index].title && ACHIEVEMENTS[index].title.includes('Tenacious')) {
+            closeAnimatedModal(() => { location.href = 'gh-index.html'; });
+            return;
+        }
         closeAnimatedModal(() => {
             const ach = ACHIEVEMENTS[index];
             const questionEl = document.getElementById("question-text");
@@ -1868,12 +1877,30 @@ document.getElementById("answer-input").addEventListener("keydown", e => { if (e
 
 let cachedJokers = 0;
 
+function hideJokerBar() {
+    const bar = document.getElementById("joker-use-bar");
+    const toggle = document.getElementById("joker-toggle-btn");
+    if (bar) { bar.classList.add("hidden"); bar.classList.remove("expanded"); }
+    if (toggle) toggle.classList.add("hidden");
+}
+
 function updateJokerUseBar() {
     const bar = document.getElementById("joker-use-bar");
-    if (!bar) return;
+    const toggle = document.getElementById("joker-toggle-btn");
+    if (!bar || !toggle) return;
     const questionVisible = !document.getElementById("modal-question").classList.contains("hidden");
-    bar.classList.toggle("hidden", !(questionVisible && cachedJokers > 0));
+    const alreadyValidated = currentIndex !== null && getValidated().includes(currentIndex);
+    const shouldShow = questionVisible && cachedJokers > 0 && !alreadyValidated;
+    bar.classList.toggle("hidden", !shouldShow);
+    if (!shouldShow) bar.classList.remove("expanded");
+    toggle.classList.toggle("hidden", !shouldShow);
 }
+
+document.getElementById("joker-toggle-btn").addEventListener("click", () => {
+    const bar = document.getElementById("joker-use-bar");
+    if (bar) bar.classList.add("expanded");
+    document.getElementById("joker-toggle-btn").classList.add("hidden");
+});
 
 document.getElementById("joker-use-btn").addEventListener("click", () => {
     if (cachedJokers <= 0 || currentIndex === null) return;
@@ -1887,7 +1914,7 @@ document.getElementById("joker-use-btn").addEventListener("click", () => {
         saveValidated(validated);
     }
     const idxForAnim = currentIndex;
-    document.getElementById("joker-use-bar").classList.add("hidden");
+    hideJokerBar();
     closeAnimatedModal(() => { currentIndex = null; activeModal = null; buildGrid(); });
     showSuccessAnimation(idxForAnim);
 });
