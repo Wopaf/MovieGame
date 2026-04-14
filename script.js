@@ -1,10 +1,3 @@
-// Plein écran au premier tap
-document.addEventListener('pointerdown', () => {
-    const el = document.documentElement;
-    if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
-    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-}, { once: true });
-
 // Bouton plein écran toggle
 function toggleFullscreen() {
     if (!document.fullscreenElement && !document.webkitFullscreenElement) {
@@ -274,11 +267,6 @@ const ACHIEVEMENTS = [
     realisateur: "Peter Jackson", description: "La guerre pour la Terre du Milieu atteint son paroxysme. Frodon approche seul de la Montagne du Destin pendant qu'Aragorn mène les armées libres face à Sauron.",
     genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0167260/", rating: "8.9", verrouille: false },
 
-    { title: "Interstelar", img: "4.png", password: "4kZ", rebus: "medias/r4.png",
-    question: "Quel est le nom de famille du scientifique à l'origine de la thérorie de la relativité ?", answer: "Einstein",
-    realisateur: "Christopher Nolan", description: "La Terre est mourante. Un pilote de la NASA s'engage dans un voyage à travers un trou de ver pour trouver une planète habitable, au prix de tout ce qu'il aime.",
-    genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt0816692/", rating: "8.7", verrouille: false },
-
     { title: "Le Cinquième élement", img: "38.png", password: "6xM", rebus: "medias/r10.png",
     question: "Trouve la réponse à ce rébus", answer: "Korben Dallas",
     realisateur: "Luc Besson", description: "Au XXIIIe siècle, une force du Mal menace la Terre tous les cinq mille ans. Korben Dallas, chauffeur de taxi, doit protéger Leeloo, le mystérieux Cinquième Élément.",
@@ -289,15 +277,23 @@ const ACHIEVEMENTS = [
     realisateur: "Robert Zemeckis", description: "Forrest Gump, homme simple au grand cœur, traverse sans le vouloir les plus grands événements de l'Amérique des années 60 à 80, toujours guidé par son amour pour Jenny.",
     genres: ["Drame", "Comédie"], imdb: "https://www.imdb.com/title/tt0109830/", rating: "8.8", verrouille: false },
 
+    { title: "Persepolis", img: "50.png", password: "4vC", rebus: "medias/r7.png",
+    question: "Quelle fleur mettait la grand-mère de Marjane dans son soutien-gorge ?", answer: "Jasmin",
+    realisateur: "Vincent Paronnaud", description: "La petite Marjane grandit à Téhéran tandis que la révolution islamique bascule l'Iran. Adulte, elle sera contrainte de fuir et trouver sa place entre deux cultures.",
+    genres: ["Animation", "Drame", "Très beau film !"], imdb: "https://www.imdb.com/title/tt0808417/", rating: "7.9", verrouille: false },
+
     { title: "Her", img: "6.png", password: "8bY", rebus: "medias/r6.png",
     question: "Quel est le nom du système d'exploitation qu'achete Théodore au début du film ?", answer: "OS ONE",
     realisateur: "Spike Jonze", description: "Theodore, un homme solitaire qui écrit des lettres d'amour pour les autres, tombe amoureux de Samantha, un système d'exploitation doté d'une intelligence artificielle.",
     genres: ["Science-fiction", "Romance"], imdb: "https://www.imdb.com/title/tt1798709/", rating: "8.0", verrouille: false },
 
-    { title: "Persepolis", img: "50.png", password: "4vC", rebus: "medias/r7.png",
-    question: "Quelle fleur mettait la grand-mère de Marjane dans son soutien-gorge ?", answer: "Jasmin",
-    realisateur: "Vincent Paronnaud et Marjane Satrapi", description: "La petite Marjane grandit à Téhéran tandis que la révolution islamique bascule l'Iran. Adulte, elle sera contrainte de fuir et trouver sa place entre deux cultures.",
-    genres: ["Animation", "Drame", "Très beau film !"], imdb: "https://www.imdb.com/title/tt0808417/", rating: "7.9", verrouille: false },
+    { title: "Interstelar", img: "4.png", password: "4kZ",
+    questions: [
+        { rebus: "medias/r4.png", question: "Quel est le nom de famille du scientifique à l'origine de la thérorie de la relativité ?", answer: "Einstein" },
+        { rebus: "medias/r4.png", question: "Quel est le nom de famille du personnage joué par Matthew McConaughey ?", answer: "Cooper" }
+    ],
+    realisateur: "Christopher Nolan", description: "La Terre est mourante. Un pilote de la NASA s'engage dans un voyage à travers un trou de ver pour trouver une planète habitable, au prix de tout ce qu'il aime.",
+    genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt0816692/", rating: "8.7", verrouille: false },
 
     { title: "Tenacious D", sousTitre: "et le médiator du destin", img: "48.png", password: "2fP", rebus: "medias/r8.png",
     question: "Dans le morceau Master Exploder, complète les paroles suivantes: I do not need, He does not need , a ...", answer: "microphone",
@@ -1127,8 +1123,17 @@ function updateNextChallengeBanner() {
 
     const imgSrc = achImg(nextIndex);
     document.getElementById("nc-bg").style.backgroundImage = `url(${imgSrc})`;
+    document.getElementById("nc-poster-img").src = imgSrc;
+    document.getElementById("nc-poster-img").alt = ach.title;
     document.getElementById("nc-title").textContent = ach.title;
 
+    const subtitleEl = document.getElementById("nc-subtitle");
+    if (ach.sousTitre) {
+        subtitleEl.textContent = ach.sousTitre;
+        subtitleEl.classList.remove("hidden");
+    } else {
+        subtitleEl.classList.add("hidden");
+    }
 
     document.getElementById("next-challenge").onclick = () => openInfoModal(nextIndex);
 }
@@ -1137,6 +1142,43 @@ function updateNextChallengeBanner() {
 
 let currentIndex = null;
 let activeModal = null;
+let currentQuestionIndex = 0;
+
+// Retourne le tableau de questions d'un achievement (rétrocompatible)
+function getQuestions(ach) {
+    if (ach.questions && ach.questions.length) return ach.questions;
+    const q = {};
+    if (ach.question) q.question = ach.question;
+    if (ach.answer)   q.answer   = ach.answer;
+    if (ach.rebus)    q.rebus    = ach.rebus;
+    return [q];
+}
+
+// Charge une question dans la modal (rebus + texte)
+function loadQuestionInModal(achIdx, qIdx) {
+    const ach = ACHIEVEMENTS[achIdx];
+    const questions = getQuestions(ach);
+    const q = questions[qIdx];
+    const questionEl = document.getElementById("question-text");
+    const rebusEl    = document.getElementById("question-rebus");
+    const qSubEl     = document.getElementById("q-subtitle");
+    const total      = questions.length;
+
+    if (q.rebus) { rebusEl.src = q.rebus; rebusEl.classList.remove("hidden"); }
+    else { rebusEl.classList.add("hidden"); }
+    if (q.question) { questionEl.dataset.qtext = q.question; questionEl.textContent = ""; questionEl.classList.remove("hidden"); }
+    else { questionEl.dataset.qtext = ""; questionEl.classList.add("hidden"); }
+
+    // Indicateur de progression si multi-questions
+    const progEl = document.getElementById("q-progress");
+    if (progEl) {
+        if (total > 1) { progEl.textContent = `${qIdx + 1} / ${total}`; progEl.classList.remove("hidden"); }
+        else { progEl.classList.add("hidden"); }
+    }
+
+    if (ach.sousTitre) { qSubEl.textContent = ach.sousTitre; qSubEl.classList.remove("hidden"); }
+    else { qSubEl.classList.add("hidden"); }
+}
 
 function fillModal(modal, index, forceReveal) {
     const ach = ACHIEVEMENTS[index];
@@ -1153,6 +1195,7 @@ function fillModal(modal, index, forceReveal) {
     icon.src = isLocked ? "medias/imageflou.png" : achImg(index);
     icon.alt = isLocked ? lockLabel : ach.title;
     icon.classList.toggle("modal-icon-locked", false);
+
 }
 
 function openAnimatedModal(modalId, index, forceReveal) {
@@ -1618,7 +1661,8 @@ document.getElementById("key-reveal-next").addEventListener("click", () => {
 function showChallengeIntro(index, callback) {
     const ach   = ACHIEVEMENTS[index];
     const intro = document.getElementById("challenge-intro");
-    document.getElementById("challenge-intro-num").textContent = `Défi #${index + 1}`;
+    const numEl = document.getElementById("challenge-intro-num");
+    if (numEl) numEl.textContent = `Défi #${index + 1}`;
     document.getElementById("challenge-intro-title").textContent = ach.title;
     const subEl = document.getElementById("challenge-intro-subtitle");
     if (ach.sousTitre) {
@@ -1626,6 +1670,22 @@ function showChallengeIntro(index, callback) {
         subEl.classList.remove("hidden");
     } else {
         subEl.classList.add("hidden");
+    }
+
+    // Étoiles dans le badge : une par question si multi-questions
+    const badgeEl = document.getElementById("challenge-intro-badge");
+    if (badgeEl) {
+        const qCount = getQuestions(ach).length;
+        badgeEl.innerHTML = "Défi Quizz";
+        if (qCount > 1) {
+            for (let i = 0; i < qCount; i++) {
+                const star = document.createElement("span");
+                star.className = "ci-star";
+                star.textContent = "⭐";
+                star.style.animationDelay = `${0.35 + i * 0.12}s`;
+                badgeEl.appendChild(star);
+            }
+        }
     }
 
     intro.classList.remove("hidden", "intro-out");
@@ -1637,7 +1697,7 @@ function showChallengeIntro(index, callback) {
             intro.classList.remove("intro-out");
             callback();
         }, { once: true });
-    }, 2000);
+    }, 2500);
 }
 
 function typewriterEffect(el, text, speed, callback) {
@@ -1654,7 +1714,7 @@ function typewriterEffect(el, text, speed, callback) {
     next();
 }
 
-function startQuestionSequence(showInput = true) {
+function startQuestionSequence(showInput = true, delay = 400) {
     const questionEl  = document.getElementById("question-text");
     const rebusEl     = document.getElementById("question-rebus");
     const inputGroup  = document.querySelector("#modal-question .input-group");
@@ -1663,31 +1723,36 @@ function startQuestionSequence(showInput = true) {
     inputGroup.classList.add("q-pending");
     if (!showInput) inputGroup.classList.add("q-collapsed");
     if (!rebusEl.classList.contains("hidden")) rebusEl.classList.add("q-pending");
+    if (!questionEl.classList.contains("hidden")) questionEl.classList.add("q-pending");
 
-    // Laisser l'animation d'ouverture du modal se terminer
+    // Laisser l'animation d'ouverture du modal se terminer (ou transition inter-question)
     setTimeout(() => {
-        const afterQuestion = () => {
-            if (!rebusEl.classList.contains("hidden")) {
-                rebusEl.classList.remove("q-pending");
-                rebusEl.classList.add("q-reveal");
-                rebusEl.addEventListener("animationend", () => {
-                    rebusEl.classList.remove("q-reveal");
-                    if (showInput) revealInput(inputGroup);
-                    else inputGroup.classList.add("q-collapsed");
-                }, { once: true });
-            } else {
-                if (showInput) revealInput(inputGroup);
-                else inputGroup.classList.add("q-collapsed");
+
+        const afterRebus = () => {
+            // 2. Input apparaît après l'image
+            if (showInput) revealInput(inputGroup);
+            else inputGroup.classList.add("q-collapsed");
+
+            // 3. Question en typewriter en parallèle
+            if (!questionEl.classList.contains("hidden")) {
+                questionEl.classList.remove("q-pending");
+                const text = questionEl.dataset.qtext || "";
+                typewriterEffect(questionEl, text, 14, () => {});
             }
         };
 
-        if (!questionEl.classList.contains("hidden")) {
-            const text = questionEl.dataset.qtext || "";
-            typewriterEffect(questionEl, text, 28, afterQuestion);
+        // 1. D'abord le rébus
+        if (!rebusEl.classList.contains("hidden")) {
+            rebusEl.classList.remove("q-pending");
+            rebusEl.classList.add("q-reveal");
+            rebusEl.addEventListener("animationend", () => {
+                rebusEl.classList.remove("q-reveal");
+                afterRebus();
+            }, { once: true });
         } else {
-            afterQuestion();
+            afterRebus();
         }
-    }, 400);
+    }, delay);
 }
 
 function revealInput(inputGroup) {
@@ -1710,34 +1775,17 @@ function openChallengeDirectly(index) {
     document.getElementById("answer-input").value = "";
     document.getElementById("answer-error").classList.add("hidden");
 
-    const ach = ACHIEVEMENTS[index];
-    showChallengeIntro(index, () => {
-        const questionEl = document.getElementById("question-text");
-        const rebusEl    = document.getElementById("question-rebus");
-        if (ach.rebus) {
-            rebusEl.src = ach.rebus;
-            rebusEl.classList.remove("hidden");
-        } else {
-            rebusEl.classList.add("hidden");
-        }
-        if (ach.question) {
-            questionEl.dataset.qtext = ach.question;
-            questionEl.textContent = "";
-            questionEl.classList.remove("hidden");
-        } else {
-            questionEl.dataset.qtext = "";
-            questionEl.classList.add("hidden");
-        }
-        const qSubEl = document.getElementById("q-subtitle");
-        if (ach.sousTitre) { qSubEl.textContent = ach.sousTitre; qSubEl.classList.remove("hidden"); }
-        else { qSubEl.classList.add("hidden"); }
-        const qImgSrc = achImg(index);
-        document.getElementById("modal-question").style.setProperty("--modal-poster", `url(${qImgSrc})`);
+    setTimeout(() => showChallengeIntro(index, () => {
+        currentQuestionIndex = 0;
+        loadQuestionInModal(index, 0);
+        document.getElementById("modal-question").style.setProperty("--modal-poster", `url(${achImg(index)})`);
         document.getElementById('q-validated-badge').classList.add('hidden');
+        document.getElementById('answer-error').classList.add('hidden');
         document.getElementById('q-input-group').classList.remove('q-collapsed');
+        document.getElementById('q-nav').classList.add('hidden');
         openAnimatedModal("modal-question", index, true);
         startQuestionSequence();
-    });
+    }), 400);
 }
 
 function proceedFromInfo() {
@@ -1762,19 +1810,12 @@ function proceedFromInfo() {
             return;
         }
         closeAnimatedModal(() => {
-            const ach = ACHIEVEMENTS[index];
-            const questionEl = document.getElementById("question-text");
-            const rebusEl    = document.getElementById("question-rebus");
-            if (ach.rebus) { rebusEl.src = ach.rebus; rebusEl.classList.remove("hidden"); }
-            else { rebusEl.classList.add("hidden"); }
-            if (ach.question) { questionEl.dataset.qtext = ach.question; questionEl.textContent = ""; questionEl.classList.remove("hidden"); }
-            else { questionEl.dataset.qtext = ""; questionEl.classList.add("hidden"); }
-            const qSubEl = document.getElementById("q-subtitle");
-            if (ach.sousTitre) { qSubEl.textContent = ach.sousTitre; qSubEl.classList.remove("hidden"); }
-            else { qSubEl.classList.add("hidden"); }
+            currentQuestionIndex = 0;
+            loadQuestionInModal(index, 0);
             document.getElementById("modal-question").style.setProperty("--modal-poster", `url(${achImg(index)})`);
             document.getElementById('q-validated-badge').classList.remove('hidden');
             document.getElementById('answer-error').classList.add('hidden');
+            updateQNav(index);
             openAnimatedModal("modal-question", index, true);
             startQuestionSequence(false);
         });
@@ -1810,33 +1851,17 @@ function proceedFromInfo() {
             return;
         }
         closeAnimatedModal(() => {
-            showChallengeIntro(index, () => {
-                const questionEl = document.getElementById("question-text");
-                const rebusEl    = document.getElementById("question-rebus");
-                if (ach.rebus) {
-                    rebusEl.src = ach.rebus;
-                    rebusEl.classList.remove("hidden");
-                } else {
-                    rebusEl.classList.add("hidden");
-                }
-                if (ach.question) {
-                    questionEl.dataset.qtext = ach.question;
-                    questionEl.textContent = "";
-                    questionEl.classList.remove("hidden");
-                } else {
-                    questionEl.dataset.qtext = "";
-                    questionEl.classList.add("hidden");
-                }
-                const qSubEl = document.getElementById("q-subtitle");
-                if (ach.sousTitre) { qSubEl.textContent = ach.sousTitre; qSubEl.classList.remove("hidden"); }
-                else { qSubEl.classList.add("hidden"); }
-                const qImgSrc = achImg(index);
-                document.getElementById("modal-question").style.setProperty("--modal-poster", `url(${qImgSrc})`);
+            setTimeout(() => showChallengeIntro(index, () => {
+                currentQuestionIndex = 0;
+                loadQuestionInModal(index, 0);
+                document.getElementById("modal-question").style.setProperty("--modal-poster", `url(${achImg(index)})`);
                 document.getElementById('q-validated-badge').classList.add('hidden');
+                document.getElementById('answer-error').classList.add('hidden');
                 document.getElementById('q-input-group').classList.remove('q-collapsed');
+                document.getElementById('q-nav').classList.add('hidden');
                 openAnimatedModal("modal-question", index, true);
                 startQuestionSequence();
-            });
+            }), 200);
         });
     }
 }
@@ -1876,6 +1901,48 @@ document.getElementById("answer-submit").addEventListener("click", checkAnswer);
 document.getElementById("answer-input").addEventListener("keydown", e => { if (e.key === "Enter") checkAnswer(); });
 
 let cachedJokers = 0;
+
+function updateQNav(achIdx) {
+    const nav     = document.getElementById("q-nav");
+    const counter = document.getElementById("q-nav-counter");
+    const prev    = document.getElementById("q-nav-prev");
+    const next    = document.getElementById("q-nav-next");
+    if (!nav) return;
+    const ach   = ACHIEVEMENTS[achIdx];
+    const total = getQuestions(ach).length;
+    if (total < 2) { nav.classList.add("hidden"); return; }
+    nav.classList.remove("hidden");
+    counter.textContent = `${currentQuestionIndex + 1} / ${total}`;
+    prev.disabled = currentQuestionIndex === 0;
+    next.disabled = currentQuestionIndex === total - 1;
+}
+
+document.getElementById("q-nav-prev").addEventListener("click", () => {
+    if (currentQuestionIndex <= 0 || currentIndex === null) return;
+    navigateQuestion(currentQuestionIndex - 1);
+});
+document.getElementById("q-nav-next").addEventListener("click", () => {
+    if (currentIndex === null) return;
+    const total = getQuestions(ACHIEVEMENTS[currentIndex]).length;
+    if (currentQuestionIndex >= total - 1) return;
+    navigateQuestion(currentQuestionIndex + 1);
+});
+
+function navigateQuestion(targetIdx) {
+    const qBody = document.getElementById("modal-question").querySelector(".q-body");
+    qBody.classList.add("q-next-out");
+    qBody.addEventListener("animationend", () => {
+        qBody.classList.remove("q-next-out");
+        qBody.style.opacity = "0";
+        currentQuestionIndex = targetIdx;
+        loadQuestionInModal(currentIndex, currentQuestionIndex);
+        updateQNav(currentIndex);
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            qBody.style.opacity = "";
+            startQuestionSequence(false, 80);
+        }));
+    }, { once: true });
+}
 
 function hideJokerBar() {
     const bar = document.getElementById("joker-use-bar");
@@ -1920,31 +1987,50 @@ document.getElementById("joker-use-btn").addEventListener("click", () => {
 });
 
 function checkAnswer() {
-    const input = document.getElementById("answer-input").value.trim();
-    const modalEl = document.getElementById("modal-question").querySelector(".modal-content");
+    const input    = document.getElementById("answer-input").value.trim();
+    const modalEl  = document.getElementById("modal-question").querySelector(".modal-content");
+    const ach      = ACHIEVEMENTS[currentIndex];
+    const questions = getQuestions(ach);
+    const currentQ = questions[currentQuestionIndex];
 
-    if (isCloseEnough(input, ACHIEVEMENTS[currentIndex].answer, 4)) {
-    playSound("success");
+    if (isCloseEnough(input, currentQ.answer, 4)) {
+        playSound("success");
 
-        const validated = getValidated();
-        if (!validated.includes(currentIndex)) {
-            validated.push(currentIndex);
-            saveValidated(validated);
+        const isLast = currentQuestionIndex >= questions.length - 1;
+        if (isLast) {
+            // Toutes les questions répondues → valider le défi
+            const validated = getValidated();
+            if (!validated.includes(currentIndex)) {
+                validated.push(currentIndex);
+                saveValidated(validated);
+            }
+            const idxForAnim = currentIndex;
+            closeAnimatedModal(() => { currentIndex = null; activeModal = null; buildGrid(); });
+            showSuccessAnimation(idxForAnim);
+        } else {
+            // Passer à la question suivante
+            currentQuestionIndex++;
+            document.getElementById("answer-input").value = "";
+            document.getElementById("answer-error").classList.add("hidden");
+            const qBody = document.getElementById("modal-question").querySelector(".q-body");
+            qBody.classList.add("q-next-out");
+            qBody.addEventListener("animationend", () => {
+                qBody.classList.remove("q-next-out");
+                // Garder invisible pendant le chargement pour éviter le flash
+                qBody.style.opacity = "0";
+                loadQuestionInModal(currentIndex, currentQuestionIndex);
+                requestAnimationFrame(() => requestAnimationFrame(() => {
+                    qBody.style.opacity = "";
+                    startQuestionSequence(true, 80);
+                }));
+            }, { once: true });
         }
-
-        // Animation succès plein écran
-        const idxForAnim = currentIndex;
-        closeAnimatedModal(() => { currentIndex = null; activeModal = null; buildGrid(); });
-        showSuccessAnimation(idxForAnim);
-
     } else {
-    playSound("fail");
-        // Animation échec
+        playSound("fail");
         modalEl.classList.remove("modal-fail-flash");
-        void modalEl.offsetWidth; // force reflow pour relancer l'animation
+        void modalEl.offsetWidth;
         modalEl.classList.add("modal-fail-flash");
         document.getElementById("answer-error").classList.remove("hidden");
-
         setTimeout(() => modalEl.classList.remove("modal-fail-flash"), 500);
     }
 }
