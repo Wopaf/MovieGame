@@ -804,6 +804,12 @@ document.getElementById('btn-back-menu').addEventListener('click', () => {
 document.getElementById('btn-quit').addEventListener('click', () => {
     window.location.href = 'index.html';
 });
+document.getElementById('gh-ingame-quit').addEventListener('click', () => {
+    running = false;
+    audio.pause();
+    audio.currentTime = 0;
+    window.location.href = 'index.html';
+});
 const btnRecord = document.getElementById('btn-record');
 if (!SHOW_RECORD_BTN) btnRecord.style.display = 'none';
 btnRecord.addEventListener('click', startRecord);

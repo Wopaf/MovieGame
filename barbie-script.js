@@ -1053,6 +1053,13 @@ const COLL_Y_OFFSET    = -0.10;    // décalage hauteur collectibles depuis le p
     document.getElementById('auboulot-pascal-ans2').addEventListener('click', () => handlePascalAnswer(1));
 
     document.getElementById('auboulot-quit-btn').addEventListener('click', closeModal);
+    document.getElementById('auboulot-ingame-quit').addEventListener('click', () => {
+        gameRunning = false;
+        cancelAnimationFrame(animId);
+        sndSoundtrack.pause();
+        sndSoundtrack.currentTime = 0;
+        location.href = 'index.html';
+    });
     document.getElementById('auboulot-menu-btn').addEventListener('click', () => {
         document.getElementById('auboulot-gameover').classList.add('hidden');
         setBgPulse(true);

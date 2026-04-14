@@ -535,6 +535,7 @@ db.ref(".info/connected").on("value", (snap) => {
 // ---- Debounce buildGrid pour éviter les reconstructions en rafale ----
 let _buildGridTimer = null;
 function buildGridDebounced() {
+    _cachedSortedIndices = null; // invalider le cache au prochain build
     clearTimeout(_buildGridTimer);
     _buildGridTimer = setTimeout(buildGrid, 50);
 }
@@ -781,7 +782,9 @@ function playSound(_name) {
 
 let currentFilter = localStorage.getItem("mg_filter") || "all";
 
+let _cachedSortedIndices = null;
 function getSortedIndices() {
+    if (_cachedSortedIndices) return _cachedSortedIndices;
     const validated = getValidated();
     const revealedMysteries = getRevealedMysteries();
     let indices = ACHIEVEMENTS.map((_, i) => i);
@@ -805,6 +808,7 @@ function getSortedIndices() {
         indices = indices.filter(i => ACHIEVEMENTS[i].genres && ACHIEVEMENTS[i].genres.includes(genre));
     }
 
+    _cachedSortedIndices = indices;
     return indices;
 }
 
@@ -999,16 +1003,19 @@ function buildMilestones() {
 
 function buildGrid() {
     const grid = document.getElementById("grid");
-    const validated = getValidated();
-    const revealedMysteries = getRevealedMysteries();
-    grid.innerHTML = "";
+    const validatedArr = getValidated();
+    const revealedArr  = getRevealedMysteries();
+    // Sets pour lookups O(1)
+    const validatedSet = new Set(validatedArr);
+    const revealedSet  = new Set(revealedArr);
 
+    const fragment = document.createDocumentFragment();
 
     getSortedIndices().forEach(i => {
         const ach = ACHIEVEMENTS[i];
-        const isValidated = validated.includes(i);
-        const isMystery = ach.verrouille && !isValidated && !revealedMysteries.includes(i);
-        const isSecret  = ach.secret     && !isValidated && !revealedMysteries.includes(i);
+        const isValidated = validatedSet.has(i);
+        const isMystery = ach.verrouille && !isValidated && !revealedSet.has(i);
+        const isSecret  = ach.secret     && !isValidated && !revealedSet.has(i);
         const cell = document.createElement("div");
         cell.className = "cell";
         cell.dataset.index = i;
@@ -1041,10 +1048,6 @@ function buildGrid() {
             </div>
         `;
 
-        cell.addEventListener("click", () => {
-            openModal(i);
-        });
-
         const dbgBtn = document.createElement("button");
         dbgBtn.className = "debug-toggle-btn " + (isValidated ? "dbg-lock" : "dbg-validate");
         dbgBtn.textContent = isValidated ? "Vérrouiller" : "Valider";
@@ -1059,9 +1062,12 @@ function buildGrid() {
             }
         });
         cell.appendChild(dbgBtn);
-
-        grid.appendChild(cell);
+        fragment.appendChild(cell);
     });
+
+    // Remplace le contenu en une seule opération DOM
+    grid.innerHTML = "";
+    grid.appendChild(fragment);
 
     updateCounter();
     updateNextChallengeBanner();
@@ -1069,6 +1075,13 @@ function buildGrid() {
     firstBuildDone = true;
     buildMilestonesDebounced();
 }
+
+// Event delegation : un seul listener pour toutes les cellules
+document.getElementById("grid").addEventListener("click", e => {
+    const cell = e.target.closest(".cell");
+    if (!cell || e.target.closest(".debug-toggle-btn")) return;
+    openModal(Number(cell.dataset.index));
+});
 
 let _buildMilestonesTimer = null;
 function buildMilestonesDebounced() {
@@ -1701,16 +1714,19 @@ function showChallengeIntro(index, callback) {
 }
 
 function typewriterEffect(el, text, speed, callback) {
-    el.textContent = "";
     let i = 0;
+    let buf = "";
     function next() {
         if (i < text.length) {
-            el.textContent += text[i++];
+            buf += text[i++];
+            el.textContent = buf;
             setTimeout(next, speed);
         } else if (callback) {
             callback();
         }
     }
+    buf = "";
+    el.textContent = "";
     next();
 }
 
@@ -2468,6 +2484,7 @@ function applyFilter(f) {
     if (!f) return;
     playSound("clic1");
     currentFilter = (currentFilter === f || f === "all") ? "all" : f;
+    _cachedSortedIndices = null;
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
     const activeBtn = document.querySelector(`.filter-btn[data-filter="${currentFilter}"]`);
     if (activeBtn) activeBtn.classList.add("active");
@@ -2859,11 +2876,19 @@ let tutorialActive = false;
         const splash = document.getElementById("splash");
         if (!splash) { splashCanDismiss = true; onSplashDone(afterCallback); return; }
         setTimeout(() => {
-            splash.classList.add("splash-fade");
-            splashCanDismiss = true;
-            splash.addEventListener("transitionend", () => onSplashDone(afterCallback), { once: true });
-            setTimeout(() => onSplashDone(afterCallback), 600);
-        }, 800);
+            // Démarrer le scale un peu avant que le splash disparaisse
+            document.body.classList.add("page-settle");
+            document.body.addEventListener("animationend", () => {
+                document.body.classList.remove("page-settle");
+            }, { once: true });
+
+            setTimeout(() => {
+                splash.classList.add("splash-fade");
+                splashCanDismiss = true;
+                splash.addEventListener("transitionend", () => onSplashDone(afterCallback), { once: true });
+                setTimeout(() => onSplashDone(afterCallback), 600);
+            }, 300);
+        }, 500);
     }
 })();
 
