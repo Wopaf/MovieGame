@@ -1001,6 +1001,7 @@ function buildMilestones() {
 }
 
 
+
 function buildGrid() {
     const grid = document.getElementById("grid");
     const validatedArr = getValidated();
@@ -1029,14 +1030,6 @@ function buildGrid() {
             <img class="cell-icon${isMystery || isSecret ? " cell-icon-locked" : ""}" src="${isMystery || isSecret ? "medias/imageflou.png" : achImg(i)}" alt="${displayTitle}" loading="lazy">
             ${isMystery ? `<div class="cell-lock-overlay"><img src="medias/lock.png" class="cell-overlay-icon"></div>` : ""}
             ${isSecret  ? `<div class="cell-lock-overlay cell-secret-overlay"><img src="medias/question.png" class="cell-overlay-icon"></div>` : ""}
-            <div class="cell-content">
-                <div class="cell-info">
-                    <span class="cell-number-tag">${i + 1}</span>
-                </div>
-            </div>
-            ${isMystery    ? `<span class="cell-type-label cell-type-label--locked">Verrouillé</span>` : ""}
-            ${isSecret     ? `<span class="cell-type-label cell-type-label--secret">Film mystère</span>` : ""}
-            ${isValidated  ? `<span class="cell-type-label cell-type-label--validated">Défi validé</span>` : ""}
             <div class="cell-status">
             <div class="cell-background">
                 <span class="cell-status-label cell-lock-label">${isSecret ? "Secret" : "Verrouillé"}</span>
@@ -1136,8 +1129,6 @@ function updateNextChallengeBanner() {
 
     const imgSrc = achImg(nextIndex);
     document.getElementById("nc-bg").style.backgroundImage = `url(${imgSrc})`;
-    document.getElementById("nc-poster-img").src = imgSrc;
-    document.getElementById("nc-poster-img").alt = ach.title;
     document.getElementById("nc-title").textContent = ach.title;
 
     const subtitleEl = document.getElementById("nc-subtitle");
@@ -1150,6 +1141,22 @@ function updateNextChallengeBanner() {
 
     document.getElementById("next-challenge").onclick = () => openInfoModal(nextIndex);
 }
+
+// ===== PARALLAX NEXT CHALLENGE =====
+(function () {
+    const ncBg = document.getElementById("nc-bg");
+    if (!ncBg) return;
+    let ticking = false;
+    window.addEventListener("scroll", () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+            const scrollY = window.scrollY;
+            ncBg.style.transform = `translateY(${scrollY * 0.4}px)`;
+            ticking = false;
+        });
+    }, { passive: true });
+})();
 
 // ===== MODALS =====
 
@@ -1410,14 +1417,7 @@ function openInfoModal(index, mysteryReveal = false) {
     const modal = document.getElementById("modal-info");
     const modalContent = modal.querySelector(".modal-content");
 
-    // transform-origin depuis le centre de la cell cliquée
-    const cell = document.querySelector(`.cell[data-index="${index}"]`);
-    if (cell) {
-        const r = cell.getBoundingClientRect();
-        modalContent.style.transformOrigin = `${r.left + r.width / 2}px ${r.top + r.height / 2}px`;
-    } else {
-        modalContent.style.transformOrigin = "center center";
-    }
+    modalContent.style.transformOrigin = "center center";
 
     modal.classList.remove("hidden", "anim-out", "anim-in", "anim-mystery-reveal");
     modal.classList.add(mysteryReveal ? "anim-mystery-reveal" : "anim-in");
@@ -1692,11 +1692,9 @@ function showChallengeIntro(index, callback) {
         badgeEl.innerHTML = "Défi Quizz";
         if (qCount > 1) {
             for (let i = 0; i < qCount; i++) {
-                const star = document.createElement("span");
-                star.className = "ci-star";
-                star.textContent = "⭐";
-                star.style.animationDelay = `${0.35 + i * 0.12}s`;
-                badgeEl.appendChild(star);
+                const tmp = document.createElement("div");
+                tmp.innerHTML = `<svg class="ci-star" style="animation-delay:${0.35 + i * 0.12}s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="${STAR_PATH}"/></svg>`;
+                badgeEl.appendChild(tmp.firstChild);
             }
         }
     }
@@ -1736,7 +1734,7 @@ function startQuestionSequence(showInput = true, delay = 400) {
     const inputGroup  = document.querySelector("#modal-question .input-group");
 
     // Tout masquer au départ
-    inputGroup.classList.add("q-pending");
+    inputGroup.classList.add("q-disabled");
     if (!showInput) inputGroup.classList.add("q-collapsed");
     if (!rebusEl.classList.contains("hidden")) rebusEl.classList.add("q-pending");
     if (!questionEl.classList.contains("hidden")) questionEl.classList.add("q-pending");
@@ -1745,15 +1743,16 @@ function startQuestionSequence(showInput = true, delay = 400) {
     setTimeout(() => {
 
         const afterRebus = () => {
-            // 2. Input apparaît après l'image
-            if (showInput) revealInput(inputGroup);
-            else inputGroup.classList.add("q-collapsed");
+            if (!showInput) {
+                inputGroup.classList.add("q-collapsed");
+            }
 
-            // 3. Question en typewriter en parallèle
             if (!questionEl.classList.contains("hidden")) {
                 questionEl.classList.remove("q-pending");
                 const text = questionEl.dataset.qtext || "";
-                typewriterEffect(questionEl, text, 14, () => {});
+                typewriterEffect(questionEl, text, 14, showInput ? () => revealInput(inputGroup) : () => {});
+            } else if (showInput) {
+                revealInput(inputGroup);
             }
         };
 
@@ -1772,12 +1771,8 @@ function startQuestionSequence(showInput = true, delay = 400) {
 }
 
 function revealInput(inputGroup) {
-    inputGroup.classList.remove("q-pending");
-    inputGroup.classList.add("q-reveal");
-    inputGroup.addEventListener("animationend", () => {
-        inputGroup.classList.remove("q-reveal");
-        document.getElementById("answer-input").focus();
-    }, { once: true });
+    inputGroup.classList.remove("q-disabled");
+    document.getElementById("answer-input").focus();
 }
 
 function openChallengeDirectly(index) {
@@ -2876,12 +2871,6 @@ let tutorialActive = false;
         const splash = document.getElementById("splash");
         if (!splash) { splashCanDismiss = true; onSplashDone(afterCallback); return; }
         setTimeout(() => {
-            // Démarrer le scale un peu avant que le splash disparaisse
-            document.body.classList.add("page-settle");
-            document.body.addEventListener("animationend", () => {
-                document.body.classList.remove("page-settle");
-            }, { once: true });
-
             setTimeout(() => {
                 splash.classList.add("splash-fade");
                 splashCanDismiss = true;
