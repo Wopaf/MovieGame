@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Seigneur des Anneaux — 1978</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="lotr-styles.css">
+    <style>* { margin: 0; padding: 0; box-sizing: border-box; } html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }</style>
+</head>
+<body>
+
+<div id="lotr-modal" class="lotr-modal">
+
+    <!-- ══ SPLASH ══ -->
+    <div id="lotr-splash" class="lotr-screen">
+        <div class="lotr-vignette"></div>
+
+        <div class="lotr-splash-inner">
+            <h1 class="lotr-title">Les aventures<br>à Gandoulf</h1>
+            <p class="lotr-press-start" id="lotr-press-start">▶ &nbsp;TOUCHER POUR COMMENCER&nbsp; ◀</p>
+        </div>
+    </div>
+
+    <!-- ══ MENU ══ -->
+    <div id="lotr-menu" class="lotr-screen hidden">
+        <div class="lotr-fire-bg lotr-fire-bg--dim"></div>
+        <div id="lotr-menu-embers" class="lotr-embers"></div>
+        <div class="lotr-vignette"></div>
+
+        <div class="lotr-menu-inner" id="lotr-menu-inner">
+            <h1 class="lotr-title lotr-title--sm">Les aventures<br>à Gandoulf</h1>
+            <div class="lotr-divider"><span class="lotr-divider-gem">◆</span></div>
+
+            <div class="lotr-scores">
+                <div class="lotr-score-box">
+                    <span class="lotr-score-label">⚔ MEILLEUR</span>
+                    <span id="lotr-best" class="lotr-score-val">—</span>
+                </div>
+                <div class="lotr-score-box lotr-score-target">
+                    <span class="lotr-score-label">🏆 OBJECTIF</span>
+                    <span id="lotr-target" class="lotr-score-val">0</span>
+                </div>
+            </div>
+
+            <div class="lotr-menu-btns">
+                <button class="lotr-btn lotr-btn--play" id="lotr-play-btn">
+                    ▶ &nbsp;COMMENCER L'AVENTURE
+                </button>
+                <button class="lotr-btn lotr-btn--quit" id="lotr-quit-btn">
+                    ✕ &nbsp;QUITTER
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ JEU (placeholder) ══ -->
+    <div id="lotr-game" class="lotr-screen hidden">
+        <canvas id="lotr-canvas" class="lotr-canvas"></canvas>
+        <button id="lotr-pause-btn" class="lotr-pause-btn">⏸</button>
+
+        <!-- Pause overlay -->
+        <div id="lotr-pause" class="lotr-pause-overlay hidden">
+            <div class="lotr-pause-panel">
+                <div class="lotr-pause-title">PAUSE</div>
+                <button class="lotr-btn lotr-btn--play" id="lotr-resume-btn">▶ &nbsp;REPRENDRE</button>
+                <button class="lotr-btn lotr-btn--quit" id="lotr-ingame-quit">✕ &nbsp;QUITTER</button>
+            </div>
+        </div>
+
+        <!-- HUD barres -->
+        <div class="lotr-hud" id="lotr-hud">
+            <div class="lotr-bar-row">
+                <img src="medias/sante.png" class="lotr-bar-icon" alt="HP">
+                <div class="lotr-bar lotr-bar--hp">
+                    <div class="lotr-bar-fill" id="lotr-hp-fill"></div>
+                </div>
+                <span class="lotr-bar-val" id="lotr-hp-val">100</span>
+            </div>
+            <div class="lotr-bar-row">
+                <img src="medias/mana.png" class="lotr-bar-icon" alt="Mana">
+                <div class="lotr-bar lotr-bar--mana">
+                    <div class="lotr-bar-fill" id="lotr-mana-fill"></div>
+                </div>
+                <span class="lotr-bar-val" id="lotr-mana-val">100</span>
+            </div>
+        </div>
+
+        <!-- Sorts -->
+        <div class="lotr-spells" id="lotr-spells">
+            <button class="lotr-spell-btn" id="lotr-spell1-btn">
+                <img src="medias/baton.png" class="lotr-spell-img" alt="Sort">
+                <span class="lotr-spell-cost">10✦</span>
+                <div class="lotr-spell-cd-overlay" id="lotr-spell1-cd"></div>
+            </button>
+            <button class="lotr-spell-btn lotr-spell-btn--ult" id="lotr-spell2-btn">
+                <span class="lotr-spell-icon">⚡</span>
+                <span class="lotr-spell-cost">40✦</span>
+                <div class="lotr-spell-cd-overlay" id="lotr-spell2-cd"></div>
+            </button>
+        </div>
+
+        <!-- Joystick -->
+        <div class="lotr-joystick-wrap">
+            <div class="lotr-joystick-base" id="lotr-joystick-base">
+                <div class="lotr-joystick-thumb" id="lotr-joystick-thumb"></div>
+            </div>
+        </div>
+
+        <!-- Stats button -->
+        <button id="lotr-stats-btn" class="lotr-stats-btn">
+            <img src="medias/book.png" alt="Stats" class="lotr-stats-icon">
+        </button>
+
+        <!-- Upgrade overlay -->
+        <div id="lotr-upgrade" class="lotr-upgrade-overlay hidden">
+            <div class="lotr-upgrade-panel">
+
+                <!-- Étape 1 : choix de catégorie -->
+                <div id="lotr-upgrade-step1">
+                    <div class="lotr-upgrade-header">
+                        <span class="lotr-upgrade-title">✦ ATOUTS ✦</span>
+                        <span class="lotr-upgrade-sub">Choisissez un style</span>
+                    </div>
+                    <div class="lotr-upgrade-cats">
+                        <button class="lotr-upgrade-cat" data-cat="magic">
+                            <img src="medias/magie.png" alt="Magie">
+                            <span>Magie</span>
+                        </button>
+                        <button class="lotr-upgrade-cat" data-cat="defense">
+                            <img src="medias/bouclier.png" alt="Défense">
+                            <span>Défense</span>
+                        </button>
+                        <button class="lotr-upgrade-cat" data-cat="speed">
+                            <img src="medias/eclair.png" alt="Vitesse">
+                            <span>Vitesse</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Étape 2 : choix de l'atout -->
+                <div id="lotr-upgrade-step2" class="hidden">
+                    <div class="lotr-upgrade-header">
+                        <span class="lotr-upgrade-title">✦ ATOUTS ✦</span>
+                        <span class="lotr-upgrade-sub" id="lotr-upgrade-cat-name"></span>
+                    </div>
+                    <div class="lotr-upgrade-choices" id="lotr-upgrade-choices"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Stats panel -->
+        <div id="lotr-stats-panel" class="lotr-stats-panel hidden">
+            <div class="lotr-stats-inner">
+                <div class="lotr-stats-title">⚔ STATISTIQUES</div>
+                <div class="lotr-divider" style="margin:8px 0 12px"><span class="lotr-divider-gem">◆</span></div>
+                <div class="lotr-stat-row">
+                    <span class="lotr-stat-label">❤ Points de vie</span>
+                    <span class="lotr-stat-val" id="lotr-stat-hp">100 / 100</span>
+                </div>
+                <div class="lotr-stat-row">
+                    <span class="lotr-stat-label">✦ Mana</span>
+                    <span class="lotr-stat-val" id="lotr-stat-mana">100 / 100</span>
+                </div>
+                <div class="lotr-stat-row">
+                    <span class="lotr-stat-label">↺ Regen mana</span>
+                    <span class="lotr-stat-val">+2 / sec</span>
+                </div>
+                <div class="lotr-stats-divider"></div>
+                <div class="lotr-stat-row">
+                    <span class="lotr-stat-label">🔥 Sort 1</span>
+                    <span class="lotr-stat-val">10✦ — 1s</span>
+                </div>
+                <div class="lotr-stat-row">
+                    <span class="lotr-stat-label">⚡ Ultime</span>
+                    <span class="lotr-stat-val">40✦ — 1s</span>
+                </div>
+                <div class="lotr-stats-divider"></div>
+                <div class="lotr-stat-row">
+                    <span class="lotr-stat-label">💨 Vitesse</span>
+                    <span class="lotr-stat-val">160 px/s</span>
+                </div>
+                <button id="lotr-stats-close" class="lotr-stats-close">✕ Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ GAME OVER (placeholder) ══ -->
+    <div id="lotr-gameover" class="lotr-screen hidden">
+        <div class="lotr-fire-bg lotr-fire-bg--dim"></div>
+        <div id="lotr-go-embers" class="lotr-embers"></div>
+        <div class="lotr-vignette"></div>
+        <div class="lotr-menu-inner" id="lotr-go-inner">
+            <h2 class="lotr-over-title">LA QUÊTE<br>EST TERMINÉE</h2>
+            <div class="lotr-divider"><span class="lotr-divider-gem">◆</span></div>
+            <div class="lotr-results">
+                <div class="lotr-result-row" id="lotr-res-score-row">
+                    <span>SCORE</span>
+                    <span id="lotr-res-score">0</span>
+                </div>
+                <div class="lotr-result-total hidden" id="lotr-res-total-row">
+                    <span>✨ TOTAL</span>
+                    <span id="lotr-res-total">0</span>
+                </div>
+                <div class="lotr-result-best hidden" id="lotr-res-best-row">
+                    ⚔ MEILLEUR : <span id="lotr-best-val">0</span>
+                </div>
+                <div class="lotr-result-challenge hidden" id="lotr-res-challenge-row">
+                    🎉 DÉFI ACCOMPLI !
+                </div>
+            </div>
+            <div class="lotr-menu-btns hidden" id="lotr-go-btns">
+                <button class="lotr-btn lotr-btn--play" id="lotr-retry-btn">↺ &nbsp;REJOUER</button>
+                <button class="lotr-btn lotr-btn--quit" id="lotr-menu-back-btn">☰ &nbsp;MENU</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script>
+    const FIREBASE_CONFIG = {
+        apiKey: "AIzaSyBsjr0peOj1jFPhAA080MWuUGlyYapjxn0",
+        authDomain: "moviegame-1b838.firebaseapp.com",
+        databaseURL: "https://moviegame-1b838-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "moviegame-1b838",
+        storageBucket: "moviegame-1b838.firebasestorage.app",
+        messagingSenderId: "448540908211",
+        appId: "1:448540908211:web:894cb1e8c38d59c4a9eec6"
+    };
+    firebase.initializeApp(FIREBASE_CONFIG);
+    const db = firebase.database();
+    let cachedValidated = [];
+    db.ref('game/validated').on('value', snap => { cachedValidated = snap.val() || []; });
+    function getValidated() { return cachedValidated; }
+    function saveValidated(arr) {
+        cachedValidated = arr;
+        db.ref('game/validated').set(arr.length ? arr : null);
+    }
+    function buildGrid() {}
+    function setMenuVisible(v) { if (v) location.href = 'index.html'; }
+</script>
+
+<script src="lotr-script.js" charset="UTF-8"></script>
+<script>LOTR_GAME.open();</script>
+
+</body>
+</html>

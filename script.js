@@ -17,10 +17,12 @@ document.addEventListener('fullscreenchange', updateFullscreenIcon);
 document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
 
 function updateFullscreenIcon() {
-    const icon = document.getElementById('fullscreen-icon');
-    if (!icon) return;
     const isFS = !!(document.fullscreenElement || document.webkitFullscreenElement);
-    icon.innerHTML = isFS ? ICON_EXIT_FULLSCREEN : ICON_FULLSCREEN;
+    const path = isFS ? ICON_EXIT_FULLSCREEN : ICON_FULLSCREEN;
+    const icon = document.getElementById('fullscreen-icon');
+    if (icon) icon.innerHTML = path;
+    const optIcon = document.getElementById('options-fullscreen-icon');
+    if (optIcon) optIcon.innerHTML = path;
 }
 
 // ============================================================
@@ -117,6 +119,17 @@ function initDebugUI() {
         });
     });
 
+    document.getElementById("debug-unlock-all-btn").addEventListener("click", () => {
+        const toUnlock = ACHIEVEMENTS
+            .map((ach, i) => ({ ach, i }))
+            .filter(({ ach }) => ach.verrouille || ach.secret)
+            .map(({ i }) => i);
+        const current = getRevealedMysteries();
+        const merged = [...new Set([...current, ...toUnlock])];
+        saveRevealedMysteries(merged);
+        showToast(`${toUnlock.length} films déverrouillés`, "error", 1500);
+    });
+
     document.getElementById("debug-add-key-btn").addEventListener("click", () => {
         refClaimedMilestones.transaction(v => (v || 0) + 1);
         showToast("+1 clé ajoutée", "error", 1000);
@@ -141,6 +154,7 @@ function initDebugUI() {
         localStorage.removeItem("persoCaught");
         localStorage.removeItem("persoDay");
         localStorage.removeItem("persoCount");
+        refFairyCatchCount.set(0);
         showToast("Fée réinitialisée !", "error", 1000);
     });
 
@@ -255,37 +269,51 @@ const ACHIEVEMENTS = [
     { title: "Le Seigneur des anneaux", sousTitre: "La communauté de l'anneau", img: "1.png", password: "X8q",
     question: "Trouve la réponse à ce rébus", rebus: "medias/r1.png", answer: "Le Poney Fringant",
     realisateur: "Peter Jackson", description: "Le jeune Frodon hérite d'un Anneau maléfique convoité par le Seigneur des Ténèbres. Une Communauté se forme pour l'accompagner vers le Mordor et le détruire.",
-    genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0120737/", rating: "8.8", verrouille: false },
+    genres: ["Fantastique", "Aventure"], imdb: "https://www.imdb.com/title/tt0120737/", rating: "8.9", verrouille: false },
+
+
 
     { title: "Le Seigneur des anneaux", sousTitre: "Les deux tours", img: "2.png", password: "v2M",
     question: "Comment se nomme cette forteresse", rebus: "medias/r2.png", answer: "Gouffre de Helm",
     realisateur: "Peter Jackson", description: "La Communauté brisée, Frodon et Sam poursuivent vers le Mordor guidés par Gollum. Leurs compagnons défendent le Rohan lors de la bataille du Gouffre de Helm.",
-    genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0167261/", rating: "8.7", verrouille: false },
+    genres: ["Fantastique", "Aventure"], imdb: "https://www.imdb.com/title/tt0167261/", rating: "8.8", verrouille: false },
+
+
 
     { title: "Le Seigneur des anneaux", sousTitre: "Le retour du roi", img: "3.png", password: "7pL",
     question: "Qui fut la dernière personne à détenir l'anneau unique ?", rebus: "medias/r3.png", answer: "Gollum",
     realisateur: "Peter Jackson", description: "La guerre pour la Terre du Milieu atteint son paroxysme. Frodon approche seul de la Montagne du Destin pendant qu'Aragorn mène les armées libres face à Sauron.",
-    genres: ["Fantastique", "Aventure", "Chef-d'œuvre"], imdb: "https://www.imdb.com/title/tt0167260/", rating: "8.9", verrouille: false },
+    genres: ["Fantastique", "Aventure"], imdb: "https://www.imdb.com/title/tt0167260/", rating: "9.0", verrouille: false },
+
+
 
     { title: "Le Cinquième élement", img: "38.png", password: "6xM", rebus: "medias/r10.png",
     question: "Trouve la réponse à ce rébus", answer: "Korben Dallas",
     realisateur: "Luc Besson", description: "Au XXIIIe siècle, une force du Mal menace la Terre tous les cinq mille ans. Korben Dallas, chauffeur de taxi, doit protéger Leeloo, le mystérieux Cinquième Élément.",
-    genres: ["Science-fiction", "Action", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0119116/", rating: "7.6", verrouille: false },
+    genres: ["Science-fiction", "Action"], imdb: "https://www.imdb.com/title/tt0119116/", rating: "7.6", verrouille: false },
+
+
 
     { title: "Forest Gump", img: "5.png", password: "1nS", rebus: "medias/r5.png",
     question: "Dans quel sport Forest Gump devient-il un professionnel ?", answer: "Ping Pong",
     realisateur: "Robert Zemeckis", description: "Forrest Gump, homme simple au grand cœur, traverse sans le vouloir les plus grands événements de l'Amérique des années 60 à 80, toujours guidé par son amour pour Jenny.",
     genres: ["Drame", "Comédie"], imdb: "https://www.imdb.com/title/tt0109830/", rating: "8.8", verrouille: false },
 
+
+
     { title: "Persepolis", img: "50.png", password: "4vC", rebus: "medias/r7.png",
     question: "Quelle fleur mettait la grand-mère de Marjane dans son soutien-gorge ?", answer: "Jasmin",
     realisateur: "Vincent Paronnaud", description: "La petite Marjane grandit à Téhéran tandis que la révolution islamique bascule l'Iran. Adulte, elle sera contrainte de fuir et trouver sa place entre deux cultures.",
-    genres: ["Animation", "Drame", "Très beau film !"], imdb: "https://www.imdb.com/title/tt0808417/", rating: "7.9", verrouille: false },
+    genres: ["Animation", "Drame"], imdb: "https://www.imdb.com/title/tt0808417/", rating: "8.0", verrouille: false },
+
+
 
     { title: "Her", img: "6.png", password: "8bY", rebus: "medias/r6.png",
     question: "Quel est le nom du système d'exploitation qu'achete Théodore au début du film ?", answer: "OS ONE",
     realisateur: "Spike Jonze", description: "Theodore, un homme solitaire qui écrit des lettres d'amour pour les autres, tombe amoureux de Samantha, un système d'exploitation doté d'une intelligence artificielle.",
     genres: ["Science-fiction", "Romance"], imdb: "https://www.imdb.com/title/tt1798709/", rating: "8.0", verrouille: false },
+
+
 
     { title: "Interstelar", img: "4.png", password: "4kZ",
     questions: [
@@ -295,76 +323,112 @@ const ACHIEVEMENTS = [
     realisateur: "Christopher Nolan", description: "La Terre est mourante. Un pilote de la NASA s'engage dans un voyage à travers un trou de ver pour trouver une planète habitable, au prix de tout ce qu'il aime.",
     genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt0816692/", rating: "8.7", verrouille: false },
 
+
+    
     { title: "Tenacious D", sousTitre: "et le médiator du destin", img: "48.png", password: "2fP", rebus: "medias/r8.png",
     question: "Dans le morceau Master Exploder, complète les paroles suivantes: I do not need, He does not need , a ...", answer: "microphone",
     realisateur: "Liam Lynch", description: "JB et KG, duo rock déjanté, apprennent l'existence du Médiator du Destin, un artefact légendaire capable de les propulser au sommet du rock mondial. La quête commence.",
     genres: ["Comédie", "Musical"], imdb: "https://www.imdb.com/title/tt0365830/", rating: "6.7", verrouille: false },
+
+
 
     { title: "Réalité", img: "49.png", password: "7xL", rebus: "medias/r9.png",
     question: "Dans le film que veut réaliser Jason, quels objets tue toute la population ?", answer: "Télévisions",
     realisateur: "Quentin Dupieux", description: "Jason rêve de réaliser un film d'horreur. Son producteur exige le meilleur gémissement jamais enregistré. La réalité et la fiction finissent par se confondre.",
     genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/title/tt2392672/", rating: "6.2", verrouille: false },
 
-    { title: "Fumer fait tousser", img: "14.png", password: "7mX", rebus: "medias/r11.png",
-    question: "quel est le dernier morceau du corps qu'il reste au neveu du personnage joué par Blanche Gardin dans le film Fumer fait tousser", answer: "la bouche",
-    realisateur: "Quentin Dupieux", description: "Les membres de la Tabac Force, super-héros anti-tabac, partent en retraite dans un chalet pour se ressouder. Une terrible menace plane sur la planète entière.",
-    genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/title/tt15471560/", rating: "6.1", verrouille: false },
 
-    { title: "Oss 117", sousTitre: "Le Caire, nid d'espions", img: "17.png", password: "3fS", rebus: "medias/r12.png",
-    question: "Que ce passe t'il lorsque quelqu'un ou quelque chose meurt... ? ", answer: "Quelqu'un ou quelque chose naît ailleurs",
+
+    { title: "Mandibules", img: "14.png", password: "7mX",
+    questions: [
+        { rebus: "medias/r11.png", question: "Que disent Jean-Gab et Manu lorsqu'ils font leur célèbre check ?", answer: "Taureau" },
+        { rebus: "medias/r11.png", question: "Quel animal la mouche a-t-elle mangé ?", answer: "un chien" }
+    ],
+    realisateur: "Quentin Dupieux", description: "Lorsque Jean-Gab et Manu, deux amis simples d'esprit, sont en pleine escapade en voiture, ils trouvent une mouche géante coincée dans le coffre d'une voiture. À la suite du choc et de l'étonnement quant à cette découverte, les deux compagnons se mettent très vite en tête de la dresser afin de gagner de l'argent et embarquent pour une aventure.",
+    genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/fr/title/tt10375106/", rating: "6.6", verrouille: false },
+
+
+
+    { title: "Oss 117", sousTitre: "Le Caire, nid d'espions", img: "17.png", password: "3fS",
+        questions: [
+        { rebus: "medias/r12.png", question: "Que ce passe t'il lorsque quelqu'un ou quelque chose meurt... ? ", answer: "Quelqu'un ou quelque chose naît ailleurs" },
+        { rebus: "medias/r12.png", question: "Quel animal la mouche a-t-elle mangé ?", answer: "un chien" }
+    ],
     realisateur: "Michel Hazanavicius", description: "En 1955, l'espion OSS 117 est envoyé au Caire pour élucider la disparition d'un agent. Dragueur, arrogant et inadapté, il sème joyeusement la pagaille.",
-    genres: ["Comédie", "Espionnage", "J'aime trop ce film"], imdb: "https://www.imdb.com/title/tt0464913/", rating: "7.4", verrouille: false },
+    genres: ["Comédie", "Espionnage"], imdb: "https://www.imdb.com/title/tt0464913/", rating: "7.4", verrouille: false },
+
+
 
     { title: "Oss 117", sousTitre: "Rio ne répond plus", img: "18.png", password: "9pZ", rebus: "medias/r13.png",
     question: "Comment appelez-vous un pays qui a comme dirigeant un militaire avec les pleins pouvoirs, une police secrète, une seule chaîne de télévision et que toute l'information est contrôlée par l'État ?", answer: "La France du general de gaulle",
     realisateur: "Michel Hazanavicius", description: "En 1967, OSS 117 est envoyé au Brésil pour récupérer un microfilm compromettant sur des anciens nazis, tout en semant le chaos comme à son habitude.",
-    genres: ["Comédie", "Espionnage", "Tout aussi bien"], imdb: "https://www.imdb.com/title/tt1167660/", rating: "6.8", verrouille: false },
+    genres: ["Comédie", "Espionnage"], imdb: "https://www.imdb.com/title/tt1167660/", rating: "6.8", verrouille: false },
+
+
 
     { title: "La cité de la peur", img: "19.png", password: "2hK", rebus: "medias/r14.png",
     question: "Quel est le titre du film d'Odile Deray ?", answer: "Red is Dead",
     realisateur: "Alain Berbérian", description: "Un tueur en série assassine les projectionnistes au Festival de Cannes. Simon Jérémi, garde du corps raté des Nuls, est chargé de protéger la maladroite Odile Deray.",
     genres: ["Comédie", "Horreur"], imdb: "https://www.imdb.com/title/tt0109440/", rating: "7.6", verrouille: false },
 
+
+
     { title: "Jumanji", img: "24.png", password: "5jN", rebus: "medias/r15.png",
     question: "Trouve la réponse à ce rébus", answer: "Alan Parrish",
     realisateur: "Joe Johnston", description: "En 1969, Alan est aspiré dans un jeu de société magique. Vingt-six ans plus tard, deux enfants reprennent la partie et libèrent des dangers de jungle dans leur ville.",
-    genres: ["Aventure", "Fantastique", "Un Classique !"], imdb: "https://www.imdb.com/title/tt0113497/", rating: "7.0", verrouille: false },
+    genres: ["Aventure", "Fantastique"], imdb: "https://www.imdb.com/title/tt0113497/", rating: "7.0", verrouille: false },
+
+
 
     { title: "Premier Contact", img: "28.png", password: "9kF", rebus: "medias/r16.png",
     question: "Il est bien ce film ?", answer: "Oui",
     realisateur: "Denis Villeneuve", description: "Douze vaisseaux extraterrestres se posent sur Terre. La linguiste Louise Banks tente de déchiffrer leur langage mystérieux avant que la panique mondiale ne déclenche la guerre.",
     genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt2543164/", rating: "7.9", verrouille: false },
 
+
+
     { title: "La classe Américaine", img: "31.png", password: "8rD", rebus: "medias/r17.png",
     question: "Selon Orson Welles, ce flilm est un plagiat d'un autre flilm. Lequel?", answer: "Citizen Kane",
-    realisateur: "Michel Hazanavicius et Dominique Mézerette", description: "George Abitbol, l'homme le plus classe du monde, part en quête de la classe perdue. Un détournement culte de films Warner où tout le monde est con sauf lui.",
-    genres: ["Comédie", "Absurde", "Je suis désolé"], imdb: "https://www.imdb.com/title/tt0321715/", rating: "7.9", verrouille: false },
+    realisateur: "Michel Hazanavicius", description: "George Abitbol, l'homme le plus classe du monde, part en quête de la classe perdue. Un détournement culte de films Warner où tout le monde est con sauf lui.",
+    genres: ["Comédie", "Absurde"], imdb: "https://www.imdb.com/title/tt0321715/", rating: "7.9", verrouille: false },
+
+
 
     { title: "Blade Runner 2049", img: "44.png", password: "1vR", rebus: "medias/r18.png",
     question: "Comment appelle-t-on les androïdes biologiquement identiques aux humains, fabriqués par la corporation Tyrell ?", answer: "Les Réplicants",
     realisateur: "Denis Villeneuve", description: "En 2049, l'agent K, blade runner chargé de traquer les réplicants, découvre un secret vieux de trente ans qui pourrait bouleverser l'ordre entre humains et androïdes.",
-    genres: ["Science-fiction", "Thriller", "Un grand film !"], imdb: "https://www.imdb.com/title/tt1856101/", rating: "8.0", verrouille: false },
+    genres: ["Science-fiction", "Thriller"], imdb: "https://www.imdb.com/title/tt1856101/", rating: "8.0", verrouille: false },
+
+
 
     { title: "Gladiator", img: "45.png", password: "4bX", rebus: "medias/r19.png",
     question: "Qui est nazi et adore ce film ?", answer: "Bertrand",
     realisateur: "Ridley Scott", description: "Maximus, grand général de Rome trahi par Commode, est réduit en esclavage. Devenu gladiateur, il traverse l'Empire pour se venger de l'homme qui a assassiné sa famille.",
-    genres: ["Action", "Historique", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0172495/", rating: "8.5", verrouille: false },
+    genres: ["Action", "Historique"], imdb: "https://www.imdb.com/title/tt0172495/", rating: "8.5", verrouille: false },
+
+
 
     { title: "Je suis une légende", img: "46.png", password: "8nN", rebus: "medias/r20.png",
     question: "Dans ce film, le personnage principal Robert Neville joué par Will Smith écoute régulièrement un morceau de Bob Marley, quel est le titre de ce morceau ?", answer: "Three Little Birds",
     realisateur: "Francis Lawrence", description: "Robert Neville survit seul à New York après qu'un virus a transformé l'humanité en créatures nocturnes sanguinaires. Militaire et chercheur, il tente de trouver un remède.",
-    genres: ["Horreur", "Drame", "Un bon film !"],
+    genres: ["Horreur", "Drame"],
     imdb: "https://www.imdb.com/title/tt0480249/", rating: "7.2", verrouille: false },
+
+
 
     { title: "Into the Wild", img: "33.png", password: "5kS", rebus: "medias/r21.png",
     question: "Quel est le numéro écrit sur le côté du 'Magic Bus' où s'installe Christopher ?", answer: "142",
     realisateur: "Sean Penn", description: "Christopher McCandless, jeune diplômé idéaliste, abandonne tout — argent, famille, identité — pour partir seul à l'aventure vers les étendues sauvages de l'Alaska.",
-    genres: ["Drame", "Aventure", "Un grand film !"], imdb: "https://www.imdb.com/title/tt0758758/", rating: "8.1", verrouille: false },
+    genres: ["Drame", "Aventure"], imdb: "https://www.imdb.com/title/tt0758758/", rating: "8.1", verrouille: false },
+
+
 
     { title: "Incassable", img: "34.png", password: "3vH", rebus: "medias/r22.png",
     question: "Quel est le nom de la galerie d'art spécialisée dans les comics tenue par Elijah Price ?", answer: "Limited Edition",
-    realisateur: "M. Night Shyamalan", description: "David Dunn, unique survivant indemne d'un accident de train ayant tué 131 personnes, est contacté par Elijah Price, un homme mystérieux qui lui révèle une vérité bouleversante.",
+    realisateur: "Night Shyamalan", description: "David Dunn, unique survivant indemne d'un accident de train ayant tué 131 personnes, est contacté par Elijah Price, un homme mystérieux qui lui révèle une vérité bouleversante.",
     genres: ["Fantastique", "Thriller"], imdb: "https://www.imdb.com/title/tt0217869/", rating: "7.3", verrouille: true },
+
+
 
     { title: "Bugonia", img: "54.png", password: "1xQ", rebus: "medias/r23.png",
     question: "De quel espèce extraterrestre parle-t-on dans ce film ?", answer: "les Andromédiens",
@@ -372,41 +436,55 @@ const ACHIEVEMENTS = [
     genres: ["Thriller", "Crime"],
     imdb: "https://www.imdb.com/fr-ca/title/tt12300742/", rating: "7.4", verrouille: true },
     
+
+
     { title: "Transcendance", img: "21.png", password: "1xQ", rebus: "medias/r24.png",
     question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
     realisateur: "Wally Pfister", description: "Will Caster, brillant chercheur en IA, se retrouve mourant après un attentat. Sa conscience est téléchargée dans un ordinateur, créant une entité omnisciente et omnipotente.",
-    genres: ["Science-fiction", "Thriller", "Sous-coté"],
+    genres: ["Science-fiction", "Thriller"],
     imdb: "https://www.imdb.com/title/tt2209764/", rating: "6.2", verrouille: true },
+
+
 
     { title: "Mommy", img: "56.png", password: "1xQ", rebus: "medias/r24.png",
     question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
     realisateur: "Xavier Dolan", description: "Une veuve mono-parentale hérite de la garde de son fils, un adolescent TDAH impulsif et violent. Au coeur de leurs emportements et difficultés, ils tentent de joindre les deux bouts, notamment grâce à l’aide inattendue de l’énigmatique voisine d’en face, Kyla. Tous les trois, ils retrouvent une forme d’équilibre et, bientôt, d’espoir.",
-    genres: ["Drame", "Bouleversant", "Beau"],
+    genres: ["Drame"],
     imdb: "https://www.imdb.com/fr/title/tt3612616/", rating: "8.0", verrouille: true },
+
+
 
     { title: "Jumper", img: "22.png", password: "4uG", rebus: "medias/r25.png",
     question: "Où se trouve la 'bibliothèque' secrète de Griffin, là où il garde ses preuves sur les Paladins ?", answer: "Dans le Colisée",
     realisateur: "Doug Liman", description: "David Rice peut se téléporter instantanément n'importe où. Cette liberté absolue prend fin quand les Paladins, une organisation secrète qui traque les Jumpers, se lance à ses trousses.",
-    genres: ["Fantastique", "Action", "Tu va peut être pas aimer"],
+    genres: ["Fantastique", "Action"],
     imdb: "https://www.imdb.com/title/tt0489099/", rating: "6.0", verrouille: true },
+
+
 
     { title: "Chappee", img: "27.png", password: "6tW", rebus: "medias/r26.png",
     question: "Quel est le nom du robot massif et lourd piloté à distance par le personnage de Hugh Jackman ?", answer: "Moose",
     realisateur: "Neill Blomkamp", description: "À Johannesburg, Chappie est le premier robot à posséder une vraie conscience. Volé par des gangsters, il apprend la dureté du monde tout en cherchant à comprendre ce qu'il est.",
-    genres: ["Science-fiction", "Action", "Divertissant", "à voir"],
+    genres: ["Science-fiction", "Action"],
     imdb: "https://www.imdb.com/title/tt1823672/", rating: "6.8", verrouille: true },
+
+
 
     { title: "Au Boulot !", img: "51.png", password: "6tW", rebus: "medias/r27.png",
     question: "Dans ce film documentaire, cette grosse bourgeoise de Sarah Saldamann prend en photo la façade d'un commerce avec un air enjoué mais plein de mépris de classe (la connasse). Quel est le nom de ce commerce ?", answer: "Un PMU",
     realisateur: "Gilles Perret", description: "François Ruffin, député, propose à Sarah Saldmann de vivre un mois avec le SMIC et d'exercer des métiers précaires pour comprendre la réalité des travailleurs modestes.",
-    genres: ["Documentaire", "Gauchiasse !"],
+    genres: ["Documentaire"],
     imdb: "https://www.imdb.com/title/tt33350039/", rating: "6.9", verrouille: true },
+
+
 
     { title: "Looper", img: "36.png", password: "1zL", rebus: "medias/r34.png",
     question: "Quel est le surnom du futur chef de la pègre qui envoie les victimes dans le passé ?", answer: "Le Maître des Pluies",
     realisateur: "Rian Johnson", description: "En 2044, Joe est un Looper : il élimine des victimes envoyées du futur par un syndicat du crime. Sa vie bascule quand sa prochaine cible est sa propre version vieillie.",
-    genres: ["Action", "Science-fiction", "Un bon film !"],
+    genres: ["Action", "Science-fiction"],
     imdb: "https://www.imdb.com/title/tt1276104/", rating: "7.4", verrouille: true },
+
+
 
     { title: "Ma Mère, Dieu et Sylvie Vartan", img: "55.png", password: "1xQ", rebus: "medias/r24.png",
     question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
@@ -414,55 +492,89 @@ const ACHIEVEMENTS = [
     genres: ["Comédie dramatique"],
     imdb: "https://www.imdb.com/fr/title/tt29927144/", rating: "7.0", verrouille: true },
 
+
+
+    { title: "El Camino", img: "57.png", password: "1xQ", rebus: "medias/r28.png",
+    question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
+    realisateur: "Vince Gilligan", description: "Après avoir été libéré par Walter White du repaire du gang de Jack où il était séquestré, Jesse Pinkman doit se réconcilier avec son passé pour pouvoir prétendre à un avenir plus radieux, alors qu'il se trouve traqué par les forces de l'ordre.",
+    genres: ["Action", "Drame"],
+    imdb: "https://www.imdb.com/fr/title/tt9243946/", rating: "7.3", verrouille: true },
+
+
+
     { title: "L'amour Ouf", img: "20.png", password: "6lD", rebus: "medias/r37.png",
     question: "Sur quelle chanson de The Cure les deux protagonistes dansent-ils dans la cour d'école ?", answer: "A Forest",
     realisateur: "Gilles Lellouche", description: "Clotaire et Jackie se rencontrent adolescents dans les années 80. Leur amour passionnel résistera aux années, à la violence et à des chemins de vie radicalement différents.",
-    genres: ["Drame", "Romance", "J'ai bien aimé mais je sais pas si c'est ta came"],
+    genres: ["Drame", "Romance"],
     imdb: "https://www.imdb.com/title/tt27490099/", rating: "7.0", verrouille: true },
 
-    { title: "Le Guide du Voyageur galactique", img: "16.png", password: "5wK", rebus: "medias/r38.png",
-    question: "En quoi le moteur à improbabilité infinie transforme-t-il les deux missiles nucléaires ?", answer: "Un pétunia et une baleine",
-    realisateur: "Garth Jennings", description: "Arthur Dent échappe de justesse à la démolition de la Terre pour une autoroute galactique. Il parcourt l'univers avec son ami Ford Prefect, un extraterrestre guide intergalactique.",
-    genres: ["Science-fiction", "Comédie", "à voir absolument !"],
-    imdb: "https://www.imdb.com/title/tt0371724/", rating: "6.8", verrouille: true },
-    
-    { title: "Kaamelott 2 part.1", img: "52.png", password: "6tW", rebus: "medias/r39.png",
-    question: "", answer: "",
-    realisateur: "Alexandre Astier", description: "Le roi Arthur revient d'exil pour reprendre Kaamelott des mains de Lancelot. Il rassemble ses chevaliers pour une reconquère contre Arthur ! Après la destruction de Kaamelott, son refus obstiné de tuer Lancelot précipite le Royaume de Logres à sa perte. Il réunit ses Chevaliers, novices téméraires et vétérans désabusés, autour de la Nouvelle Table Ronde et les envoie prouver leur valeur aux quatre coins du Monde, des Marais Orcaniens aux terres glacées du DRAGON_END_PLACEHOLDER",
-    genres: ["Aventure", "Fantastique", "L'excelente suite d'un film moyen"],
-    imdb: "https://www.imdb.com/title/tt9844322/", rating: "7.2", verrouille: true },
 
-    { title: "10 Cloverfield Lane", img: "10.png", password: "9jN", rebus: "medias/r40.png",
-    question: "À quel jeu de société Howard, Emmett et Michelle jouent-ils dans le bunker ?", answer: "Le jeu de la vie",
-    realisateur: "Dan Trachtenberg", description: "Une femme se réveille dans un bunker après un accident, son hôte affirmant que l'extérieur est contaminé.",
-    genres: ["Thriller", "Science-fiction", "Un bon film !"],
-    imdb: "https://www.imdb.com/title/tt1179933/", rating: "7.2", verrouille: true },
 
     { title: "Stargate", img: "11.png", password: "2tX", rebus: "medias/r41.png",
     question: "Comment s'appelle le minéral instable utilisé pour faire fonctionner la porte ?", answer: "Naquadah",
     realisateur: "Roland Emmerich", description: "Une équipe de militaires et un archéologue franchissent une porte stellaire menant à une autre planète.",
-    genres: ["Science-fiction", "Aventure", "Un classique de la science-fiction"],
+    genres: ["Science-fiction", "Aventure"],
     imdb: "https://www.imdb.com/title/tt0111282/", rating: "7.1", verrouille: true },
+    
+
+
+    { title: "Kaamelott 2 part.1", img: "52.png", password: "6tW", rebus: "medias/r39.png",
+    question: "", answer: "",
+    realisateur: "Alexandre Astier", description: "Le roi Arthur revient d'exil pour reprendre Kaamelott des mains de Lancelot. Il rassemble ses chevaliers pour une reconquère contre Arthur ! Après la destruction de Kaamelott, son refus obstiné de tuer Lancelot précipite le Royaume de Logres à sa perte. Il réunit ses Chevaliers, novices téméraires et vétérans désabusés, autour de la Nouvelle Table Ronde et les envoie prouver leur valeur aux quatre coins du Monde, des Marais Orcaniens aux terres glacées du DRAGON_END_PLACEHOLDER",
+    genres: ["Aventure", "Fantastique"],
+    imdb: "https://www.imdb.com/title/tt9844322/", rating: "7.2", verrouille: true },
+
+
+
+    { title: "10 Cloverfield Lane", img: "10.png", password: "9jN", rebus: "medias/r40.png",
+    question: "À quel jeu de société Howard, Emmett et Michelle jouent-ils dans le bunker ?", answer: "Le jeu de la vie",
+    realisateur: "Dan Trachtenberg", description: "Une femme se réveille dans un bunker après un accident, son hôte affirmant que l'extérieur est contaminé.",
+    genres: ["Thriller", "Science-fiction"],
+    imdb: "https://www.imdb.com/title/tt1179933/", rating: "7.2", verrouille: true },
+
+
+
+    { title: "Le Guide du Voyageur galactique", img: "16.png", password: "5wK", rebus: "medias/r38.png",
+    question: "En quoi le moteur à improbabilité infinie transforme-t-il les deux missiles nucléaires ?", answer: "Un pétunia et une baleine",
+    realisateur: "Garth Jennings", description: "Arthur Dent échappe de justesse à la démolition de la Terre pour une autoroute galactique. Il parcourt l'univers avec son ami Ford Prefect, un extraterrestre guide intergalactique.",
+    genres: ["Science-fiction", "Comédie"],
+    imdb: "https://www.imdb.com/title/tt0371724/", rating: "6.7", verrouille: true },
+
+
 
     { title: "Scary Movie 3", img: "12.png", password: "1pB", rebus: "medias/r42.png",
     question: "Comment s'appelle la petite fille terrifiante qui sort du puits (parodie du Cercle) ?", answer: "Tabitha",
     realisateur: "David Zucker", description: "Une parodie déjantée des films d'horreur et de science-fiction les plus célèbres des années 2000.",
-    genres: ["Comédie", "Absurde", "Un classique de l'humour"],
+    genres: ["Comédie", "Absurde"],
     imdb: "https://www.imdb.com/title/tt0306047/", rating: "6.1", verrouille: true },
+
+
 
     { title: "Daaaaaalie", img: "13.png", password: "4vC", rebus: "medias/r43.png",
     question: "Quel objet insolite Dalí veut-il absolument filmer lors de l'interview ?", answer: "Une fontaine",
     realisateur: "Quentin Dupieux", description: "Une journaliste tente de réaliser une interview avec Salvador Dalí, qui se transforme en un voyage absurde.",
-    genres: ["Comédie", "Absurde", "Pas mal non ?! C'est français"],
+    genres: ["Comédie", "Absurde"],
     imdb: "https://www.imdb.com/title/tt23476446/", rating: "6.5", verrouille: true },
+
+
+
+    { title: "Undercover Brother", img: "58.png", password: "1xQ", rebus: "medias/r29.png",
+    question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
+    realisateur: "Malcolm D. Lee", description: "Afin d'arrêter la terrible mission perpétrée par un chef d'entreprise déterminé à réduire la population mondiale en une masse de zombies, Anton Jackson endosse une identité secrète et change d'apparence. L'homme parvient à s'infiltrer au coeur de l'entreprise et obtient le soutien d'une organisation composée uniquement d'Afro-Américains, mais c'est l'aide de la belle Sistah Girl qui garantit le succès de son difficile projet.",
+    genres: ["Comédie"],
+    imdb: "https://www.imdb.com/fr/title/tt0279493/", rating: "5.9", secret: true },
+
+
 
     { title: "Stéphane", img: "53.png", password: "4vC", rebus: "medias/r43.png",
     question: "", answer: "",
-    realisateur: "Timothée Hochet et Lucas Pastor", description: "Un jeune vidéaste au talent douteux fait la rencontre de Stéphane, un ancien cascadeur brut de décoffrage, qui sous couvert d'une grande sympathie se montre de plus en plus étrange. Ils s’engagent alors dans un projet périlleux : réaliser à eux seuls un grand film de guerre.",
+    realisateur: "Timothée Hochet", description: "Un jeune vidéaste au talent douteux fait la rencontre de Stéphane, un ancien cascadeur brut de décoffrage, qui sous couvert d'une grande sympathie se montre de plus en plus étrange. Ils s’engagent alors dans un projet périlleux : réaliser à eux seuls un grand film de guerre.",
     genres: ["Comédie", "Drame"],
     imdb: "https://www.imdb.com/fr/title/tt22180542/", rating: "6.4", secret: true },
 
-    { title: "Le Seigneur des anneaux l'animé de 1979", img: "26.png", password: "3bK", rebus: "medias/r44.png",
+
+
+    { title: "Le Seigneur des anneaux", sousTitre: "l'animé de 1979", img: "26.png", password: "3bK", rebus: "medias/r44.png",
     question: "Quel personnage majeur des livres est totalement absent de cette version de Bakshi ?", answer: "Tom Bombadil",
     realisateur: "Ralph Bakshi", description: "Une adaptation expérimentale du premier tome de Tolkien utilisant la technique de la rotoscopie.",
     genres: ["Fantastique", "Animation"],
@@ -493,6 +605,8 @@ const refTutorialDone      = db.ref("game/tutorialDone");
 const refAccentColor       = db.ref("game/accentColor");
 const refJumanjiActive     = db.ref("game/jumanjiActive");
 const refJumanjiNextRoll   = db.ref("game/jumanjiNextRoll");
+const refFairyCatchCount   = db.ref("game/fairyCatchCount");
+const refCols              = db.ref("game/cols");
 
 const JUMANJI_INDEX = 14;
 
@@ -648,7 +762,7 @@ function initAccentColorModal() {
     const overlay = document.getElementById("accent-modal-overlay");
     const closeBtn = document.getElementById("accent-modal-close");
     const grid    = document.getElementById("accent-color-swatches");
-    if (!btn || !modal || !grid) return;
+    if (!modal || !grid) return;
 
     // Construire les swatches
     ACCENT_COLORS.forEach(({ label, value }) => {
@@ -664,7 +778,7 @@ function initAccentColorModal() {
         grid.appendChild(sw);
     });
 
-    btn.addEventListener("click", () => modal.classList.remove("hidden"));
+    if (btn) btn.addEventListener("click", () => modal.classList.remove("hidden"));
     overlay.addEventListener("click", () => modal.classList.add("hidden"));
     closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
 }
@@ -756,21 +870,51 @@ function saveTierlist() {
 // ============================================================
 //  SONS — Modifier les fichiers dans le dossier sounds/
 // ============================================================
+const tutorialMusic = new Audio("sounds/ffost2.mp3");
+tutorialMusic.loop = true;
+
+function fadeOutMusic(audio, duration = 1500) {
+    const start = audio.volume;
+    const steps = 30;
+    const interval = duration / steps;
+    const decrement = start / steps;
+    const timer = setInterval(() => {
+        audio.volume = Math.max(0, audio.volume - decrement);
+        if (audio.volume <= 0) {
+            clearInterval(timer);
+            audio.pause();
+            audio.volume = start;
+            audio.currentTime = 0;
+        }
+    }, interval);
+}
+
 const SOUNDS = {
-    click:      new Audio("sounds/clic.mp3"),
-    success:    new Audio("sounds/success.mp3"),
-    fail:       new Audio("sounds/fail.mp3"),
-    takeReward: new Audio("sounds/take-reward.mp3"),
-    notif:      new Audio("sounds/notif.mp3"),
-    unlock:     new Audio("sounds/unlock.mp3"),
-    drop:       new Audio("sounds/drop1.wav"),
-    drop2:      new Audio("sounds/drop2.wav"),
-    closedrop1: new Audio("sounds/closedrop1.wav"),
-    clic1:      new Audio("sounds/clic1.wav"),
+    click:          new Audio("sounds/clic.mp3"),
+    success:        new Audio("sounds/success.mp3"),
+    fail:           new Audio("sounds/fail.mp3"),
+    takeReward:     new Audio("sounds/take-reward.mp3"),
+    notif:          new Audio("sounds/notif.mp3"),
+    unlock:         new Audio("sounds/unlock.mp3"),
+    drop:           new Audio("sounds/drop1.wav"),
+    drop2:          new Audio("sounds/drop2.wav"),
+    closedrop1:     new Audio("sounds/closedrop1.wav"),
+    clic1:          new Audio("sounds/clic1.wav"),
+    win:            new Audio("sounds/Win_sound_16.WAV"),
+    secretUnlock:   new Audio("sounds/Powerup_upgrade_21.WAV"),
+    rewardKeyJoker: new Audio("sounds/Powerup_upgrade_34.WAV"),
+    milestone:      new Audio("sounds/Win_sound_23.WAV"),
+    accentChange:   new Audio("sounds/Powerup_upgrade_19.WAV"),
+    menuOpen:       new Audio("sounds/drop1.wav"),
+    menuClose:      new Audio("sounds/drop2.wav"),
+    challengeStart: new Audio("sounds/Powerup_upgrade_22.WAV"),
 };
 
-function playSound(_name) {
-    // Sons désactivés
+function playSound(name) {
+    const s = SOUNDS[name];
+    if (!s) return;
+    s.currentTime = 0;
+    s.play().catch(() => {});
 }
 
 
@@ -952,7 +1096,7 @@ function buildMilestones() {
 
         if (showClaimBtn) {
             div.querySelector(".milestone-claim-btn").addEventListener("click", () => {
-                playSound("takeReward");
+                playSound("milestone");
                 saveClaimedMilestones(getClaimedMilestones() + 1);
 
                 const hasSecret = m.secretFilm !== undefined;
@@ -1004,15 +1148,18 @@ function buildMilestones() {
 
 function buildGrid() {
     const grid = document.getElementById("grid");
+    const empty = document.getElementById("grid-empty");
     const validatedArr = getValidated();
     const revealedArr  = getRevealedMysteries();
-    // Sets pour lookups O(1)
     const validatedSet = new Set(validatedArr);
     const revealedSet  = new Set(revealedArr);
 
+    const indices = getSortedIndices();
+    if (empty) empty.classList.toggle("hidden", indices.length > 0);
+
     const fragment = document.createDocumentFragment();
 
-    getSortedIndices().forEach(i => {
+    indices.forEach(i => {
         const ach = ACHIEVEMENTS[i];
         const isValidated = validatedSet.has(i);
         const isMystery = ach.verrouille && !isValidated && !revealedSet.has(i);
@@ -1030,6 +1177,7 @@ function buildGrid() {
             <img class="cell-icon${isMystery || isSecret ? " cell-icon-locked" : ""}" src="${isMystery || isSecret ? "medias/imageflou.png" : achImg(i)}" alt="${displayTitle}" loading="lazy">
             ${isMystery ? `<div class="cell-lock-overlay"><img src="medias/lock.png" class="cell-overlay-icon"></div>` : ""}
             ${isSecret  ? `<div class="cell-lock-overlay cell-secret-overlay"><img src="medias/question.png" class="cell-overlay-icon"></div>` : ""}
+            ${isValidated ? `<div class="cell-validated-badge"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13l4 4L19 7" stroke="white" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>` : ""}
             <div class="cell-status">
             <div class="cell-background">
                 <span class="cell-status-label cell-lock-label">${isSecret ? "Secret" : "Verrouillé"}</span>
@@ -1085,7 +1233,6 @@ function buildMilestonesDebounced() {
 function updateGridHeading() {
     const heading  = document.getElementById("grid-heading");
     const countEl  = document.getElementById("grid-heading-count");
-    const banner   = document.getElementById("next-challenge");
     const labels = {
         "all":         "Tous les films",
         "validated":   "Films validés",
@@ -1104,7 +1251,6 @@ function updateGridHeading() {
     const n = getSortedIndices().length;
     if (countEl) countEl.textContent = n ? n : "";
 
-    if (currentFilter !== "all" && currentFilter !== "unvalidated") banner.classList.add("hidden");
 }
 
 function updateNextChallengeBanner() {
@@ -1112,8 +1258,9 @@ function updateNextChallengeBanner() {
     const validated       = getValidated();
     const revealedMysteries = getRevealedMysteries();
 
-    // Premier film disponible (non verrouillé, non secret, non validé)
-    const nextIndex = getSortedIndices().find(i => {
+    // Premier film disponible (non verrouillé, non secret, non validé) — tous les films, filtre ignoré
+    const allIndices = ACHIEVEMENTS.map((_, i) => i);
+    const nextIndex = allIndices.find(i => {
         const ach = ACHIEVEMENTS[i];
         const isAvailable = (!ach.verrouille && !ach.secret) || revealedMysteries.includes(i);
         return isAvailable && !validated.includes(i);
@@ -1273,7 +1420,6 @@ function openModal(index) {
 }
 
 function openInfoModal(index, mysteryReveal = false) {
-    playSound("click");
     setMenuVisible(false);
     currentIndex = index;
     const ach = ACHIEVEMENTS[index];
@@ -1292,6 +1438,15 @@ function openInfoModal(index, mysteryReveal = false) {
     infoBgEl.style.filter = "";
     document.getElementById("modal-info").style.setProperty("--modal-poster", `url(${imgSrc})`);
     document.getElementById("info-validated-badge").classList.toggle("hidden", !isValidated);
+
+    const lockOverlay = document.getElementById("info-lock-overlay");
+    const lockIcon    = document.getElementById("info-lock-icon");
+    if (isLocked) {
+        lockIcon.src = isMystery ? "medias/lock.png" : "medias/question.png";
+        lockOverlay.classList.remove("hidden");
+    } else {
+        lockOverlay.classList.add("hidden");
+    }
 
     // Titre + sous-titre
     const titleEl = document.getElementById("info-title");
@@ -1435,7 +1590,7 @@ function showPosterReveal(index) {
     title.textContent = ach.title;
 
     setMenuVisible(false);
-    playSound("unlock");
+    playSound("secretUnlock");
     screen.classList.remove("hidden");
     // Force reflow then fade in
     requestAnimationFrame(() => {
@@ -1509,6 +1664,7 @@ function renderSecretRewardStep(step) {
 }
 
 function showSuccessAnimation(_index) {
+    playSound("win");
     const screen  = document.getElementById("success-screen");
     const titleEl = document.getElementById("success-title");
 
@@ -1590,6 +1746,7 @@ function showKeyReveal(keys, onNext) {
     icon.innerHTML = `<img src="medias/key.png" class="icon-key icon-key-reveal">`;
     count.textContent = `+${keys} Clé${keys > 1 ? "s" : ""}`;
     setMenuVisible(false);
+    playSound("rewardKeyJoker");
     screen.classList.remove("hidden");
     requestAnimationFrame(() => {
         requestAnimationFrame(() => screen.classList.add("active"));
@@ -1607,6 +1764,7 @@ function showJokerReveal(onNext, jokers = 1) {
     icon.innerHTML    = `<img src="medias/joker.png" class="icon-joker icon-key-reveal">`;
     count.textContent = `+${jokers} Joker${jokers > 1 ? "s" : ""}`;
     setMenuVisible(false);
+    playSound("rewardKeyJoker");
     screen.classList.remove("hidden");
     requestAnimationFrame(() => {
         requestAnimationFrame(() => screen.classList.add("active"));
@@ -1693,12 +1851,13 @@ function showChallengeIntro(index, callback) {
         if (qCount > 1) {
             for (let i = 0; i < qCount; i++) {
                 const tmp = document.createElement("div");
-                tmp.innerHTML = `<svg class="ci-star" style="animation-delay:${0.35 + i * 0.12}s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="${STAR_PATH}"/></svg>`;
+                tmp.innerHTML = `<svg class="ci-star" style="animation-delay:${0.35 + i * 0.12}s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
                 badgeEl.appendChild(tmp.firstChild);
             }
         }
     }
 
+    playSound("challengeStart");
     intro.classList.remove("hidden", "intro-out");
 
     setTimeout(() => {
@@ -1816,6 +1975,10 @@ function proceedFromInfo() {
             closeAnimatedModal(() => { location.href = 'barbie-index.html'; });
             return;
         }
+        if (index === LOTR_ANIM_INDEX) {
+            closeAnimatedModal(() => { location.href = 'lotr-index.html'; });
+            return;
+        }
         if (ACHIEVEMENTS[index].title && ACHIEVEMENTS[index].title.includes('Tenacious')) {
             closeAnimatedModal(() => { location.href = 'gh-index.html'; });
             return;
@@ -1859,6 +2022,10 @@ function proceedFromInfo() {
         }
         if (index === AU_BOULOT_INDEX) {
             closeAnimatedModal(() => { location.href = 'barbie-index.html'; });
+            return;
+        }
+        if (index === LOTR_ANIM_INDEX) {
+            closeAnimatedModal(() => { location.href = 'lotr-index.html'; });
             return;
         }
         closeAnimatedModal(() => {
@@ -1985,7 +2152,6 @@ document.getElementById("joker-use-btn").addEventListener("click", () => {
     refJokers.transaction(val => Math.max(0, (val || 0) - 1)).catch(err => {
         console.error("Firebase joker error:", err);
     });
-    playSound("success");
     const validated = getValidated();
     if (!validated.includes(currentIndex)) {
         validated.push(currentIndex);
@@ -2005,8 +2171,6 @@ function checkAnswer() {
     const currentQ = questions[currentQuestionIndex];
 
     if (isCloseEnough(input, currentQ.answer, 4)) {
-        playSound("success");
-
         const isLast = currentQuestionIndex >= questions.length - 1;
         if (isLast) {
             // Toutes les questions répondues → valider le défi
@@ -2102,7 +2266,6 @@ function validateDaliAnswer() {
 
     if (Math.abs(xPct - DALI_TARGET_X) <= DALI_TOLERANCE &&
         Math.abs(yPct - DALI_TARGET_Y) <= DALI_TOLERANCE) {
-        playSound("success");
         const validated = getValidated();
         if (!validated.includes(DALI_INDEX)) {
             validated.push(DALI_INDEX);
@@ -2130,7 +2293,8 @@ document.querySelector('.dali-close-btn').addEventListener('click', () => {
 });
 
 // MODAL AU BOULOT — jeu dans barbie-index.html
-const AU_BOULOT_INDEX = 27;
+const AU_BOULOT_INDEX   = 27;
+const LOTR_ANIM_INDEX   = 40;
 
 
 // ============================================================
@@ -2256,7 +2420,6 @@ let currentView = 'films';
 
 function setView(view) {
     if (currentView === view) return;
-    playSound("drop");
     const prev = currentView;
     currentView = view;
 
@@ -2340,8 +2503,17 @@ document.querySelectorAll(".menu-btn[data-view]").forEach(btn => {
     btn.addEventListener("click", () => setView(btn.dataset.view));
 });
 
-// Grille fixe à 3 colonnes
-document.getElementById("grid").classList.add("cols-3");
+// Colonnes de la grille (Firebase)
+refCols.on("value", snap => {
+    const cols = snap.val() || 3;
+    const grid = document.getElementById("grid");
+    grid.classList.remove("cols-2", "cols-3", "cols-4");
+    grid.classList.add(`cols-${cols}`);
+    const btn   = document.getElementById("options-cols-btn");
+    const label = document.getElementById("options-cols-label");
+    if (btn) btn.dataset.cols = cols;
+    if (label) label.textContent = cols;
+});
 
 // Infobulles badges clés / jokers
 (function initBadgeTooltips() {
@@ -2414,17 +2586,14 @@ document.getElementById("grid").classList.add("cols-3");
     toggleBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         if (menu.classList.contains("hidden")) {
-            playSound("drop2");
             openMenu();
         } else {
-            playSound("closedrop1");
             closeMenu();
         }
     });
 
     document.addEventListener("click", (e) => {
         if (!menu.classList.contains("hidden") && !menu.contains(e.target)) {
-            playSound("closedrop1");
             closeMenu();
         }
     });
@@ -2477,7 +2646,6 @@ document.getElementById("grid").classList.add("cols-3");
 // Boutons de filtre
 function applyFilter(f) {
     if (!f) return;
-    playSound("clic1");
     currentFilter = (currentFilter === f || f === "all") ? "all" : f;
     _cachedSortedIndices = null;
     document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
@@ -2554,14 +2722,18 @@ document.getElementById("modal-desc-overlay").addEventListener("click", closeDes
 //  DIDACTICIEL
 // ============================================================
 const TUTORIAL_PHASE2_STEPS = [
-    { text: "Ici tu retrouveras tous les films disponibles et tu pourras accéder à tous les défis !", view: "films" },
+    { text: "Ici, tu retrouveras une liste de films, chaque film possède un défi à accomplir. Pour atteindre ton objectif, tu auras le droit de t'aider de tes amis et te seront offerts des Joker si tu restes bloqué. Bien entendu, on évite d'aller chercher des infos sur internet comme une grosse tricheur.", view: "films" },
     { text: "Ici tu retrouveras les récompenses et succès\nà débloquer lors de ta progression.", view: "rewards" },
     { text: "Et ici tu pourras classer tes films\ndans une tierlist ! Trop bien !", view: "tierlist" },
+    { text: "Durant ton aventure tu obtiendras certaines récompenses !", view: "films" },
+    { html: `<span class="tg-icon-row"><img src="medias/key.png" class="tg-icon">En validant des défis, tu gagnes des clés. Utilise-les pour déverrouiller des films cachés qui ont des défis supplémentaires !</span>`, view: "films" },
+    { html: `<span class="tg-icon-row"><img src="medias/joker.png" class="tg-icon">Si tu es bloqué sur un défi, un Joker peut te donner un coup de pouce. À utiliser avec modération !</span>`, view: "films" },
+    { html: `<span class="tg-icon-row"><img src="medias/star.png" class="tg-icon">Certains paliers de progression révèlent des films secrets cachés. Continue à valider des défis pour les débloquer !</span>`, view: "films" },
 ];
 const TUTORIAL_PHASE2_FINAL = [
     { text: "Voilà, tu sais maintenant deux trois trucs sur cette application.", img: "medias/mage.gif"  },
     { text: "Mais tu n'a pas encore tous découvert.", img: "medias/mage.gif" },
-    { text: "Maintenant je te laisse la explorer le reste plus en détail !",  img: "medias/mage.gif"  },
+    { text: "Maintenant je te laisse explorer le reste !",  img: "medias/mage.gif"  },
     { text: "Amuse-toi bien !",  img: "medias/mage.gif"  },
 ];
 
@@ -2576,17 +2748,19 @@ function showTutorialGuideStep(index) {
 
     btn.textContent = "Suivant";
 
-    if (guide.classList.contains("hidden")) {
-        // Première apparition
-        textEl.textContent = step.text;
-        guide.classList.remove("hidden", "tuto-guide-out");
+    const applyStep = () => {
+        if (step.html) textEl.innerHTML = step.html;
+        else textEl.textContent = step.text;
         setView(step.view);
+    };
+
+    if (guide.classList.contains("hidden")) {
+        applyStep();
+        guide.classList.remove("hidden", "tuto-guide-out");
     } else {
-        // Transition : out → changer → in
         guide.classList.add("tuto-guide-out");
         setTimeout(() => {
-            textEl.textContent = step.text;
-            setView(step.view);
+            applyStep();
             guide.classList.remove("tuto-guide-out");
         }, 280);
     }
@@ -2594,6 +2768,8 @@ function showTutorialGuideStep(index) {
 
 function startTutorialPhase2() {
     tutorialPhase2Step = 0;
+    tutorialMusic.volume = 0.2;
+    tutorialMusic.play().catch(() => {});
     showTutorialGuideStep(0);
 
     document.getElementById("tutorial-guide-next").addEventListener("click", function onGuideNext() {
@@ -2631,6 +2807,9 @@ function showTutorialFinal() {
     const showFinalStep = (first = false) => {
         const step   = TUTORIAL_PHASE2_FINAL[tutorialFinalStep];
         const isLast = tutorialFinalStep >= TUTORIAL_PHASE2_FINAL.length - 1;
+        if (tutorialFinalStep === 0) {
+            fadeOutMusic(tutorialMusic);
+        }
         btn.textContent = isLast ? "Terminer !" : "Suivant";
         applyTutorialImg(imgEl, step.img);
 
@@ -2668,6 +2847,7 @@ function showTutorialFinal() {
             showFinalStep();
         } else {
             btn.removeEventListener("click", onFinalNext);
+            fadeOutMusic(tutorialMusic);
             refTutorialDone.set(2).then(() => location.reload());
         }
     });
@@ -2676,23 +2856,35 @@ const TUTORIAL_STEPS = [
     { text: "Bienvenue !\n mon nom est Gimijimotolototolopov", img: "medias/mage.gif" },
     { text: "C'est un long prénom", img: "medias/mage.gif" },
     { text: "Comme c'est la première fois que tu utilises cette application je vais te guider !", img: "medias/mage.gif" },
+    { text: "Pour une meilleure expérience, met un peu de volume car l'application utilise des sons et musiques.", img: "medias/mage.gif"},
+    { text: "Je te conseille aussi de mettre l'application en mode plein écran dans les options quand tu y auras accès", img: "medias/mage.gif"},
     { text: "Pour commencer \nj'ai besoin de connaitre ton prénom", img: "medias/mage.gif" },
     { text: "Entrez votre prénom", fakeInput: true, img: "medias/idcard.png" },
     { text: "Matthias !\n Wow quel beau prénom !", img: "medias/mage.gif" },
     { text: "Ça tombe super bien\n car tu es sur le point de découvrir un jeu fantastique ..", img: "medias/mage.gif" },
     { text: "Le jeu des films de Matthias !", img: "medias/mage.gif" },
+    { text: "Avant de commencer,\nj'ai une dernière question ...", img: "medias/mage.gif" },
+    { text: "Quelle est ta couleur préférée ?", img: "medias/mage.gif", colorPicker: true },
     { text: "Allez, je vais te montrer \ncomment ça marche !", last: true, img: "medias/mage.gif" },
 ];
 
 let tutorialStep = 0;
 
 let _typewriterTimer = null;
+const _typewriterSound = new Audio("sounds/c3.WAV");
+_typewriterSound.volume = 0.4;
+
 function typewrite(el, text, speed = 10) {
     if (_typewriterTimer) clearInterval(_typewriterTimer);
     el.textContent = "";
     let i = 0;
     _typewriterTimer = setInterval(() => {
-        el.textContent += text[i++];
+        const ch = text[i++];
+        el.textContent += ch;
+        if (ch !== " " && ch !== "\n") {
+            _typewriterSound.currentTime = 0;
+            _typewriterSound.play().catch(() => {});
+        }
         if (i >= text.length) clearInterval(_typewriterTimer);
     }, speed);
 }
@@ -2723,13 +2915,49 @@ function applyTutorialImg(imgEl, src) {
     }
 }
 
+function buildTutorialColorPicker() {
+    const container = document.getElementById("tutorial-color-picker");
+    if (container.dataset.built) return;
+    container.dataset.built = "1";
+    ACCENT_COLORS.forEach(({ label, value }) => {
+        const btn = document.createElement("button");
+        btn.className = "tutorial-color-swatch";
+        btn.title = label;
+        btn.style.background = value;
+        btn.dataset.color = value;
+        btn.addEventListener("click", () => {
+            refAccentColor.set(value);
+            container.querySelectorAll(".tutorial-color-swatch").forEach(s =>
+                s.classList.toggle("active", s.dataset.color === value)
+            );
+            document.getElementById("tutorial-next-btn").classList.remove("hidden");
+        });
+        container.appendChild(btn);
+    });
+}
+
+function applyTutorialStep(step) {
+    const fakeInput   = document.getElementById("tutorial-fake-input");
+    const colorPicker = document.getElementById("tutorial-color-picker");
+    const nextBtn     = document.getElementById("tutorial-next-btn");
+
+    fakeInput.classList.toggle("hidden", !step.fakeInput);
+    colorPicker.classList.toggle("hidden", !step.colorPicker);
+
+    if (step.colorPicker) {
+        buildTutorialColorPicker();
+        nextBtn.classList.add("hidden");
+    } else {
+        nextBtn.classList.toggle("hidden", !!step.fakeInput);
+        if (!step.fakeInput) nextBtn.textContent = step.last ? "C'est parti !" : "Suivant";
+    }
+}
+
 function showTutorialStep(index) {
     const step      = TUTORIAL_STEPS[index];
     const box       = document.querySelector("#tutorial-overlay .tutorial-box");
     const textEl    = document.getElementById("tutorial-text");
     const imgEl     = document.getElementById("tutorial-img");
-    const fakeInput = document.getElementById("tutorial-fake-input");
-    const nextBtn   = document.getElementById("tutorial-next-btn");
 
     const isFirst = index === 0;
 
@@ -2743,10 +2971,8 @@ function showTutorialStep(index) {
         box.style.opacity    = "1";
         box.style.transform  = "translateY(0)";
         applyTutorialImg(imgEl, step.img);
+        applyTutorialStep(step);
         setTimeout(() => typewrite(textEl, step.text), 200);
-        fakeInput.classList.toggle("hidden", !step.fakeInput);
-        nextBtn.classList.toggle("hidden", !!step.fakeInput);
-        if (!step.fakeInput) nextBtn.textContent = step.last ? "C'est parti !" : "Suivant";
     } else {
         // Slide out vers le haut + fade, puis slide in depuis le bas
         box.style.transition = "opacity 0.18s ease, transform 0.18s ease";
@@ -2756,9 +2982,7 @@ function showTutorialStep(index) {
         setTimeout(() => {
             textEl.textContent = "";
             applyTutorialImg(imgEl, step.img);
-            fakeInput.classList.toggle("hidden", !step.fakeInput);
-            nextBtn.classList.toggle("hidden", !!step.fakeInput);
-            if (!step.fakeInput) nextBtn.textContent = step.last ? "C'est parti !" : "Suivant";
+            applyTutorialStep(step);
 
             box.style.transition = "none";
             box.style.transform  = "translateY(14px)";
@@ -2774,9 +2998,11 @@ function showTutorialStep(index) {
 function advanceTutorial() {
     tutorialStep++;
     if (tutorialStep >= TUTORIAL_STEPS.length) {
+        tutorialMusic.volume = 0.2;
         refTutorialDone.set(1).then(() => location.reload());
         return;
     }
+    new Audio("sounds/Ui_Success_15_NEW.WAV").play().catch(() => {});
     showTutorialStep(tutorialStep);
 }
 
@@ -2793,15 +3019,16 @@ function showQrIntro(onDone) {
         img.classList.add("visible");
     }, 200);
 
-    // Barre apparaît puis démarre sa progression
+    // Barre apparaît puis démarre sa progression après 5s
     setTimeout(() => {
+        new Audio("sounds/Bird_Call_2.WAV").play().catch(() => {});
         barWrap.classList.add("visible");
         requestAnimationFrame(() => requestAnimationFrame(() => {
             bar.style.width = "100%";
         }));
-    }, 600);
+    }, 5000);
 
-    // Après 5s + 600ms : fondu sortant du contenu sur 3s, fond reste
+    // Après la barre remplie : fondu sortant du contenu sur 3s, fond reste
     setTimeout(() => {
         img.style.transition = "opacity 3s ease";
         img.style.opacity = "0";
@@ -2809,9 +3036,11 @@ function showQrIntro(onDone) {
         barWrap.style.opacity = "0";
         setTimeout(() => {
             screen.classList.add("hidden");
+            tutorialMusic.volume = 0.5;
+            tutorialMusic.play().catch(() => {});
             onDone();
         }, 3000);
-    }, 5600);
+    }, 15000);
 }
 
 function startTutorial() {
@@ -2904,6 +3133,72 @@ if (restoredFilterBtn) restoredFilterBtn.classList.add("active");
 
 // Init modal couleur accent
 initAccentColorModal();
+
+// Init bouton options flottant
+(function initOptionsMenu() {
+    const wrap = document.getElementById("options-wrap");
+    const btn  = document.getElementById("options-btn");
+    const menu = document.getElementById("options-menu");
+    if (!wrap || !btn || !menu) return;
+
+    let pendingClose = null;
+
+    function openMenu() {
+        if (pendingClose) {
+            menu.removeEventListener("animationend", pendingClose);
+            pendingClose = null;
+        }
+        menu.classList.remove("hidden", "closing");
+        btn.classList.add("active");
+    }
+    function closeMenu() {
+        if (menu.classList.contains("hidden")) return;
+        if (pendingClose) return;
+        menu.classList.add("closing");
+        btn.classList.remove("active");
+        pendingClose = () => {
+            menu.classList.add("hidden");
+            menu.classList.remove("closing");
+            pendingClose = null;
+        };
+        menu.addEventListener("animationend", pendingClose, { once: true });
+    }
+    function toggleMenu() {
+        if (menu.classList.contains("hidden") || menu.classList.contains("closing")) {
+            openMenu();
+        } else {
+            closeMenu();
+        }
+    }
+
+    btn.addEventListener("click", (e) => { e.stopPropagation(); toggleMenu(); });
+
+    document.addEventListener("click", (e) => {
+        if (!wrap.contains(e.target)) closeMenu();
+    });
+
+    document.getElementById("options-fullscreen-btn").addEventListener("click", () => {
+        closeMenu();
+        toggleFullscreen();
+    });
+
+    document.getElementById("options-cols-btn").addEventListener("click", () => {
+        const current = parseInt(document.getElementById("options-cols-btn").dataset.cols || "3", 10);
+        const next = current === 3 ? 4 : 3;
+        refCols.set(next);
+    });
+
+    document.getElementById("options-accent-btn").addEventListener("click", () => {
+        closeMenu();
+        document.getElementById("modal-accent").classList.remove("hidden");
+    });
+
+    document.getElementById("options-replay-tutorial-btn").addEventListener("click", () => {
+        closeMenu();
+        refTutorialDone.set(null).then(() => location.reload());
+    });
+
+})();
 
 // Init indicateur de menu
 requestAnimationFrame(() => updateMenuIndicator(currentView));
@@ -3148,6 +3443,28 @@ initTierlist();
     let activeSide = "left";
     let popCount = 0;
     const MAX_POPS = 3;
+    let fairyCatchCount = 0;
+
+    const FAIRY_MESSAGES = [
+        "Hahaha, comme tu es malin !\nMais pas assez rapide !\nTu ne m'attraperas jamais !\nHahaha !",
+        "Hahaha, Tu as failli m'attraper !\nAh le nul !\nHouhouhouuuuu !",
+        "Oh oui !\nJ'ai enfin trouvé plus malin que moi !\nTiens, prends ça !"
+    ];
+
+    // --- Dialog fée ---
+    function showFairyDialog(text, onClose) {
+        const dialog = document.getElementById("fairy-dialog");
+        const textEl = document.getElementById("fairy-dialog-text");
+        const btn    = document.getElementById("fairy-dialog-btn");
+        textEl.innerHTML = text.replace(/\n/g, "<br>");
+        dialog.classList.remove("hidden");
+        const handler = () => {
+            btn.removeEventListener("click", handler);
+            dialog.classList.add("hidden");
+            onClose?.();
+        };
+        btn.addEventListener("click", handler);
+    }
 
     // --- Helpers localStorage ---
     function todayStr() {
@@ -3174,7 +3491,7 @@ initTierlist();
     }
     function inWindow() {
         const mins = new Date().getHours() * 60 + new Date().getMinutes();
-        return mins >= 22 * 60 && mins < 23 * 60 + 30; // 22h00 – 23h30
+        return mins >= 22 * 60 && mins < 23 * 60 + 30;
     }
 
     // --- Transforms ---
@@ -3227,6 +3544,7 @@ initTierlist();
     }
 
     function catchPerso() {
+        if (fairyCatchCount >= 3) { slideOut(); return; }
         clearTimeout(hideTimer);
         clearTimeout(showTimer);
 
@@ -3235,36 +3553,61 @@ initTierlist();
         wrap.style.opacity    = "0";
         setTimeout(() => wrap.classList.add("perso-hidden"), 220);
 
-        // Marquer comme attrapé définitivement
-        localStorage.setItem("persoCaught", "true");
+        fairyCatchCount++;
+        refFairyCatchCount.set(fairyCatchCount);
 
-        // Récompense Joker
-        refJokers.transaction(val => (val || 0) + 1).catch(err => {
-            console.error("Firebase joker error:", err);
+        const msg    = FAIRY_MESSAGES[Math.min(fairyCatchCount, 3) - 1];
+        const isLast = fairyCatchCount >= 3;
+
+        showFairyDialog(msg, () => {
+            if (isLast) {
+                localStorage.setItem("persoCaught", "true");
+                refJokers.transaction(val => (val || 0) + 1).catch(() => {});
+                showJokerReveal();
+            }
         });
-        showJokerReveal();
-        // Pas de reprise — le pop a déjà été compté dans show()
     }
 
     wrap.addEventListener("click", catchPerso);
 
-    // --- Démarrage ---
-    if (localStorage.getItem("persoCaught") === "true") return; // attrapé une fois, fini pour toujours
-    popCount = getPopsToday();
-    if (popCount >= MAX_POPS) return; // quota épuisé pour aujourd'hui
+    // --- Démarrage — attendre la valeur Firebase ---
+    refFairyCatchCount.once("value", snap => {
+        fairyCatchCount = snap.val() || 0;
+        if (fairyCatchCount >= 3) return; // déjà attrapée 3 fois, terminé
+        if (localStorage.getItem("persoCaught") === "true") return;
 
-    const delay = msUntilWindow();
-    if (delay > 0) {
-        // Pas encore 22h — planifier pour l'ouverture de la fenêtre
-        showTimer = setTimeout(() => {
-            popCount = getPopsToday(); // re-vérifier au moment de démarrer
-            if (popCount < MAX_POPS) showTimer = setTimeout(show, 3000 + Math.random() * 4000);
-        }, delay);
-    } else {
-        // Déjà dans la fenêtre — démarrage aléatoire rapide
-        showTimer = setTimeout(show, 3000 + Math.random() * 4000);
+        popCount = getPopsToday();
+        if (popCount >= MAX_POPS) return;
+
+        const delay = msUntilWindow();
+        if (delay > 0) {
+            showTimer = setTimeout(() => {
+                popCount = getPopsToday();
+                if (popCount < MAX_POPS) showTimer = setTimeout(show, 3000 + Math.random() * 4000);
+            }, delay);
+        } else {
+            showTimer = setTimeout(show, 3000 + Math.random() * 4000);
+        }
+    });
+
+    function enableFairySpawnBtn() {
+        document.querySelectorAll(".options-fairy-gated").forEach(el => el.classList.remove("hidden"));
+        document.getElementById("options-fairy-btn").addEventListener("click", () => {
+            document.getElementById("options-menu").classList.add("hidden");
+            show(true);
+        });
     }
 
     // Exposé pour le debug
     window._debugShowFairy = () => show(true);
+
+    // Afficher le bouton si déjà débloqué
+    refFairyCatchCount.once("value", snap => {
+        if ((snap.val() || 0) >= 3) enableFairySpawnBtn();
+    });
+
+    // Activer aussi au moment de l'obtention de la récompense
+    wrap.addEventListener("click", () => {
+        if (fairyCatchCount >= 3) enableFairySpawnBtn();
+    });
 })();
