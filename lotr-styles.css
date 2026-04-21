@@ -43,7 +43,7 @@
 
 #lotr-splash,
 #lotr-menu {
-    background-image: url('medias/gandalf-home-background.png');
+    background-image: url('medias-lotr/gandalf-home-background.png');
     background-size: cover;
     background-position: center top;
 }

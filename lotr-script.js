@@ -8,20 +8,20 @@ const TARGET_SCORE = 5000;
 const LOTR_GAME = (() => {
 
     // ── Images personnage ───────────────────────────────────
-    const imgBgs   = Array.from({length: 5}, (_, i) => { const img = new Image(); img.src = `medias/lotr-brackground-${i+1}.png`; return img; });
-    const imgIdle  = new Image(); imgIdle.src  = 'medias/gandalf-idle.png';
-    const imgWalk1 = new Image(); imgWalk1.src = 'medias/gandalf-walk1.png';
-    const imgWalk2 = new Image(); imgWalk2.src = 'medias/gandalf-walk2.png';
+    const imgBgs   = Array.from({length: 5}, (_, i) => { const img = new Image(); img.src = `medias-lotr/lotr-brackground-${i+1}.png`; return img; });
+    const imgIdle  = new Image(); imgIdle.src  = 'medias-lotr/gandalf-idle.png';
+    const imgWalk1 = new Image(); imgWalk1.src = 'medias-lotr/gandalf-walk1.png';
+    const imgWalk2 = new Image(); imgWalk2.src = 'medias-lotr/gandalf-walk2.png';
 
     // ── Images ennemis ──────────────────────────────────────
-    const imgMob1    = new Image(); imgMob1.src    = 'medias/mob-11.png';
-    const imgMob2    = new Image(); imgMob2.src    = 'medias/mob-12.png';
-    const imgTroll1  = new Image(); imgTroll1.src  = 'medias/troll-1.png';
-    const imgTroll2  = new Image(); imgTroll2.src  = 'medias/troll-2.png';
-    const imgShield  = new Image(); imgShield.src  = 'medias/bouclier.png';
-    const imgMobDead   = new Image(); imgMobDead.src   = 'medias/mob-mort.png';
-    const imgTrollDead = new Image(); imgTrollDead.src = 'medias/troll-mort.png';
-    const imgBoss      = new Image(); imgBoss.src      = 'medias/nazgul.png';
+    const imgMob1    = new Image(); imgMob1.src    = 'medias-lotr/mob-11.png';
+    const imgMob2    = new Image(); imgMob2.src    = 'medias-lotr/mob-12.png';
+    const imgTroll1  = new Image(); imgTroll1.src  = 'medias-lotr/troll-1.png';
+    const imgTroll2  = new Image(); imgTroll2.src  = 'medias-lotr/troll-2.png';
+    const imgShield  = new Image(); imgShield.src  = 'medias-lotr/bouclier.png';
+    const imgMobDead   = new Image(); imgMobDead.src   = 'medias-lotr/mob-mort.png';
+    const imgTrollDead = new Image(); imgTrollDead.src = 'medias-lotr/troll-mort.png';
+    const imgBoss      = new Image(); imgBoss.src      = 'medias-lotr/nazgul.png';
 
     // ── État jeu ────────────────────────────────────────────
     let canvas, ctx, animId;
@@ -348,7 +348,7 @@ const LOTR_GAME = (() => {
     // ── Potions ──────────────────────────────────────────────
     const POTION_HEAL   = 5;
     const POTION_RADIUS = 14;
-    const POTION_IMG    = (() => { const i = new Image(); i.src = 'medias/sante.png'; return i; })();
+    const POTION_IMG    = (() => { const i = new Image(); i.src = 'medias-lotr/sante.png'; return i; })();
     let potions = [];  // [{ x, y }]
 
     function spawnPotion(x, y) {
@@ -846,17 +846,17 @@ const LOTR_GAME = (() => {
     // ── Bénédictions des Valar ───────────────────────────────
     const VALAR_BLESSINGS = [
         {
-            key: 'este',   name: 'Estë',   img: 'medias/rose.png',   color: '#ff88aa',
+            key: 'este',   name: 'Estë',   img: 'medias-lotr/rose.png',   color: '#ff88aa',
             desc: 'Restaure tout<br>votre mana',
             apply: () => { mana = maxMana; updateHUD(); }
         },
         {
-            key: 'varda',  name: 'Varda',  img: 'medias/violet.png', color: '#bb55ff',
+            key: 'varda',  name: 'Varda',  img: 'medias-lotr/violet.png', color: '#bb55ff',
             desc: 'Dégâts +20%<br>pendant 10 secondes',
             apply: () => { vardaUntil = performance.now() + 10000; }
         },
         {
-            key: 'ulmo',   name: 'Ulmo',   img: 'medias/bleu.png',   color: '#2288ff',
+            key: 'ulmo',   name: 'Ulmo',   img: 'medias-lotr/bleu.png',   color: '#2288ff',
             desc: 'Tous les ennemis<br>reçoivent −20 PV',
             apply: () => {
                 const H = canvas.height;
@@ -869,7 +869,7 @@ const LOTR_GAME = (() => {
             }
         },
         {
-            key: 'tulkas', name: 'Tulkas', img: 'medias/rouge.png',  color: '#cc2222',
+            key: 'tulkas', name: 'Tulkas', img: 'medias-lotr/rouge.png',  color: '#cc2222',
             desc: '5 ennemis meurent<br>instantanément',
             apply: () => {
                 const H = canvas.height;
@@ -886,21 +886,21 @@ const LOTR_GAME = (() => {
             }
         },
         {
-            key: 'aule',    name: 'Aulë',    img: 'medias/gris.png',  color: '#aaaaaa',
+            key: 'aule',    name: 'Aulë',    img: 'medias-lotr/gris.png',  color: '#aaaaaa',
             desc: 'Immunité totale<br>pendant 15 secondes',
             apply: () => { iframesUntil = performance.now() + 15000; }
         },
         {
-            key: 'yavanna', name: 'Yavanna', img: 'medias/vert.png',  color: '#44cc66',
+            key: 'yavanna', name: 'Yavanna', img: 'medias-lotr/vert.png',  color: '#44cc66',
             desc: '+1 PV / seconde<br>pendant 10 secondes',
             apply: () => { esteHealUntil = performance.now() + 5000; }
         },
     ];
 
     const SPECIAL_UPGRADES = [
-        { label: 'Prochain atout ×2', img: 'medias/eclair.png',   apply: () => { doubleNextUpgrade = true; } },
-        { label: '+10 PV Max.',        img: 'medias/bouclier.png', apply: () => { maxHp += 10; hp = Math.min(hp + 10, maxHp); updateHUD(); } },
-        { label: '+10 Mana Max.',      img: 'medias/mana.png',     apply: () => { maxMana += 10; mana = Math.min(mana + 10, maxMana); updateHUD(); } },
+        { label: 'Prochain atout ×2', img: 'medias-lotr/eclair.png',   apply: () => { doubleNextUpgrade = true; } },
+        { label: '+10 PV Max.',        img: 'medias-lotr/bouclier.png', apply: () => { maxHp += 10; hp = Math.min(hp + 10, maxHp); updateHUD(); } },
+        { label: '+10 Mana Max.',      img: 'medias-lotr/mana.png',     apply: () => { maxMana += 10; mana = Math.min(mana + 10, maxMana); updateHUD(); } },
     ];
 
     function getDamageMult() { return performance.now() < vardaUntil ? 1.2 : 1; }
@@ -1044,9 +1044,9 @@ const LOTR_GAME = (() => {
     };
 
     const CAT_META = {
-        magic:   { label: 'Magie',   img: 'medias/magie.png' },
-        defense: { label: 'Défense', img: 'medias/bouclier.png' },
-        speed:   { label: 'Vitesse', img: 'medias/eclair.png' },
+        magic:   { label: 'Magie',   img: 'medias-lotr/magie.png' },
+        defense: { label: 'Défense', img: 'medias-lotr/bouclier.png' },
+        speed:   { label: 'Vitesse', img: 'medias-lotr/eclair.png' },
     };
 
     function pickRandom(arr, n) {
@@ -1771,7 +1771,7 @@ const LOTR_GAME = (() => {
         <div class="lotr-divider" style="margin:6px 0 10px"><span class="lotr-divider-gem">◆</span></div>`;
 
         // Magie
-        html += catHeader('medias/magie.png', 'MAGIE');
+        html += catHeader('medias-lotr/magie.png', 'MAGIE');
         html += row('❤ PV', `${Math.ceil(hp)} / ${maxHp}`);
         html += row('✦ Mana', `${Math.ceil(mana)} / ${maxMana}`);
         html += row('↺ Regen mana', `+${manaRegen}/s`);
@@ -1782,13 +1782,13 @@ const LOTR_GAME = (() => {
         html += row('⭕ Orbes', `${orbCount}`);
 
         // Vitesse
-        html += catHeader('medias/eclair.png', 'VITESSE');
+        html += catHeader('medias-lotr/eclair.png', 'VITESSE');
         html += row('💨 Déplacement', `${charSpeed}`);
         html += row('↻ Vitesse orbes', `${orbSpeed.toFixed(1)}`);
         html += row('⚡ CD rayon', `${(laserCooldown/1000).toFixed(2)}s (0.1s min.)`);
 
         // Défense
-        html += catHeader('medias/bouclier.png', 'DÉFENSE');
+        html += catHeader('medias-lotr/bouclier.png', 'DÉFENSE');
         html += row('🛡 Résistance', `${damageReduction}% / 50%`);
         html += row('⏱ Immunité', `${(iframesDuration/1000).toFixed(1)}s`);
         if (shieldCharges > 0) html += row('🔵 Bouclier', `${shieldCharges} charges`);

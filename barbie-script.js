@@ -178,21 +178,21 @@ const COLL_Y_OFFSET    = -0.10;    // décalage hauteur collectibles depuis le p
     const SPEED_TIER       = 100;    // tous les N points → +10% vitesse
 
     // ── Images ──
-    const imgBg       = new Image(); imgBg.src       = 'medias/barbie_background.png';
-    const imgLoop     = new Image(); imgLoop.src     = 'medias/barbie_background_loop.png';
-    const imgIdle1    = new Image(); imgIdle1.src    = 'medias/barbie_idle1.png';
-    const imgIdle2    = new Image(); imgIdle2.src    = 'medias/barbie_idle2.png';
-    const imgJump     = new Image(); imgJump.src     = 'medias/barbie_jump.png';
-    const imgObs      = new Image(); imgObs.src      = 'medias/barbie_obstacle.png';
-    const imgLiasse   = new Image(); imgLiasse.src   = 'medias/liasse.png';
-    const imgMontre   = new Image(); imgMontre.src   = 'medias/montre.png';
-    const imgCollier  = new Image(); imgCollier.src  = 'medias/collier.png';
-    const imgFondTeint  = new Image(); imgFondTeint.src  = 'medias/fonddeteint.png';
-    const imgCoiffeuse  = new Image(); imgCoiffeuse.src  = 'medias/coiffeuse.png';
-    const imgSpark      = new Image(); imgSpark.src      = 'medias/spark.png';
-    const imgPascal     = new Image(); imgPascal.src     = 'medias/barbie_pascal.png';
-    const imgGauchiste  = new Image(); imgGauchiste.src  = 'medias/barbie_gauchistes.png';
-    const imgGauchiste2 = new Image(); imgGauchiste2.src = 'medias/barbie_gauchistes2.png';
+    const imgBg       = new Image(); imgBg.src       = 'medias-barbie/barbie_background.png';
+    const imgLoop     = new Image(); imgLoop.src     = 'medias-barbie/barbie_background_loop.png';
+    const imgIdle1    = new Image(); imgIdle1.src    = 'medias-barbie/barbie_idle1.png';
+    const imgIdle2    = new Image(); imgIdle2.src    = 'medias-barbie/barbie_idle2.png';
+    const imgJump     = new Image(); imgJump.src     = 'medias-barbie/barbie_jump.png';
+    const imgObs      = new Image(); imgObs.src      = 'medias-barbie/barbie_obstacle.png';
+    const imgLiasse   = new Image(); imgLiasse.src   = 'medias-barbie/liasse.png';
+    const imgMontre   = new Image(); imgMontre.src   = 'medias-barbie/montre.png';
+    const imgCollier  = new Image(); imgCollier.src  = 'medias-barbie/collier.png';
+    const imgFondTeint  = new Image(); imgFondTeint.src  = 'medias-barbie/fonddeteint.png';
+    const imgCoiffeuse  = new Image(); imgCoiffeuse.src  = 'medias-barbie/coiffeuse.png';
+    const imgSpark      = new Image(); imgSpark.src      = 'medias-barbie/spark.png';
+    const imgPascal     = new Image(); imgPascal.src     = 'medias-barbie/barbie_pascal.png';
+    const imgGauchiste  = new Image(); imgGauchiste.src  = 'medias-barbie/barbie_gauchistes.png';
+    const imgGauchiste2 = new Image(); imgGauchiste2.src = 'medias-barbie/barbie_gauchistes2.png';
 
     // ── Sons ──
     const sndSoundtrack = new Audio('sounds/barbie_soundtrack.mp3');
@@ -316,7 +316,7 @@ const COLL_Y_OFFSET    = -0.10;    // décalage hauteur collectibles depuis le p
     function updateHUD() {
         const el = document.getElementById('auboulot-lives');
         if (el) el.innerHTML = Array.from({ length: MAX_LIVES }, (_, i) =>
-            `<img src="medias/${i < lives ? 'c-plein' : 'c-vide'}.png" class="auboulot-heart-icon">`).join('');
+            `<img src="medias-barbie/${i < lives ? 'c-plein' : 'c-vide'}.png" class="auboulot-heart-icon">`).join('');
         const sc = document.getElementById('auboulot-score');
         if (sc) sc.textContent = score;
         const ri = document.getElementById('auboulot-richesse');
