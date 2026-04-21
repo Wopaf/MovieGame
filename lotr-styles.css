@@ -47,6 +47,11 @@
     background-size: cover;
     background-position: center top;
 }
+#lotr-splash {
+    cursor: pointer;
+    touch-action: manipulation;
+    user-select: none;
+}
 
 /* ── Fire background ── */
 @keyframes firePulse {
@@ -369,25 +374,52 @@
     image-rendering: pixelated;
 }
 
-/* ── HUD barres ── */
-.lotr-hud {
+/* ── Bottom HUD container ── */
+.lotr-bottom-hud {
     position: absolute;
-    bottom: 32px;
-    left: 50%;
-    transform: translateX(-50%);
+    gap: 20px;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
     z-index: 10;
+    pointer-events: none;
+}
+.lotr-bottom-hud > * {
+    pointer-events: auto;
+}
+
+/* ── HUD barres + Sorts ── */
+.lotr-hud {
+    width: 100%;
     display: flex;
     flex-direction: column;
+    gap: 6px;
+}
+.lotr-bars-row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
     gap: 8px;
-    background: rgba(6,4,1,0.78);
-    border: 2px solid rgba(201,162,39,0.3);
-    box-shadow: 3px 3px 0 #000;
-    padding: 8px 12px;
+}
+.lotr-btns-row {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    width: 100%;
 }
 .lotr-bar-row {
+    width: 100%;
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: 5px;
+    background: rgba(6,4,1,0.78);
+    border: 2px solid rgba(201,162,39,0.3);
+    box-shadow: 2px 2px 0 #000;
+    padding: 4px 6px;
 }
 .lotr-bar-icon {
     width: 24px;
@@ -397,7 +429,7 @@
     image-rendering: pixelated;
 }
 .lotr-bar {
-    width: 160px;
+    width: 100%;
     height: 12px;
     background: #000;
     border: 2px solid rgba(255,255,255,0.18);
@@ -411,30 +443,22 @@
     transform-origin: left;
     transition: transform 0.15s ease;
 }
-.lotr-bar--hp   .lotr-bar-fill { background: #c83030; box-shadow: inset 0 1px 0 rgba(255,100,100,0.4); }
-.lotr-bar--mana .lotr-bar-fill { background: #2255cc; box-shadow: inset 0 1px 0 rgba(106,176,255,0.4); }
+.lotr-bar--hp   .lotr-bar-fill { background: #c83030; box-shadow: inset 0 1px 0 rgba(255,100,100,0.4);     width: 100%; }
+.lotr-bar--mana .lotr-bar-fill { background: #2255cc; box-shadow: inset 0 1px 0 rgba(106,176,255,0.4);     width: 100%; }
 .lotr-bar-val {
     font-family: var(--px-font);
     font-size: 0.42rem;
     color: rgba(232,213,163,0.8);
-    min-width: 32px;
-    text-align: right;
+    min-width: 24px;
+    text-align: center;
     text-shadow: 1px 1px 0 #000;
 }
 
-/* ── Sorts ── */
-.lotr-spells {
-    position: absolute;
-    bottom: 28px;
-    left: 18px;
-    z-index: 10;
-    display: flex;
-    gap: 10px;
-}
+/* ── Sorts (spell buttons) ── */
 .lotr-spell-btn {
     position: relative;
-    width: 60px;
-    height: 60px;
+    flex: 1;
+    height: 80px;
     border-radius: 0;
     background: #0a0603;
     border: 2px solid rgba(201, 162, 39, 0.55);
@@ -454,9 +478,18 @@
     border-color: rgba(150, 100, 255, 0.65);
     box-shadow: 3px 3px 0 #000;
 }
+.lotr-spell-btn--empty {
+    opacity: 0.35;
+    border-color: rgba(255,255,255,0.15);
+    box-shadow: 2px 2px 0 #000;
+    pointer-events: none;
+}
+.lotr-spell-btn--empty .lotr-spell-icon,
+.lotr-spell-btn--empty .lotr-spell-cost,
+.lotr-spell-btn--empty .lotr-spell-img { display: none; }
 .lotr-spell-btn:active { transform: translate(3px, 3px); box-shadow: none; }
 .lotr-spell-icon { font-size: 1.3rem; line-height: 1; }
-.lotr-spell-img  { width: 30px; height: 30px; object-fit: contain; image-rendering: pixelated; }
+.lotr-spell-img  { width: 40px; height: 40px; object-fit: contain; image-rendering: pixelated; }
 .lotr-spell-cost {
     font-family: var(--px-font);
     font-size: 0.32rem;
@@ -478,16 +511,12 @@
 
 /* ── Joystick ── */
 .lotr-joystick-wrap {
-    position: absolute;
-    bottom: 28px;
-    right: 18px;
-    z-index: 10;
     touch-action: none;
     user-select: none;
 }
 .lotr-joystick-base {
-    width: 100px;
-    height: 100px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     background: rgba(10, 6, 2, 0.5);
     border: 3px solid rgba(201, 162, 39, 0.4);
@@ -497,8 +526,8 @@
 }
 .lotr-joystick-thumb {
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     background: radial-gradient(circle at 38% 38%, var(--lotr-gold-lt), var(--lotr-gold));
     border: 2px solid var(--lotr-gold-lt);
@@ -511,7 +540,7 @@
 
 .lotr-pause-btn {
     position: absolute;
-    top: 10px; left: 10px;
+    top: 20px; left: 10px;
     z-index: 10;
     width: 48px;
     height: 48px;
@@ -570,7 +599,7 @@
 /* ── Stats button & panel ── */
 .lotr-stats-btn {
     position: absolute;
-    top: 10px;
+    top: 20px;
     right: 10px;
     z-index: 10;
     width: 48px;
@@ -604,7 +633,9 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 20;
-    width: min(90%, 320px);
+    width: min(92%, 340px);
+    max-height: 85%;
+    overflow-y: auto;
     animation: statsIn 0.2s cubic-bezier(0.16,1,0.3,1) both;
 }
 .lotr-stats-panel.hidden { display: none; }
@@ -674,6 +705,303 @@
 .lotr-stats-close:hover {
     color: var(--lotr-gold-lt);
     border-color: var(--lotr-gold);
+}
+.lotr-stat-cat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--px-font);
+    font-size: 0.38rem;
+    color: var(--lotr-gold);
+    text-shadow: 1px 1px 0 #000;
+    letter-spacing: 1px;
+    margin: 10px 0 4px;
+    padding-bottom: 4px;
+    border-bottom: 2px solid rgba(201,162,39,0.35);
+}
+.lotr-stat-cat-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+.lotr-stat-upgrade {
+    font-family: var(--px-font);
+    font-size: 0.32rem;
+    color: #88ddff;
+    text-shadow: 1px 1px 0 #000;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(136,221,255,0.1);
+}
+
+/* ── Level progress bar ── */
+.lotr-level-progress {
+    position: absolute;
+    top: 0;
+    left: 0; right: 0;
+    height: 10px;
+    background: rgba(0,0,0,0.55);
+    border-bottom: 1px solid rgba(201,162,39,0.25);
+    z-index: 12;
+    overflow: visible;
+}
+.lotr-lp-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #c9a227, #f5d060);
+    box-shadow: 0 0 8px rgba(245,208,96,0.6);
+    transition: width 0.25s linear;
+}
+.lotr-lp-marker {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.lotr-lp-tick {
+    width: 2px;
+    height: 10px;
+    background: rgba(245,208,96,0.7);
+}
+.lotr-lp-tick--boss {
+    background: rgba(255,80,80,0.9);
+    width: 2px;
+    height: 10px;
+}
+.lotr-lp-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    margin-bottom: 1px;
+    position: absolute;
+    bottom: 100%;
+    margin-bottom: 2px;
+}
+.lotr-lp-icon--boss {
+    width: 18px;
+    height: 18px;
+}
+.lotr-lp-marker--boss .lotr-lp-tick {
+    background: rgba(255,80,80,0.9);
+}
+
+/* ── Level transition ── */
+.lotr-level-transition {
+    position: absolute;
+    inset: 0;
+    z-index: 25;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+.lotr-level-transition.hidden  { display: none; }
+.lotr-level-transition.visible { opacity: 1; }
+.lotr-level-num {
+    font-family: var(--px-font);
+    font-size: clamp(1rem, 5vw, 1.8rem);
+    color: var(--lotr-gold-lt);
+    letter-spacing: 4px;
+    text-shadow: 4px 4px 0 #000, 0 0 30px rgba(245,208,96,0.6);
+    text-transform: uppercase;
+    text-align: center;
+}
+.lotr-level-sub {
+    font-family: var(--px-font);
+    font-size: 0.42rem;
+    color: rgba(232,213,163,0.5);
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 0 #000;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+/* ── Blessing overlay (Valar) ── */
+@keyframes cloudDriftTR {
+    0%,100% { transform: translate(0, 0); }
+    50%     { transform: translate(-12px, 8px); }
+}
+@keyframes cloudDriftBL {
+    0%,100% { transform: scaleX(-1) translate(0, 0); }
+    50%     { transform: scaleX(-1) translate(-10px, -7px); }
+}
+@keyframes blessingOverlayIn {
+    0%   { opacity: 0; }
+    15%  { opacity: 1; background: rgba(255,160,40,0.12); }
+    100% { opacity: 1; background: rgba(0,0,0,0.94); }
+}
+@keyframes blessingPanelIn {
+    0%   { opacity: 0; transform: scale(0.7) translateY(-40px); }
+    60%  { opacity: 1; transform: scale(1.04) translateY(4px); }
+    80%  { transform: scale(0.98) translateY(-2px); }
+    100% { transform: scale(1) translateY(0); }
+}
+@keyframes blessingGlow {
+    0%,100% { box-shadow: 0 0 0 6px #000, 0 0 30px rgba(255,120,0,0.4), 0 0 8px rgba(255,255,255,0.15); }
+    50%     { box-shadow: 0 0 0 6px #000, 0 0 70px rgba(255,140,20,0.75), 0 0 16px rgba(255,255,255,0.25); }
+}
+@keyframes specialGlow {
+    0%,100% { box-shadow: 0 0 0 6px #000, 0 0 30px rgba(140,60,255,0.5), 0 0 8px rgba(200,150,255,0.2); }
+    50%     { box-shadow: 0 0 0 6px #000, 0 0 70px rgba(160,80,255,0.85), 0 0 16px rgba(200,150,255,0.35); }
+}
+
+.lotr-blessing-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 16;
+    background: rgba(0,0,0,0.94);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: blessingOverlayIn 0.55s ease both;
+}
+.lotr-blessing-overlay.hidden { display: none; }
+.lotr-blessing-cloud {
+    position: absolute;
+    opacity: 0.82;
+    pointer-events: none;
+    image-rendering: pixelated;
+}
+.lotr-blessing-cloud--tr {
+    width: 220px;
+    top: -18px;
+    right: -30px;
+    z-index: 0;
+    animation: cloudDriftTR 8s ease-in-out infinite;
+}
+.lotr-blessing-cloud--bl {
+    width: 190px;
+    bottom: -22px;
+    left: -28px;
+    z-index: 2;
+    transform: scaleX(-1);
+    animation: cloudDriftBL 9s ease-in-out infinite;
+}
+.lotr-blessing-panel {
+    position: relative;
+    z-index: 1;
+    width: min(96%, 400px);
+    background: linear-gradient(160deg, #100c04 0%, #080601 60%, #120e05 100%);
+    outline: 3px solid rgba(255,255,255,0.9);
+    box-shadow: 0 0 0 6px #000, 0 0 40px rgba(255,140,20,0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: blessingPanelIn 0.5s cubic-bezier(0.16,1,0.3,1) both, blessingGlow 2.5s 0.5s ease-in-out infinite;
+}
+.lotr-blessing-overlay--special .lotr-blessing-panel {
+    background: linear-gradient(160deg, #0d0818 0%, #060410 60%, #0f0a1c 100%);
+    outline-color: rgba(180,100,255,0.85);
+    animation: blessingPanelIn 0.5s cubic-bezier(0.16,1,0.3,1) both, specialGlow 2.5s 0.5s ease-in-out infinite;
+}
+.lotr-blessing-overlay--special .lotr-blessing-header {
+    background: linear-gradient(90deg, #12082a, #220f40, #12082a);
+    border-bottom-color: rgba(180,100,255,0.5);
+}
+.lotr-blessing-overlay--special .lotr-blessing-title {
+    text-shadow: 0 0 18px #bb44ff, 0 0 6px #9922ee, 2px 2px 0 #000;
+}
+.lotr-blessing-overlay--special .lotr-blessing-sub {
+    color: rgba(210,170,255,0.65);
+    text-shadow: 0 0 8px rgba(150,60,255,0.6), 1px 1px 0 #000;
+}
+.lotr-blessing-overlay--special .lotr-blessing-choice {
+    background: #0a0614;
+    border-color: rgba(160,80,255,0.35);
+}
+.lotr-blessing-overlay--special .lotr-blessing-choice:hover {
+    box-shadow: 0 0 20px rgba(160,80,255,0.5), 3px 3px 0 #000;
+    border-color: rgba(200,140,255,0.8);
+}
+.lotr-blessing-overlay--special .lotr-blessing-name {
+    color: #ffffff;
+    text-shadow: 0 0 10px #aa44ff, 1px 1px 0 #000;
+}
+.lotr-blessing-header {
+    background: linear-gradient(90deg, #1a1204, #2e1e06, #1a1204);
+    border-bottom: 2px solid rgba(255,200,80,0.5);
+    padding: 14px 20px 12px;
+    text-align: center;
+}
+.lotr-blessing-title {
+    font-family: var(--px-font);
+    font-size: 0.55rem;
+    color: #ffffff;
+    letter-spacing: 2px;
+    text-shadow: 0 0 18px #ffaa30, 0 0 6px #ff8800, 2px 2px 0 #000;
+    text-transform: uppercase;
+    display: block;
+}
+.lotr-blessing-sub {
+    font-family: var(--px-font);
+    font-size: 0.3rem;
+    color: rgba(255,220,160,0.65);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(255,140,30,0.6), 1px 1px 0 #000;
+    display: block;
+    margin-top: 6px;
+}
+.lotr-blessing-choices {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding: 16px 14px 18px;
+}
+.lotr-blessing-choice {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #0c0802;
+    border: 2px solid rgba(255,180,60,0.3);
+    padding: 16px 8px 14px;
+    min-height: 130px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #000;
+    transition: border-color 0.12s, transform 0.1s, box-shadow 0.12s;
+    animation: cardSlideUp 0.45s cubic-bezier(0.16,1,0.3,1) both;
+    overflow: hidden;
+}
+.lotr-blessing-choice:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 20px rgba(255,180,60,0.4), 3px 3px 0 #000;
+    border-color: rgba(255,220,120,0.7);
+}
+.lotr-blessing-choice:active { transform: translate(3px,4px); box-shadow: 1px 1px 0 #000; }
+.lotr-blessing-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+.lotr-blessing-name {
+    font-family: var(--px-font);
+    font-size: 0.42rem;
+    letter-spacing: 1px;
+    color: #ffffff;
+    text-shadow: 1px 1px 0 #000;
+    text-align: center;
+    line-height: 1.9;
+    text-transform: uppercase;
+}
+.lotr-blessing-desc {
+    font-family: var(--px-font);
+    font-size: 0.38rem;
+    color: rgba(255,240,210,0.8);
+    text-shadow: 1px 1px 0 #000;
+    text-align: center;
+    line-height: 1.8;
 }
 
 /* ── Upgrade overlay ── */
@@ -814,8 +1142,8 @@
     animation: catShine 0.5s ease forwards;
 }
 .lotr-upgrade-cat img {
-    width: 58px;
-    height: 58px;
+    width: 76px;
+    height: 76px;
     object-fit: contain;
     image-rendering: pixelated;
     filter: drop-shadow(0 0 6px rgba(201,162,39,0.3));
@@ -853,7 +1181,7 @@
     min-height: 120px;
     cursor: pointer;
     font-family: var(--px-font);
-    font-size: 0.32rem;
+    font-size: 0.42rem;
     color: rgba(232,213,163,0.8);
     line-height: 2;
     text-align: center;
@@ -863,8 +1191,8 @@
     animation: cardSlideUp 0.45s cubic-bezier(0.16,1,0.3,1) both;
 }
 .lotr-upgrade-choice-icon {
-    width: 44px;
-    height: 44px;
+    width: 62px;
+    height: 62px;
     object-fit: contain;
     image-rendering: pixelated;
     filter: drop-shadow(0 0 4px rgba(201,162,39,0.3));

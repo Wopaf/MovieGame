@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Seigneur des Anneaux — 1978</title>
+    <title>Gandalf Survivor</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
@@ -19,7 +19,7 @@
         <div class="lotr-vignette"></div>
 
         <div class="lotr-splash-inner">
-            <h1 class="lotr-title">Les aventures<br>à Gandoulf</h1>
+            <h1 class="lotr-title">Gandalf<br>Survivor</h1>
             <p class="lotr-press-start" id="lotr-press-start">▶ &nbsp;TOUCHER POUR COMMENCER&nbsp; ◀</p>
         </div>
     </div>
@@ -31,7 +31,7 @@
         <div class="lotr-vignette"></div>
 
         <div class="lotr-menu-inner" id="lotr-menu-inner">
-            <h1 class="lotr-title lotr-title--sm">Les aventures<br>à Gandoulf</h1>
+            <h1 class="lotr-title lotr-title--sm">Gandalf<br>Survivor</h1>
             <div class="lotr-divider"><span class="lotr-divider-gem">◆</span></div>
 
             <div class="lotr-scores">
@@ -61,6 +61,27 @@
         <canvas id="lotr-canvas" class="lotr-canvas"></canvas>
         <button id="lotr-pause-btn" class="lotr-pause-btn">⏸</button>
 
+        <!-- Barre de progression niveau -->
+        <div id="lotr-level-progress" class="lotr-level-progress">
+            <div class="lotr-lp-fill" id="lotr-lp-fill"></div>
+            <div class="lotr-lp-marker" style="left:27.8%">
+                <img src="medias/magie.png" class="lotr-lp-icon" alt="">
+                <div class="lotr-lp-tick"></div>
+            </div>
+            <div class="lotr-lp-marker" style="left:55.6%">
+                <img src="medias/magie.png" class="lotr-lp-icon" alt="">
+                <div class="lotr-lp-tick"></div>
+            </div>
+            <div class="lotr-lp-marker" style="left:83.3%">
+                <img src="medias/magie.png" class="lotr-lp-icon" alt="">
+                <div class="lotr-lp-tick"></div>
+            </div>
+            <div class="lotr-lp-marker lotr-lp-marker--boss" style="left:100%">
+                <img src="medias/nazgul.png" class="lotr-lp-icon lotr-lp-icon--boss" alt="">
+                <div class="lotr-lp-tick lotr-lp-tick--boss"></div>
+            </div>
+        </div>
+
         <!-- Pause overlay -->
         <div id="lotr-pause" class="lotr-pause-overlay hidden">
             <div class="lotr-pause-panel">
@@ -70,49 +91,73 @@
             </div>
         </div>
 
-        <!-- HUD barres -->
-        <div class="lotr-hud" id="lotr-hud">
-            <div class="lotr-bar-row">
-                <img src="medias/sante.png" class="lotr-bar-icon" alt="HP">
-                <div class="lotr-bar lotr-bar--hp">
-                    <div class="lotr-bar-fill" id="lotr-hp-fill"></div>
-                </div>
-                <span class="lotr-bar-val" id="lotr-hp-val">100</span>
-            </div>
-            <div class="lotr-bar-row">
-                <img src="medias/mana.png" class="lotr-bar-icon" alt="Mana">
-                <div class="lotr-bar lotr-bar--mana">
-                    <div class="lotr-bar-fill" id="lotr-mana-fill"></div>
-                </div>
-                <span class="lotr-bar-val" id="lotr-mana-val">100</span>
-            </div>
-        </div>
+        <!-- Container global bas d'écran -->
+        <div class="lotr-bottom-hud">
 
-        <!-- Sorts -->
-        <div class="lotr-spells" id="lotr-spells">
-            <button class="lotr-spell-btn" id="lotr-spell1-btn">
-                <img src="medias/baton.png" class="lotr-spell-img" alt="Sort">
-                <span class="lotr-spell-cost">10✦</span>
-                <div class="lotr-spell-cd-overlay" id="lotr-spell1-cd"></div>
-            </button>
-            <button class="lotr-spell-btn lotr-spell-btn--ult" id="lotr-spell2-btn">
-                <span class="lotr-spell-icon">⚡</span>
-                <span class="lotr-spell-cost">40✦</span>
-                <div class="lotr-spell-cd-overlay" id="lotr-spell2-cd"></div>
-            </button>
-        </div>
-
-        <!-- Joystick -->
-        <div class="lotr-joystick-wrap">
-            <div class="lotr-joystick-base" id="lotr-joystick-base">
-                <div class="lotr-joystick-thumb" id="lotr-joystick-thumb"></div>
+            <!-- Bloc gauche : barres + boutons -->
+            <div class="lotr-hud" id="lotr-hud">
+                <div class="lotr-bars-row">
+                    <div class="lotr-bar-row">
+                        <img src="medias/mana.png" class="lotr-bar-icon" alt="Mana">
+                        <div class="lotr-bar lotr-bar--mana">
+                            <div class="lotr-bar-fill" id="lotr-mana-fill"></div>
+                        </div>
+                        <span class="lotr-bar-val" id="lotr-mana-val">100</span>
+                    </div>
+                    <div class="lotr-bar-row">
+                        <img src="medias/sante.png" class="lotr-bar-icon" alt="HP">
+                        <div class="lotr-bar lotr-bar--hp">
+                            <div class="lotr-bar-fill" id="lotr-hp-fill"></div>
+                        </div>
+                        <span class="lotr-bar-val" id="lotr-hp-val">100</span>
+                    </div>
+                </div>
+                <div class="lotr-btns-row">
+                    <button class="lotr-spell-btn" id="lotr-spell1-btn">
+                        <img src="medias/baton.png" class="lotr-spell-img" alt="Sort">
+                        <span class="lotr-spell-cost">10✦</span>
+                        <div class="lotr-spell-cd-overlay" id="lotr-spell1-cd"></div>
+                    </button>
+                    <button class="lotr-spell-btn lotr-spell-btn--ult lotr-spell-btn--empty" id="lotr-spell2-btn">
+                        <span class="lotr-spell-icon">⚡</span>
+                        <span class="lotr-spell-cost">—</span>
+                        <div class="lotr-spell-cd-overlay" id="lotr-spell2-cd"></div>
+                    </button>
+                </div>
             </div>
+
+            <!-- Bloc droit : joystick -->
+            <div class="lotr-joystick-wrap">
+                <div class="lotr-joystick-base" id="lotr-joystick-base">
+                    <div class="lotr-joystick-thumb" id="lotr-joystick-thumb"></div>
+                </div>
+            </div>
+
         </div>
 
         <!-- Stats button -->
         <button id="lotr-stats-btn" class="lotr-stats-btn">
             <img src="medias/book.png" alt="Stats" class="lotr-stats-icon">
         </button>
+
+        <!-- Level transition -->
+        <div id="lotr-level-transition" class="lotr-level-transition hidden">
+            <div class="lotr-level-num" id="lotr-level-num">NIVEAU 2</div>
+            <div class="lotr-level-sub">LES TÉNÈBRES S'INTENSIFIENT</div>
+        </div>
+
+        <!-- Blessing overlay (Valar) -->
+        <div id="lotr-blessing" class="lotr-blessing-overlay hidden">
+            <img src="medias/nuage.png" class="lotr-blessing-cloud lotr-blessing-cloud--tr" alt="">
+            <img src="medias/nuage.png" class="lotr-blessing-cloud lotr-blessing-cloud--bl" alt="">
+            <div class="lotr-blessing-panel">
+                <div class="lotr-blessing-header">
+                    <span class="lotr-blessing-title">✦ BÉNÉDICTIONS DES VALAR ✦</span>
+                    <span class="lotr-blessing-sub">Choisissez une bénédiction</span>
+                </div>
+                <div class="lotr-blessing-choices" id="lotr-blessing-choices"></div>
+            </div>
+        </div>
 
         <!-- Upgrade overlay -->
         <div id="lotr-upgrade" class="lotr-upgrade-overlay hidden">
@@ -154,37 +199,7 @@
 
         <!-- Stats panel -->
         <div id="lotr-stats-panel" class="lotr-stats-panel hidden">
-            <div class="lotr-stats-inner">
-                <div class="lotr-stats-title">⚔ STATISTIQUES</div>
-                <div class="lotr-divider" style="margin:8px 0 12px"><span class="lotr-divider-gem">◆</span></div>
-                <div class="lotr-stat-row">
-                    <span class="lotr-stat-label">❤ Points de vie</span>
-                    <span class="lotr-stat-val" id="lotr-stat-hp">100 / 100</span>
-                </div>
-                <div class="lotr-stat-row">
-                    <span class="lotr-stat-label">✦ Mana</span>
-                    <span class="lotr-stat-val" id="lotr-stat-mana">100 / 100</span>
-                </div>
-                <div class="lotr-stat-row">
-                    <span class="lotr-stat-label">↺ Regen mana</span>
-                    <span class="lotr-stat-val">+2 / sec</span>
-                </div>
-                <div class="lotr-stats-divider"></div>
-                <div class="lotr-stat-row">
-                    <span class="lotr-stat-label">🔥 Sort 1</span>
-                    <span class="lotr-stat-val">10✦ — 1s</span>
-                </div>
-                <div class="lotr-stat-row">
-                    <span class="lotr-stat-label">⚡ Ultime</span>
-                    <span class="lotr-stat-val">40✦ — 1s</span>
-                </div>
-                <div class="lotr-stats-divider"></div>
-                <div class="lotr-stat-row">
-                    <span class="lotr-stat-label">💨 Vitesse</span>
-                    <span class="lotr-stat-val">160 px/s</span>
-                </div>
-                <button id="lotr-stats-close" class="lotr-stats-close">✕ Fermer</button>
-            </div>
+            <div class="lotr-stats-inner"></div>
         </div>
     </div>
 
