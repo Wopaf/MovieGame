@@ -195,6 +195,14 @@
     z-index: 3;
     text-transform: uppercase;
 }
+.lotr-menu-logo {
+    width: 100%;
+    max-width: 360px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    z-index: 3;
+}
+
 .lotr-title--sm {
     font-size: clamp(0.7rem, 2.5vw, 1.05rem);
     animation: none;
@@ -1289,6 +1297,170 @@
     text-shadow: 2px 2px 0 #000;
     animation: rowIn 0.4s ease both;
 }
+
+/* ── Dialogue RPG ── */
+@keyframes dialogueIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes portraitIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes textReveal {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+.lotr-dialogue-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 26;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+.lotr-dialogue-overlay.hidden { display: none; }
+
+/* Portrait pleine largeur au-dessus de la boîte */
+.lotr-dialogue-portrait {
+    width: 100%;
+    max-height: 62%;
+    object-fit: contain;
+    object-position: bottom center;
+    image-rendering: pixelated;
+    flex-shrink: 0;
+    pointer-events: none;
+    animation: portraitIn 0.5s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+/* Boîte de dialogue pleine largeur en bas */
+.lotr-dialogue-box {
+    width: calc(100% - 32px);
+    height: 150px;
+    margin: 0 16px 16px;
+    background: linear-gradient(160deg, #0d0a04, #060401);
+    border: 3px solid rgba(201,162,39,0.7);
+    box-shadow: 0 0 0 4px #000, 0 0 40px rgba(201,162,39,0.2);
+    padding: 14px 20px 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+    animation: dialogueIn 0.4s 0.1s cubic-bezier(0.16,1,0.3,1) both;
+}
+.lotr-dialogue-text-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-self: flex-start;
+}
+.lotr-dialogue-name {
+    font-family: var(--px-font);
+    font-size: 0.62rem;
+    color: var(--lotr-gold);
+    text-shadow: 1px 1px 0 #000;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+.lotr-dialogue-text {
+    font-family: var(--px-font);
+    font-size: 0.48rem;
+    color: var(--lotr-text);
+    line-height: 2.1;
+    text-shadow: 1px 1px 0 #000;
+    animation: textReveal 0.3s ease both;
+}
+.lotr-dialogue-next {
+    flex-shrink: 0;
+    font-family: var(--px-font);
+    font-size: 0.46rem;
+    letter-spacing: 1px;
+    color: var(--lotr-gold-lt);
+    background: transparent;
+    border: 3px solid rgba(201,162,39,0.6);
+    padding: 14px 20px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #000;
+    text-shadow: 1px 1px 0 #000;
+    transition: border-color 0.12s, color 0.12s;
+    text-transform: uppercase;
+    align-self: flex-end;
+}
+.lotr-dialogue-next:hover { border-color: var(--lotr-gold); color: #fff; }
+.lotr-dialogue-next:active { transform: translate(2px,2px); box-shadow: none; }
+
+/* ── Victoire finale ── */
+@keyframes victoryIn {
+    0%   { opacity: 0; transform: scale(0.7); }
+    60%  { opacity: 1; transform: scale(1.05); }
+    80%  { transform: scale(0.98); }
+    100% { opacity: 1; transform: scale(1); }
+}
+@keyframes victoryGlow {
+    0%,100% { text-shadow: 3px 3px 0 #000, 0 0 30px rgba(245,208,96,0.5), 0 0 60px rgba(201,162,39,0.3); }
+    50%     { text-shadow: 3px 3px 0 #000, 0 0 60px rgba(245,208,96,0.9), 0 0 100px rgba(201,162,39,0.6); }
+}
+.lotr-victory-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 27;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lotr-victory-overlay.hidden { display: none; }
+.lotr-victory-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    animation: victoryIn 0.8s cubic-bezier(0.16,1,0.3,1) both;
+}
+.lotr-victory-title {
+    font-family: var(--px-font);
+    font-size: clamp(0.8rem, 4vw, 1.4rem);
+    color: var(--lotr-gold-lt);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-align: center;
+    animation: victoryGlow 2s ease-in-out infinite;
+}
+.lotr-victory-sub {
+    font-family: var(--px-font);
+    font-size: 0.38rem;
+    color: rgba(232,213,163,0.5);
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 0 #000;
+    text-align: center;
+}
+.lotr-victory-quit {
+    margin-top: 16px;
+    width: auto;
+    padding: 12px 28px;
+}
+
+/* ── Debug button ── */
+.lotr-debug-btn {
+    display: none;
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+    font-family: var(--px-font);
+    font-size: 0.3rem;
+    padding: 4px 8px;
+    background: rgba(80,0,0,0.75);
+    color: #ff6666;
+    border: 1px solid #ff3333;
+    cursor: pointer;
+    opacity: 0.5;
+}
+.lotr-debug-btn:hover { opacity: 1; }
 
 /* ── Utils ── */
 .hidden { display: none !important; }

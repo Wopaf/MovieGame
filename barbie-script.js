@@ -1,9 +1,9 @@
 // ============================================================
 //  MODAL AU BOULOT — Jeu Barbie à cheval
 // ============================================================
-const AU_BOULOT_INDEX = 27;
-const TARGET_SCORE    = 100000; // Score à battre pour valider le défi
-
+const AU_BOULOT_INDEX = 25;
+const TARGET_SCORE    = 4000; // Score à battre pour valider le défi
+ 
 // ── Questions Pascal (éditable librement) ──
 const PASCAL_QUESTIONS = [
     { question: "C'est qui qui fait du mal au français ?",

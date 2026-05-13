@@ -24,7 +24,7 @@ const validatedRef = db.ref('game/validated');
 
 // ── SEUIL DE DÉFI ─────────────────────────────────────────────────────────────
 // Dépasser ce score valide le défi Tenacious D (index 8 dans ACHIEVEMENTS)
-const SCORE_UNLOCK_THRESHOLD = 250000;
+const SCORE_UNLOCK_THRESHOLD = 200000;
 const TENACIOUS_INDEX = 8;
 
 // ── BOUTON ENREGISTRER ────────────────────────────────────────────────────────

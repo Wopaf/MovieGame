@@ -109,6 +109,7 @@ function initDebugUI() {
             refRevealedMysteries.set(null),
             refClaimedMilestones.set(null),
             refJokers.set(0),
+            refBonusKeys.set(0),
             db.ref('guitarHero/bestScore').set(null),
             db.ref('game/barbieBestScore').set(null),
             refJumanjiActive.set(null),
@@ -138,6 +139,15 @@ function initDebugUI() {
     document.getElementById("debug-add-joker-btn").addEventListener("click", () => {
         refJokers.transaction(v => (v || 0) + 1);
         showToast("+1 joker ajouté", "error", 1000);
+    });
+
+    document.getElementById("debug-send-mail-btn").addEventListener("click", () => {
+        document.getElementById("compose-mail-modal").classList.remove("hidden");
+    });
+
+    document.getElementById("debug-reset-mails-btn").addEventListener("click", () => {
+        refMails.set(null);
+        showToast("Tous les mails supprimés", "error", 1500);
     });
 
     document.getElementById("debug-tutorial-reset-btn").addEventListener("click", () => {
@@ -180,17 +190,17 @@ function enableDebugMode() {
 //  PALIERS / OBJECTIFS — Modifier ici facilement
 // ============================================================
 const MILESTONES = [
-    { label: "Initié",               objectif: "Valider 1 Défi",  count: 1,  keys: 1,             icon: 2 },
-    { label: "Accro aux popcorns",   objectif: "Valider 3 Défis",  count: 3,  jokers: 1,           icon: 3 },
-    { label: "Amateur éclairé",      objectif: "Valider 10 Défis", count: 10, keys: 1,             icon: 4 },
-    { label: "Cinéphile du dimanche",objectif: "Valider 20 Défis", count: 20, keys: 2, jokers: 1,  icon: 5 },
-    { label: "Passionné",            objectif: "Valider 24 Défis", count: 24, keys: 3,             icon: 6 },
-    { label: "Critique en herbe",    objectif: "Valider 27 Défis", count: 27, keys: 3, jokers: 1,  icon: 7 },
-    { label: "Fin Connaisseur",      objectif: "Valider 30 Défis", count: 30, keys: 3,             icon: 8 },
-    { label: "Cinéphile",            objectif: "Valider 33 Défis", count: 33, keys: 3,             icon: 9 },
-    { label: "Déglingo",             objectif: "Valider 36 Défis", count: 36, keys: 3, secretFilm: 38, icon: 10 },
-    { label: "Collectionneur",       objectif: "Valider 39 Défis", count: 39, secretFilm: 39,      icon: 11 },
-    { label: "???",                  objectif: "Valider 40 Défis", count: 40, rewards: ["?"],      icon: 12 },
+    { label: "Initié",               objectif: "Valider 1 Défi",  count: 1,  keys: 1,                    icon: 2 },
+    { label: "Accro aux popcorns",   objectif: "Valider 3 Défis",  count: 3,  jokers: 1,                 icon: 3 },
+    { label: "Amateur éclairé",      objectif: "Valider 10 Défis", count: 10, keys: 1,                   icon: 4 },
+    { label: "Cinéphile du dimanche",objectif: "Valider 20 Défis", count: 20, keys: 2,                   icon: 5 },
+    { label: "Passionné",            objectif: "Valider 24 Défis", count: 23, keys: 3, secretFilm: 36,   icon: 6 },
+    { label: "Critique en herbe",    objectif: "Valider 27 Défis", count: 26, keys: 3, jokers: 1,        icon: 7 },
+    { label: "Fin Connaisseur",      objectif: "Valider 30 Défis", count: 30, keys: 3,                   icon: 8 },
+    { label: "Cinéphile",            objectif: "Valider 33 Défis", count: 33, keys: 3, secretFilm: 37,   icon: 9 },
+    { label: "Déglingo",             objectif: "Valider 36 Défis", count: 36, jokers: 1,                 icon: 10 },
+    { label: "Collectionneur",       objectif: "Valider 39 Défis", count: 39, secretFilm: 38,            icon: 11 },
+    { label: "???",                  objectif: "Valider 40 Défis", count: 40, rewards: ["?"],            icon: 12 },
 ];
 
 // ============================================================
@@ -200,17 +210,22 @@ const MILESTONES = [
 // ============================================================
 const SECRET_REWARD_STEPS = [
     ["Félicitations !"],
-    ["Tu as validé tous les films de la liste."],
+    ["Tu as validé tous les films de la liste.."],
     ["et terminé le jeu des films de Matthias !"],
     ["J'éspere que tu aura passé un bon moment à voir tous ses films"],
     ["Je voulais te dire merci"],
-    ["Que soit volontaire et parfois même involontaire .."],
+    ["Un immense merci !"],
     ["Merci pour tous ce que tu as fait pour moi"],
-    ["Merci !"],
+    ["Que soit volontaire et parfois même involontaire .."],
+    ["Simplement des fois juste en étant toi même"],
+    ["Tu as pu voir une partie des films qui m'ont touché, fait rire, réfléchir, et pour certains m'ont émerveillé, m'offrant le sens d'aimer le cinéma."],
     ["Désormais ce jeu prend fin"],
     ["Et comme pour toutes les surprises et autres inventions dérilantes que nous avons partagé"],
     ["Il deviendras souvenir .."],
-    ["Souvenir distilé, dans un vaste océan qui méllee d'autres moment passé à te coté"],
+    ["Souvenir distilé"],
+    ["Dans un vaste océan"],
+    ["Qui méllee d'autres moment"],
+    ["Passé à te coté"],
 ];
 
 // ============================================================
@@ -351,18 +366,19 @@ const ACHIEVEMENTS = [
 
     { title: "Oss 117", sousTitre: "Le Caire, nid d'espions", img: "17.png", password: "3fS",
         questions: [
-        { rebus: "medias/r12.png", question: "Que ce passe t'il lorsque quelqu'un ou quelque chose meurt... ? ", answer: "Quelqu'un ou quelque chose naît ailleurs" },
-        { rebus: "medias/r12.png", question: "Quel animal la mouche a-t-elle mangé ?", answer: "un chien" }
+        { rebus: "medias/r12.png", question: "Lorsque quelqu'un ou quelque chose meurt...", answer: "quelqu'un ou quelque chose naît ailleurs" },
+        { rebus: "medias/r12.png", question: "Si le chat a la queue verticale...", answer: "c'est qu'il est en confiance" },
+        { rebus: "medias/r12.png", question: "Il faut laisser pleurer un nourrisson quand il va au lit, sinon on ...", answer: "sacralise trop son coucher" }
     ],
     realisateur: "Michel Hazanavicius", description: "En 1955, l'espion OSS 117 est envoyé au Caire pour élucider la disparition d'un agent. Dragueur, arrogant et inadapté, il sème joyeusement la pagaille.",
     genres: ["Comédie", "Espionnage"], imdb: "https://www.imdb.com/title/tt0464913/", rating: "7.4", verrouille: false },
 
 
 
-    { title: "Oss 117", sousTitre: "Rio ne répond plus", img: "18.png", password: "9pZ", rebus: "medias/r13.png",
-    question: "Comment appelez-vous un pays qui a comme dirigeant un militaire avec les pleins pouvoirs, une police secrète, une seule chaîne de télévision et que toute l'information est contrôlée par l'État ?", answer: "La France du general de gaulle",
-    realisateur: "Michel Hazanavicius", description: "En 1967, OSS 117 est envoyé au Brésil pour récupérer un microfilm compromettant sur des anciens nazis, tout en semant le chaos comme à son habitude.",
-    genres: ["Comédie", "Espionnage"], imdb: "https://www.imdb.com/title/tt1167660/", rating: "6.8", verrouille: false },
+    { title: "Harry Potter", sousTitre: "à l'école des sorciers", img: "59.png", password: "9pZ", rebus: "medias/r30.png",
+    question: "Qu'utilise Harry pour détruire le diadème de Rowena Serdaigle ?", answer: "Un crochet du basilic",
+    realisateur: "Chris Columbus", description: "Ayant été gardé dans l'ignorance de son passé, Harry Potter rejoint la prestigieuse école de sorcellerie de Poudlard. Avec l'aide de Ron et Hermione, ils découvrent que le château renferme un terrible pouvoir prêt à être libéré.",
+    genres: ["Aventure", "Fantastique"], imdb: "https://www.imdb.com/fr/title/tt0241527/", rating: "7.7", verrouille: false },
 
 
 
@@ -381,7 +397,7 @@ const ACHIEVEMENTS = [
 
 
     { title: "Premier Contact", img: "28.png", password: "9kF", rebus: "medias/r16.png",
-    question: "Il est bien ce film ?", answer: "Oui",
+    question: "Quel est le nom donné aux extraterrestres ?", answer: "heptapodes",
     realisateur: "Denis Villeneuve", description: "Douze vaisseaux extraterrestres se posent sur Terre. La linguiste Louise Banks tente de déchiffrer leur langage mystérieux avant que la panique mondiale ne déclenche la guerre.",
     genres: ["Science-fiction", "Drame"], imdb: "https://www.imdb.com/title/tt2543164/", rating: "7.9", verrouille: false },
 
@@ -416,22 +432,8 @@ const ACHIEVEMENTS = [
 
 
 
-    { title: "Into the Wild", img: "33.png", password: "5kS", rebus: "medias/r21.png",
-    question: "Quel est le numéro écrit sur le côté du 'Magic Bus' où s'installe Christopher ?", answer: "142",
-    realisateur: "Sean Penn", description: "Christopher McCandless, jeune diplômé idéaliste, abandonne tout — argent, famille, identité — pour partir seul à l'aventure vers les étendues sauvages de l'Alaska.",
-    genres: ["Drame", "Aventure"], imdb: "https://www.imdb.com/title/tt0758758/", rating: "8.1", verrouille: false },
-
-
-
-    { title: "Incassable", img: "34.png", password: "3vH", rebus: "medias/r22.png",
-    question: "Quel est le nom de la galerie d'art spécialisée dans les comics tenue par Elijah Price ?", answer: "Limited Edition",
-    realisateur: "Night Shyamalan", description: "David Dunn, unique survivant indemne d'un accident de train ayant tué 131 personnes, est contacté par Elijah Price, un homme mystérieux qui lui révèle une vérité bouleversante.",
-    genres: ["Fantastique", "Thriller"], imdb: "https://www.imdb.com/title/tt0217869/", rating: "7.3", verrouille: true },
-
-
-
     { title: "Bugonia", img: "54.png", password: "1xQ", rebus: "medias/r23.png",
-    question: "De quel espèce extraterrestre parle-t-on dans ce film ?", answer: "les Andromédiens",
+    question: "Quel est le nom de la société dirigée par la PDG Michelle Fuller ?", answer: "Auxilia",
     realisateur: "Yorgos Lanthimos", description: "Deux employés persuadés d'une invasion extraterrestre enlèvent une puissante PDG, convaincus qu'elle est une alien venue anéantir l'humanité. Absurde et glaçant.",
     genres: ["Thriller", "Crime"],
     imdb: "https://www.imdb.com/fr-ca/title/tt12300742/", rating: "7.4", verrouille: true },
@@ -439,7 +441,7 @@ const ACHIEVEMENTS = [
 
 
     { title: "Transcendance", img: "21.png", password: "1xQ", rebus: "medias/r24.png",
-    question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
+    question: "Comment s’appelle le projet d’intelligence artificielle créé par Will Caster avant sa transcendance ?", answer: "PINN",
     realisateur: "Wally Pfister", description: "Will Caster, brillant chercheur en IA, se retrouve mourant après un attentat. Sa conscience est téléchargée dans un ordinateur, créant une entité omnisciente et omnipotente.",
     genres: ["Science-fiction", "Thriller"],
     imdb: "https://www.imdb.com/title/tt2209764/", rating: "6.2", verrouille: true },
@@ -455,15 +457,15 @@ const ACHIEVEMENTS = [
 
 
     { title: "Jumper", img: "22.png", password: "4uG", rebus: "medias/r25.png",
-    question: "Où se trouve la 'bibliothèque' secrète de Griffin, là où il garde ses preuves sur les Paladins ?", answer: "Dans le Colisée",
+    question: "Quel est le nom de l’organisation qui traque les “Jumpers” ?", answer: "les Paladins",
     realisateur: "Doug Liman", description: "David Rice peut se téléporter instantanément n'importe où. Cette liberté absolue prend fin quand les Paladins, une organisation secrète qui traque les Jumpers, se lance à ses trousses.",
     genres: ["Fantastique", "Action"],
     imdb: "https://www.imdb.com/title/tt0489099/", rating: "6.0", verrouille: true },
 
 
 
-    { title: "Chappee", img: "27.png", password: "6tW", rebus: "medias/r26.png",
-    question: "Quel est le nom du robot massif et lourd piloté à distance par le personnage de Hugh Jackman ?", answer: "Moose",
+    { title: "Chappie", img: "27.png", password: "6tW", rebus: "medias/r26.png",
+    question: "Quel est le nom de la société qui développe les robots policiers ?", answer: "Tetravaal",
     realisateur: "Neill Blomkamp", description: "À Johannesburg, Chappie est le premier robot à posséder une vraie conscience. Volé par des gangsters, il apprend la dureté du monde tout en cherchant à comprendre ce qu'il est.",
     genres: ["Science-fiction", "Action"],
     imdb: "https://www.imdb.com/title/tt1823672/", rating: "6.8", verrouille: true },
@@ -483,14 +485,6 @@ const ACHIEVEMENTS = [
     realisateur: "Rian Johnson", description: "En 2044, Joe est un Looper : il élimine des victimes envoyées du futur par un syndicat du crime. Sa vie bascule quand sa prochaine cible est sa propre version vieillie.",
     genres: ["Action", "Science-fiction"],
     imdb: "https://www.imdb.com/title/tt1276104/", rating: "7.4", verrouille: true },
-
-
-
-    { title: "Ma Mère, Dieu et Sylvie Vartan", img: "55.png", password: "1xQ", rebus: "medias/r24.png",
-    question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
-    realisateur: "Ken Scott", description: "En 1963, Esther met au monde Roland, petit dernier d’une famille nombreuse. Roland naît avec un pied-bot qui l’empêche de se tenir debout. Contre l’avis de tous, elle promet à son fils qu’il marchera comme les autres et qu’il aura une vie fabuleuse. Dès lors, Esther n’aura de cesse de tout mettre en œuvre pour tenir cette promesse. À travers des décennies d’épreuves et de miracles de la vie, ce film est le récit d’une histoire vraie, drôle et bouleversante, celle d’un destin incroyable et du plus grand amour qui soit : celui d’une mère pour son enfant.",
-    genres: ["Comédie dramatique"],
-    imdb: "https://www.imdb.com/fr/title/tt29927144/", rating: "7.0", verrouille: true },
 
 
 
@@ -523,6 +517,13 @@ const ACHIEVEMENTS = [
     realisateur: "Alexandre Astier", description: "Le roi Arthur revient d'exil pour reprendre Kaamelott des mains de Lancelot. Il rassemble ses chevaliers pour une reconquère contre Arthur ! Après la destruction de Kaamelott, son refus obstiné de tuer Lancelot précipite le Royaume de Logres à sa perte. Il réunit ses Chevaliers, novices téméraires et vétérans désabusés, autour de la Nouvelle Table Ronde et les envoie prouver leur valeur aux quatre coins du Monde, des Marais Orcaniens aux terres glacées du DRAGON_END_PLACEHOLDER",
     genres: ["Aventure", "Fantastique"],
     imdb: "https://www.imdb.com/title/tt9844322/", rating: "7.2", verrouille: true },
+
+
+
+    { title: "Incassable", img: "34.png", password: "3vH", rebus: "medias/r22.png",
+    question: "Quel surnom Elijah Price ?", answer: "Mr. Glass",
+    realisateur: "Night Shyamalan", description: "David Dunn, unique survivant indemne d'un accident de train ayant tué 131 personnes, est contacté par Elijah Price, un homme mystérieux qui lui révèle une vérité bouleversante.",
+    genres: ["Fantastique", "Thriller"], imdb: "https://www.imdb.com/title/tt0217869/", rating: "7.3", verrouille: true },
 
 
 
@@ -607,6 +608,8 @@ const refJumanjiActive     = db.ref("game/jumanjiActive");
 const refJumanjiNextRoll   = db.ref("game/jumanjiNextRoll");
 const refFairyCatchCount   = db.ref("game/fairyCatchCount");
 const refCols              = db.ref("game/cols");
+const refMails             = db.ref("game/mails");
+const refBonusKeys         = db.ref("game/bonusKeys");
 
 const JUMANJI_INDEX = 14;
 
@@ -616,6 +619,7 @@ let cachedValidated         = [];
 let cachedTierlist          = {};
 let cachedRevealedMysteries = [];
 let cachedClaimedMilestones = 0;
+let cachedBonusKeys         = 0;
 
 // ---- Notifications toast ----
 function showToast(msg, type = "error", duration = 5000) {
@@ -723,10 +727,10 @@ function getAvailablePoints() {
     // Somme des clés gagnées sur les paliers réclamés (champ `keys`, défaut 1)
     const totalKeys = MILESTONES
         .slice(0, getClaimedMilestones())
-        .reduce((sum, m) => sum + (m.keys ?? 1), 0);
+        .reduce((sum, m) => sum + (m.keys ?? 0), 0);
     // Ne compter que les films verrouillés débloqués (pas les films secrets, gratuits)
     const revealedVerrouille = getRevealedMysteries().filter(i => ACHIEVEMENTS[i] && ACHIEVEMENTS[i].verrouille);
-    return Math.max(0, totalKeys - revealedVerrouille.length);
+    return Math.max(0, totalKeys + cachedBonusKeys - revealedVerrouille.length);
 }
 
 // ============================================================
@@ -803,13 +807,17 @@ function updateJokersIndicator(count) {
 function updateRewardsBadge(playNotif = false) {
     const validated = getValidated();
     const milestonesReached = MILESTONES.filter(m => validated.length >= m.count).length;
-    const pending = milestonesReached - getClaimedMilestones();
+    const pendingMilestones = milestonesReached - getClaimedMilestones();
+    const mailNotifs = Object.values(mailsCache).filter(m =>
+        !m.read || (m.rewards && !m.claimed && (m.rewards.keys > 0 || m.rewards.jokers > 0))
+    ).length;
+    const total = pendingMilestones + mailNotifs;
     const badge = document.getElementById("rewards-badge");
     if (!badge) return;
     const wasHidden = badge.classList.contains("hidden");
-    badge.textContent = pending > 0 ? pending : "";
-    badge.classList.toggle("hidden", pending <= 0);
-    if (playNotif && wasHidden && pending > 0) playSound("notif");
+    badge.textContent = total > 0 ? total : "";
+    badge.classList.toggle("hidden", total <= 0);
+    if (playNotif && wasHidden && pendingMilestones > 0) playSound("notif");
 }
 
 function updateTierlistBadge() {
@@ -844,6 +852,15 @@ refClaimedMilestones.on("value", (snapshot) => {
     updateMysteryPointsIndicator();
 }, (err) => {
     console.error("Firebase read error (claimedMilestones):", err);
+});
+
+refBonusKeys.once("value").then(snapshot => {
+    if (snapshot.val() === null) refBonusKeys.set(0);
+});
+
+refBonusKeys.on("value", (snapshot) => {
+    cachedBonusKeys = snapshot.val() || 0;
+    updateMysteryPointsIndicator();
 });
 
 refJokers.once("value").then(snapshot => {
@@ -908,7 +925,16 @@ const SOUNDS = {
     menuOpen:       new Audio("sounds/drop1.wav"),
     menuClose:      new Audio("sounds/drop2.wav"),
     challengeStart: new Audio("sounds/Powerup_upgrade_22.WAV"),
+    gs:             new Audio("sounds/gs1.WAV"),
 };
+
+const MAGE_SOUNDS = [
+    "sounds/gs1.wav",
+    "sounds/gs2.wav",
+    "sounds/gs3.wav",
+    "sounds/gs4.wav",
+    "sounds/gs5.wav"
+];
 
 function playSound(name) {
     const s = SOUNDS[name];
@@ -918,7 +944,12 @@ function playSound(name) {
 }
 
 
-
+function playRandomMageSound() {
+    const randomIdx = Math.floor(Math.random() * MAGE_SOUNDS.length);
+    const audio = new Audio(MAGE_SOUNDS[randomIdx]);
+    audio.volume = 1,5; // Ajustez le volume selon vos besoins
+    audio.play().catch(e => console.log("Lecture audio bloquée par le navigateur"));
+}
 
 // ============================================================
 //  FILTRE
@@ -2221,7 +2252,7 @@ if (DEBUG_MODE) initDebugUI();
 // ============================================================
 //  MODAL DALI — Où est Dali ?
 // ============================================================
-const DALI_INDEX = 38;
+const DALI_INDEX = 35;
 // ── Coordonnées de la cible (0 = gauche/haut, 1 = droite/bas) — à ajuster ──
 const DALI_TARGET_X  = 0.95;
 const DALI_TARGET_Y  = 0.54;
@@ -2293,8 +2324,8 @@ document.querySelector('.dali-close-btn').addEventListener('click', () => {
 });
 
 // MODAL AU BOULOT — jeu dans barbie-index.html
-const AU_BOULOT_INDEX   = 27;
-const LOTR_ANIM_INDEX   = 40;
+const AU_BOULOT_INDEX   = 25;
+const LOTR_ANIM_INDEX   = 38;
 
 
 // ============================================================
@@ -2674,6 +2705,178 @@ document.querySelector(".filter-bar-inline").addEventListener("click", (e) => {
 function hideFilterIndicator() {}
 function updateFilterIndicator() {}
 
+// Bounce animation on filter button click
+document.addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn, .filter-btn-genre-item, .filter-toggle-btn');
+    if (!btn) return;
+    btn.classList.remove('filter-bounce');
+    void btn.offsetWidth; // reflow pour relancer l'animation
+    btn.classList.add('filter-bounce');
+    btn.addEventListener('animationend', () => btn.classList.remove('filter-bounce'), { once: true });
+});
+
+// ============================================================
+//  MAILBOX (Firebase)
+// ============================================================
+let mailsCache = {};
+let currentMailId = null;
+
+refMails.on("value", snap => {
+    mailsCache = snap.val() || {};
+    updateMailboxBadge();
+    updateRewardsBadge();
+});
+
+function updateMailboxBadge() {
+    const unread = Object.values(mailsCache).filter(m => !m.read).length;
+    const badge = document.getElementById("mailbox-badge");
+    if (!badge) return;
+    badge.textContent = unread;
+    badge.classList.toggle("hidden", unread === 0);
+}
+
+function formatMailDate(ts) {
+    if (!ts) return "";
+    return new Date(ts).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" });
+}
+
+function openMailbox() {
+    document.getElementById("mailbox-modal").classList.remove("hidden");
+    showMailList();
+}
+
+function closeMailbox() {
+    document.getElementById("mailbox-modal").classList.add("hidden");
+    currentMailId = null;
+}
+
+function showMailList() {
+    renderMailList();
+    const listEl   = document.getElementById("mailbox-list-view");
+    const detailEl = document.getElementById("mailbox-detail-view");
+    detailEl.classList.add("hidden");
+    listEl.classList.remove("hidden");
+    listEl.classList.add("mb-slide-in-left");
+    listEl.addEventListener("animationend", () => listEl.classList.remove("mb-slide-in-left"), { once: true });
+}
+
+function renderMailList() {
+    const list  = document.getElementById("mailbox-list");
+    const empty = document.getElementById("mailbox-empty");
+    const mails = Object.entries(mailsCache).sort((a, b) => (b[1].date || 0) - (a[1].date || 0));
+
+    list.innerHTML = "";
+    if (mails.length === 0) { empty.classList.remove("hidden"); return; }
+    empty.classList.add("hidden");
+
+    mails.forEach(([id, mail]) => {
+        const hasReward = mail.rewards && (mail.rewards.keys > 0 || mail.rewards.jokers > 0);
+        const item = document.createElement("div");
+        item.className = "mailbox-item" + (mail.read ? "" : " unread");
+        item.innerHTML = `
+            <div class="mailbox-item-avatar">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="currentColor"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200Z"/></svg>
+            </div>
+            <div class="mailbox-item-content">
+                <div class="mailbox-item-top">
+                    <span class="mailbox-item-subject">${mail.subject || "(Sans objet)"}</span>
+                    <span class="mailbox-item-date">${formatMailDate(mail.date)}</span>
+                </div>
+                <div class="mailbox-item-bottom">
+                    <span class="mailbox-item-preview">${(mail.body || "").slice(0, 55)}…</span>
+                    ${hasReward && !mail.claimed ? '<span class="mailbox-item-reward-badge">📦 Récompense</span>' : ""}
+                </div>
+            </div>
+        `;
+        item.addEventListener("click", () => openMail(id));
+        list.appendChild(item);
+    });
+}
+
+function openMail(id) {
+    const mail = mailsCache[id];
+    if (!mail) return;
+    currentMailId = id;
+
+    if (!mail.read) refMails.child(id).update({ read: true });
+
+    const listEl   = document.getElementById("mailbox-list-view");
+    const detailEl = document.getElementById("mailbox-detail-view");
+    listEl.classList.add("hidden");
+    detailEl.classList.remove("hidden");
+    detailEl.classList.add("mb-slide-in-right");
+    detailEl.addEventListener("animationend", () => detailEl.classList.remove("mb-slide-in-right"), { once: true });
+
+    document.getElementById("mailbox-detail-subject").textContent = mail.subject || "(Sans objet)";
+    document.getElementById("mailbox-detail-date").textContent = formatMailDate(mail.date);
+    document.getElementById("mailbox-detail-body").textContent = mail.body || "";
+
+    const rewardsEl = document.getElementById("mailbox-detail-rewards");
+    const claimBtn  = document.getElementById("mailbox-claim-btn");
+    const hasReward = mail.rewards && (mail.rewards.keys > 0 || mail.rewards.jokers > 0);
+
+    if (hasReward) {
+        rewardsEl.classList.remove("hidden");
+        const items = document.getElementById("mailbox-rewards-items");
+        items.innerHTML = "";
+        if (mail.rewards.keys > 0)
+            items.innerHTML += `<div class="mailbox-reward-item"><img src="medias/key.png"><span>×${mail.rewards.keys} Clé${mail.rewards.keys > 1 ? "s" : ""}</span></div>`;
+        if (mail.rewards.jokers > 0)
+            items.innerHTML += `<div class="mailbox-reward-item"><img src="medias/joker.png"><span>×${mail.rewards.jokers} Joker${mail.rewards.jokers > 1 ? "s" : ""}</span></div>`;
+        claimBtn.textContent = mail.claimed ? "Récompenses déjà récupérées ✓" : "Récupérer les récompenses";
+        claimBtn.disabled = !!mail.claimed;
+    } else {
+        rewardsEl.classList.add("hidden");
+    }
+}
+
+document.getElementById("mailbox-claim-btn").addEventListener("click", () => {
+    const mail = mailsCache[currentMailId];
+    if (!mail || mail.claimed) return;
+    const { keys = 0, jokers = 0 } = mail.rewards || {};
+    if (keys > 0)   refBonusKeys.set(cachedBonusKeys + keys);
+    if (jokers > 0) refJokers.set(cachedJokers + jokers);
+    refMails.child(currentMailId).update({ claimed: true });
+    showToast("Récompenses ajoutées à l'inventaire !", "success", 2000);
+    document.getElementById("mailbox-claim-btn").textContent = "Récompenses déjà récupérées ✓";
+    document.getElementById("mailbox-claim-btn").disabled = true;
+});
+
+document.getElementById("mailbox-btn").addEventListener("click", openMailbox);
+document.getElementById("mailbox-close-btn").addEventListener("click", closeMailbox);
+document.getElementById("mailbox-back-btn").addEventListener("click", showMailList);
+document.getElementById("mailbox-modal").addEventListener("click", e => {
+    if (e.target === document.getElementById("mailbox-modal")) closeMailbox();
+});
+
+// ── Compose mail (debug) ──
+document.getElementById("compose-close-btn").addEventListener("click", () => {
+    document.getElementById("compose-mail-modal").classList.add("hidden");
+});
+document.getElementById("compose-mail-modal").addEventListener("click", e => {
+    if (e.target === document.getElementById("compose-mail-modal"))
+        document.getElementById("compose-mail-modal").classList.add("hidden");
+});
+document.getElementById("compose-send-btn").addEventListener("click", () => {
+    const subject = document.getElementById("compose-subject").value.trim();
+    const body    = document.getElementById("compose-body").value.trim();
+    const keys    = parseInt(document.getElementById("compose-keys").value) || 0;
+    const jokers  = parseInt(document.getElementById("compose-jokers").value) || 0;
+    if (!subject) { showToast("L'objet est requis", "error", 1500); return; }
+
+    const mail = { subject, body, date: Date.now(), read: false, claimed: false };
+    if (keys > 0 || jokers > 0) mail.rewards = { keys, jokers };
+
+    refMails.push(mail).then(() => {
+        showToast("Mail envoyé !", "success", 1500);
+        document.getElementById("compose-subject").value = "";
+        document.getElementById("compose-body").value = "";
+        document.getElementById("compose-keys").value = "0";
+        document.getElementById("compose-jokers").value = "0";
+        document.getElementById("compose-mail-modal").classList.add("hidden");
+    });
+});
+
 // ============================================================
 //  SPLASH SCREEN + INTRO ANIMATION
 // ============================================================
@@ -2806,6 +3009,9 @@ function showTutorialFinal() {
 
     const showFinalStep = (first = false) => {
         const step   = TUTORIAL_PHASE2_FINAL[tutorialFinalStep];
+        if (step.img === "medias/mage.gif") {
+        playRandomMageSound();
+    }
         const isLast = tutorialFinalStep >= TUTORIAL_PHASE2_FINAL.length - 1;
         if (tutorialFinalStep === 0) {
             fadeOutMusic(tutorialMusic);
@@ -2867,6 +3073,7 @@ const TUTORIAL_STEPS = [
     { text: "Quelle est ta couleur préférée ?", img: "medias/mage.gif", colorPicker: true },
     { text: "Allez, je vais te montrer \ncomment ça marche !", last: true, img: "medias/mage.gif" },
 ];
+
 
 let tutorialStep = 0;
 
@@ -3036,7 +3243,7 @@ function showQrIntro(onDone) {
         barWrap.style.opacity = "0";
         setTimeout(() => {
             screen.classList.add("hidden");
-            tutorialMusic.volume = 0.5;
+            tutorialMusic.volume = 0.2;
             tutorialMusic.play().catch(() => {});
             onDone();
         }, 3000);

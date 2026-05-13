@@ -2,7 +2,7 @@
 //  LE SEIGNEUR DES ANNEAUX 1978 — Mini Jeu
 // ============================================================
 
-const LOTR_INDEX   = 40;
+const LOTR_INDEX   = 38;
 const TARGET_SCORE = 5000;
 
 const LOTR_GAME = (() => {
@@ -29,7 +29,7 @@ const LOTR_GAME = (() => {
     let lastTime    = 0;
 
     let   charSpeed     = 160;   // px/s (upgradable)
-    const CHAR_H_RATIO  = 0.09;  // hauteur du perso = H * ratio
+    const CHAR_H_RATIO  = 0.07;  // hauteur du perso = H * ratio
     const WALK_INTERVAL = 180;   // ms entre les frames de marche
 
     let charX = 0, charY = 0;
@@ -49,27 +49,27 @@ const LOTR_GAME = (() => {
     let   manaRegen        = 2;
 
     // ── Ennemis ─────────────────────────────────────────────
-    const MOB_SPEED        = 90;    // px/s
-    const MOB_H_RATIO      = 0.055; // hauteur du mob = H * ratio
+    const MOB_SPEED        = 40;    // px/s
+    const MOB_H_RATIO      = 0.042; // hauteur du mob = H * ratio
     const MOB_ANIM_MS      = 220;   // ms entre les frames du mob
     let   mobSpawnDelay    = 2500;  // ms entre les spawns (diminue à chaque atout)
     const MOB_MAX_HP       = 20;    // PV max des mobs
     const MOB_DAMAGE       = 5;     // PV perdus par contact
     const MOB_SPAWN_MARGIN = 60;    // px hors écran pour le spawn
 
-    const TROLL_MAX_HP  = 100;
-    const TROLL_SPEED   = 60;
+    const TROLL_MAX_HP  = 60;
+    const TROLL_SPEED   = 40;
     const TROLL_H_RATIO = 0.085;
     const TROLL_SPAWN_MS = 20000;   // ms entre les spawns de troll
 
-    const BOSS_MAX_HP          = 250;
-    const BOSS_SPEED           = 42;
+    const BOSS_MAX_HP          = 200;
+    const BOSS_SPEED           = 30;
     const BOSS_H_RATIO         = 0.12;
     const BOSS_DAMAGE          = 10;
     const BOSS_SPAWN_MS        = 90000;
     const BOSS_ORB_COUNT       = 3;
     const BOSS_ORB_ORBIT_RATIO = 0.14;
-    const BOSS_ORB_RADIUS      = 10;
+    const BOSS_ORB_RADIUS      = 8;
     const BOSS_ORB_DAMAGE      = 10;
     const BOSS_ORB_HIT_CD      = 800;
     const BOSS_ORB_SPEED       = 1.5;
@@ -89,6 +89,7 @@ const LOTR_GAME = (() => {
     let activeBlessingKey = null;
     let esteHealUntil     = 0;
     let vardaUntil        = 0;
+    let hurtFlashUntil    = 0;
     let currentLevel      = 1;
     let mobHpMult         = 1;
     let bossStatMult      = 1;
@@ -122,6 +123,77 @@ const LOTR_GAME = (() => {
     const WAVE_RAY_LIFETIME = 1100;
     const WAVE_RAY_RADIUS   = 7;
 
+
+    const introMusic = new Audio('medias-lotr/music-intro.WAV');
+    const battleMusic = new Audio('medias-lotr/music.WAV');
+
+    battleMusic.loop = true; // Seule la musique de combat boucle
+    introMusic.volume = 0.1;
+    battleMusic.volume = 0.05;
+
+    const soundHit = new Audio('medias-lotr/impact.WAV');
+    const waveSound = new Audio('medias-lotr/wave.WAV');
+    const specialSound = new Audio('medias-lotr/special.WAV');
+    const bonusSound = new Audio('medias-lotr/bonus.WAV');
+    const healSound = new Audio('medias-lotr/heal.WAV');
+
+    function startGameMusic() {
+    // 1. On lance l'intro
+    introMusic.play().catch(e => console.log("Audio bloqué"));
+
+    // 2. On programme le changement après 5 secondes (5000 ms)
+    setTimeout(() => {
+        // Optionnel : Fondu enchaîné rapide
+        const fadeOut = setInterval(() => {
+            if (introMusic.volume > 0.1) {
+                introMusic.volume -= 0.1;
+            } else {
+                clearInterval(fadeOut);
+                introMusic.pause();
+                introMusic.currentTime = 0;
+                
+                // 3. Lancement de la musique de combat qui boucle
+                battleMusic.play().catch(e => console.log("Audio bloqué"));
+            }
+        }, 100);
+    }, 5000);
+}
+
+    function playHitSound() {
+        // On clone le son pour permettre des lectures simultanées (chevauchement)
+        const s = soundHit.cloneNode();
+        s.volume = 0.5; // Un peu plus bas car il y en aura beaucoup
+        s.play().catch(() => {}); // Le catch évite les erreurs de navigateur
+    }
+
+    function playWaveSound() {
+        // On clone le son pour permettre des lectures simultanées (chevauchement)
+        const s = waveSound.cloneNode();
+        s.volume = 0.1; // Un peu plus bas car il y en aura beaucoup
+        s.play().catch(() => {}); // Le catch évite les erreurs de navigateur
+    }
+
+    function playSpecialSound() {
+        // On clone le son pour permettre des lectures simultanées (chevauchement)
+        const s = specialSound.cloneNode();
+        s.volume = 0.3; // Un peu plus bas car il y en aura beaucoup
+        s.play().catch(() => {}); // Le catch évite les erreurs de navigateur
+    }
+
+    function playBonusSound() {
+        // On clone le son pour permettre des lectures simultanées (chevauchement)
+        const s = bonusSound.cloneNode();
+        s.volume = 0.6; // Un peu plus bas car il y en aura beaucoup
+        s.play().catch(() => {}); // Le catch évite les erreurs de navigateur
+    }
+
+    function playHealSound() {
+        // On clone le son pour permettre des lectures simultanées (chevauchement)
+        const s = healSound.cloneNode();
+        s.volume = 0.3; // Un peu plus bas car il y en aura beaucoup
+        s.play().catch(() => {}); // Le catch évite les erreurs de navigateur
+    }
+
     function spawnWaveRays() {
         const now = performance.now();
         for (let i = 0; i < waveExtraRays; i++) {
@@ -134,6 +206,7 @@ const LOTR_GAME = (() => {
         waves.push({ startTime: performance.now(), maxR: H * WAVE_MAX_RADIUS_RATIO, hitMobs: new Set() });
         if (waveHeal > 0) { hp = Math.min(maxHp, hp + waveHeal); updateHUD(); }
         if (waveExtraRays > 0) spawnWaveRays();
+        playWaveSound();
     }
 
     function updateWaveRays(dt) {
@@ -315,6 +388,7 @@ const LOTR_GAME = (() => {
 
     function spawnDmgNumber(x, y, value, color = '#f5d060') {
         dmgNumbers.push({ x, y: y - 10, value, color, age: 0, maxAge: 700 });
+        playHitSound();
     }
 
     // ── Cercles d'impact ─────────────────────────────────────
@@ -336,7 +410,7 @@ const LOTR_GAME = (() => {
             const alpha  = (1 - t) * 0.9;
             ctx.save();
             ctx.globalAlpha  = alpha;
-            ctx.strokeStyle  = '#ffffff';
+            ctx.strokeStyle  = r.color || '#ffffff';
             ctx.lineWidth    = 2.5 * (1 - t * 0.6);
             ctx.beginPath();
             ctx.arc(r.x, r.y, radius, 0, Math.PI * 2);
@@ -361,6 +435,8 @@ const LOTR_GAME = (() => {
             if (Math.sqrt(dx * dx + dy * dy) < POTION_RADIUS + 20) {
                 hp = Math.min(maxHp, hp + POTION_HEAL);
                 updateHUD();
+                impactRings.push({ x: p.x, y: p.y, age: 0, maxAge: 220, maxR: 32, color: '#ff4466' });
+                impactRings.push({ x: p.x, y: p.y, age: 0, maxAge: 320, maxR: 48, color: '#ff8899' });
                 return false;
             }
             return true;
@@ -369,7 +445,18 @@ const LOTR_GAME = (() => {
 
     function drawPotions() {
         const size = POTION_RADIUS * 2;
+        const pulse = 0.6 + 0.4 * Math.sin(performance.now() / 350);
         for (const p of potions) {
+            ctx.save();
+            const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, POTION_RADIUS * 2.8);
+            glow.addColorStop(0, `rgba(255, 80, 100, ${0.55 * pulse})`);
+            glow.addColorStop(1, 'rgba(255, 40, 60, 0)');
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, POTION_RADIUS * 2.8, 0, Math.PI * 2);
+            ctx.fillStyle = glow;
+            ctx.fill();
+            ctx.restore();
+
             if (POTION_IMG.complete && POTION_IMG.naturalWidth) {
                 ctx.drawImage(POTION_IMG, p.x - size / 2, p.y - size / 2, size, size);
             } else {
@@ -430,7 +517,7 @@ const LOTR_GAME = (() => {
 
             ctx.save();
             ctx.globalAlpha  = alpha;
-            ctx.font         = 'bold 13px "Cinzel", serif';
+            ctx.font         = 'bold 20px "Cinzel", serif';
             ctx.textAlign    = 'center';
             ctx.textBaseline = 'middle';
             // Contour sombre
@@ -551,7 +638,7 @@ const LOTR_GAME = (() => {
                 if (isPlayerInBossLaser() && now >= iframesUntil) {
                     iframesUntil = now + iframesDuration;
                     if (shieldCharges > 0) { shieldCharges--; spawnDmgNumber(charX, charY - 30, '🛡', '#88ccff'); }
-                    else { hp = Math.max(0, hp - Math.max(1, Math.round(BOSS_DAMAGE * (1 - damageReduction / 100)))); spawnDmgNumber(charX, charY - 30, BOSS_DAMAGE, '#ff8800'); spawnImpact(charX, charY); updateHUD(); if (hp <= 0) showGameOver(0); }
+                    else { hp = Math.max(0, hp - Math.max(1, Math.round(BOSS_DAMAGE * (1 - damageReduction / 100)))); spawnDmgNumber(charX, charY - 30, BOSS_DAMAGE, '#ff8800'); spawnImpact(charX, charY); hurtFlashUntil = performance.now() + 400; updateHUD(); if (hp <= 0) showGameOver(0); }
                 }
             }
             if (boss.stateTimer >= BOSS_LASER_FIRE_MS * boss.statMult) {
@@ -928,7 +1015,9 @@ const LOTR_GAME = (() => {
         currentLevel  = Math.min(currentLevel + 1, 5);
         mobHpMult     = Math.pow(1.2, currentLevel - 1);
         bossStatMult  = Math.pow(1.25, currentLevel - 1);
-        mobSpawnDelay = Math.max(600, mobSpawnDelay - 400);
+        mobSpawnDelay = Math.max(600, mobSpawnDelay - 200);
+        mana = maxMana;
+        updateHUD();
         document.getElementById('lotr-level-num').textContent = `NIVEAU ${currentLevel}`;
 
         overlay.classList.remove('hidden');
@@ -1066,11 +1155,12 @@ const LOTR_GAME = (() => {
         overlay.classList.remove('hidden');
         document.getElementById('lotr-upgrade-step1').classList.remove('hidden');
         document.getElementById('lotr-upgrade-step2').classList.add('hidden');
+        playBonusSound();
     }
 
     function resumeGame() {
         document.getElementById('lotr-upgrade').classList.add('hidden');
-        mobSpawnDelay = Math.max(600, mobSpawnDelay - 200);
+        mobSpawnDelay = Math.max(600, mobSpawnDelay - 100);
         lastTime    = 0;
         gameRunning = true;
         animId      = requestAnimationFrame(gameLoop);
@@ -1179,7 +1269,7 @@ const LOTR_GAME = (() => {
                 iframesUntil = now + iframesDuration;
                 mob.flashUntil = now + 180;
                 if (shieldCharges > 0) { shieldCharges--; spawnDmgNumber(charX, charY - charH * 0.5, '🛡', '#88ccff'); }
-                else { hp = Math.max(0, hp - Math.max(1, Math.round(MOB_DAMAGE * (1 - damageReduction / 100)))); spawnDmgNumber(charX, charY - charH * 0.5, MOB_DAMAGE, '#ff4444'); spawnImpact(charX, charY); updateHUD(); if (hp <= 0) showGameOver(0); }
+                else { hp = Math.max(0, hp - Math.max(1, Math.round(MOB_DAMAGE * (1 - damageReduction / 100)))); spawnDmgNumber(charX, charY - charH * 0.5, MOB_DAMAGE, '#ff4444'); spawnImpact(charX, charY); hurtFlashUntil = now + 400; updateHUD(); if (hp <= 0) showGameOver(0); }
             }
         }
 
@@ -1420,7 +1510,11 @@ const LOTR_GAME = (() => {
             const dy = charY - g.y;
             if (Math.sqrt(dx * dx + dy * dy) < 40) {
                 glyphs.splice(gi, 1);
-                showBlessingOverlay();
+                if (currentLevel === 5) {
+                    showManweDialogue();
+                } else {
+                    showBlessingOverlay();
+                }
                 return;
             }
         }
@@ -1502,6 +1596,19 @@ const LOTR_GAME = (() => {
         drawImpactRings();
         drawDmgNumbers();
 
+        // Vignette rouge lors des dégâts
+        if (performance.now() < hurtFlashUntil) {
+            const t = (hurtFlashUntil - performance.now()) / 400;
+            const grad = ctx.createRadialGradient(W/2, H/2, H*0.25, W/2, H/2, H*0.85);
+            grad.addColorStop(0, 'rgba(180,0,0,0)');
+            grad.addColorStop(0.5, `rgba(210,0,0,${0.45 * t})`);
+            grad.addColorStop(1, `rgba(230,0,0,${0.95 * t})`);
+            ctx.save();
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+            ctx.restore();
+        }
+
         updateSpellVisuals();
         updateProgressBar();
     }
@@ -1533,6 +1640,7 @@ const LOTR_GAME = (() => {
         activeBlessingKey = null;
         esteHealUntil     = 0;
         vardaUntil        = 0;
+        hurtFlashUntil    = 0;
         currentLevel      = 1;
         mobHpMult         = 1;
         bossStatMult      = 1;
@@ -1561,7 +1669,6 @@ const LOTR_GAME = (() => {
         document.getElementById('lotr-spell2-btn').classList.add('lotr-spell-btn--empty');
         gameRunning = true;
         updateHUD();
-
         initJoystick();
         cancelAnimationFrame(animId);
         animId = requestAnimationFrame(gameLoop);
@@ -1604,6 +1711,8 @@ const LOTR_GAME = (() => {
         stopGame();
         document.getElementById('lotr-game').classList.add('hidden');
         document.getElementById('lotr-gameover').classList.add('hidden');
+        document.getElementById('lotr-dialogue').classList.add('hidden');
+        document.getElementById('lotr-victory').classList.add('hidden');
 
         const menu  = document.getElementById('lotr-menu');
         const inner = document.getElementById('lotr-menu-inner');
@@ -1625,10 +1734,131 @@ const LOTR_GAME = (() => {
     }
 
     function showGame() {
-        document.getElementById('lotr-menu').classList.add('hidden');
-        document.getElementById('lotr-gameover').classList.add('hidden');
-        document.getElementById('lotr-game').classList.remove('hidden');
-        requestAnimationFrame(() => startGame());
+        // Fondu au noir
+        const fade = document.createElement('div');
+        fade.style.cssText = 'position:fixed;inset:0;background:#000;opacity:0;z-index:99999;pointer-events:none;transition:opacity 0.6s ease;';
+        document.body.appendChild(fade);
+        requestAnimationFrame(() => { fade.style.opacity = '1'; });
+
+        setTimeout(() => {
+            document.getElementById('lotr-menu').classList.add('hidden');
+            document.getElementById('lotr-gameover').classList.add('hidden');
+            document.getElementById('lotr-game').classList.remove('hidden');
+
+            // Fondu depuis le noir
+            fade.style.opacity = '0';
+            setTimeout(() => fade.remove(), 700);
+
+            requestAnimationFrame(() => requestAnimationFrame(() => playIntro()));
+        }, 650);
+    }
+
+    function playIntro() {
+        canvas = document.getElementById('lotr-canvas');
+        ctx    = canvas.getContext('2d');
+        const rect = canvas.getBoundingClientRect();
+        canvas.width  = Math.round(rect.width)  || 400;
+        canvas.height = Math.round(rect.height) || 700;
+        const W = canvas.width, H = canvas.height;
+
+        // Cacher le HUD
+        const hudEls = ['lotr-hud','lotr-joystick-wrap','lotr-level-progress',
+                         'lotr-pause-btn','lotr-stats-btn','lotr-debug-btn'];
+        hudEls.forEach(id => { const el = document.getElementById(id); if (el) el.style.opacity = '0'; });
+
+        const bg      = imgBgs[0];
+        const charH   = H * CHAR_H_RATIO;
+        const charRef = imgIdle.naturalWidth ? imgIdle : (imgWalk1.naturalWidth ? imgWalk1 : null);
+        const ratio   = charRef && charRef.naturalHeight ? charRef.naturalWidth / charRef.naturalHeight : 0.55;
+        const charW   = charH * ratio;
+        const startY  = H + charH;
+        const targetY = H * 0.5;
+        const cx      = W / 2;
+
+        const WALK_DUR  = 4400;
+        const QMARK_DUR = 900;
+        let phase   = 'walk';
+        let elapsed = 0;
+        let lastTs  = null;
+        let walkF   = 0;
+        let walkT   = 0;
+        
+        startGameMusic();
+
+        function drawBg() {
+            if (bg.complete && bg.naturalWidth) {
+                ctx.drawImage(bg, 0, 0, W, H);
+            } else {
+                ctx.fillStyle = '#1a1208';
+                ctx.fillRect(0, 0, W, H);
+            }
+        }
+
+        function drawChar(cy) {
+            let sprite;
+            if (phase === 'walk') {
+                sprite = walkF === 0
+                    ? (imgWalk1.naturalWidth ? imgWalk1 : imgIdle)
+                    : (imgWalk2.naturalWidth ? imgWalk2 : imgIdle);
+            } else {
+                sprite = imgIdle.naturalWidth ? imgIdle : imgWalk1;
+            }
+            if (sprite && sprite.naturalWidth) {
+                ctx.drawImage(sprite, cx - charW / 2, cy - charH / 2, charW, charH);
+            }
+        }
+
+        function introLoop(ts) {
+            const dt = lastTs ? Math.min(ts - lastTs, 50) : 16;
+            lastTs = ts;
+            elapsed += dt;
+
+            drawBg();
+
+            if (phase === 'walk') {
+                const t    = Math.min(elapsed / WALK_DUR, 1);
+                const ease = 1 - Math.pow(1 - t, 3);
+                const cy   = startY + (targetY - startY) * ease;
+
+                walkT += dt;
+                if (walkT >= WALK_INTERVAL) { walkT -= WALK_INTERVAL; walkF ^= 1; }
+                drawChar(cy);
+
+                if (t >= 1) { phase = 'qmark'; elapsed = 0; }
+                animId = requestAnimationFrame(introLoop);
+
+            } else {
+                drawChar(targetY);
+
+                const t     = Math.min(elapsed / QMARK_DUR, 1);
+                const scale = t < 0.3 ? (t / 0.3) * 1.3
+                            : t < 0.6 ? 1.3 - ((t - 0.3) / 0.3) * 0.3
+                            : 1.0;
+                const alpha = t < 0.75 ? 1 : 1 - (t - 0.75) / 0.25;
+
+                ctx.save();
+                ctx.globalAlpha  = alpha;
+                ctx.font         = `bold ${Math.round(charH * 0.65 * scale)}px "Press Start 2P", monospace`;
+                ctx.fillStyle    = '#ff8800';
+                ctx.strokeStyle  = '#000';
+                ctx.lineWidth    = 4;
+                ctx.textAlign    = 'center';
+                ctx.textBaseline = 'bottom';
+                const qy = targetY - charH * 0.7;
+                ctx.strokeText('!', cx, qy);
+                ctx.fillText('!', cx, qy);
+                ctx.restore();
+
+                if (t >= 1) {
+                    hudEls.forEach(id => { const el = document.getElementById(id); if (el) el.style.opacity = ''; });
+                    startGame();
+                    return;
+                }
+                animId = requestAnimationFrame(introLoop);
+            }
+        }
+
+        animId = requestAnimationFrame(introLoop);
     }
 
     // ── Splash → Menu ───────────────────────────────────────
@@ -1639,6 +1869,54 @@ const LOTR_GAME = (() => {
     }
 
     // ── Game Over ───────────────────────────────────────────
+    const MANWE_LINES = [
+        'Tu as vaincu le dernier Nazgul, félicitations !',
+        "Tu ne m'as encore jamais croisé, je me présente : je suis Manwë, chef des Ainur et roi d'Arda.",
+        "C'est moi qui t'ai envoyé ici pour guider le hobbit et mettre fin au règne des ténèbres.",
+        "Ta tâche n'est pas terminée, pour l'heure accepte ce présent.",
+    ];
+
+    function showManweDialogue() {
+        stopGame();
+        const overlay  = document.getElementById('lotr-dialogue');
+        const textEl   = document.getElementById('lotr-dialogue-text');
+        const nextBtn  = document.getElementById('lotr-dialogue-next');
+        overlay.classList.remove('hidden');
+        let idx = 0;
+
+        function showLine() {
+            textEl.style.animation = 'none';
+            void textEl.offsetWidth;
+            textEl.style.animation = '';
+            textEl.textContent = MANWE_LINES[idx];
+            nextBtn.textContent = idx < MANWE_LINES.length - 1 ? 'SUIVANT ▶' : 'FERMER ▶';
+        }
+
+        showLine();
+        nextBtn.onclick = () => {
+            idx++;
+            if (idx < MANWE_LINES.length) {
+                showLine();
+            } else {
+                overlay.classList.add('hidden');
+                showVictory();
+            }
+        };
+    }
+
+    function showVictory() {
+        const overlay = document.getElementById('lotr-victory');
+        overlay.classList.remove('hidden');
+        const validated = getValidated();
+        if (!validated.includes(LOTR_INDEX)) {
+            validated.push(LOTR_INDEX);
+            saveValidated(validated);
+        }
+        document.getElementById('lotr-victory-quit').onclick = () => {
+            setMenuVisible(true);
+        };
+    }
+
     function showGameOver(score) {
         stopGame();
         document.getElementById('lotr-game').classList.add('hidden');
@@ -1829,6 +2107,23 @@ const LOTR_GAME = (() => {
         if (gameRunning) { gameRunning = false; cancelAnimationFrame(animId); statsPaused = true; }
         updateStatsPanel();
         panel.classList.remove('hidden');
+    });
+
+    document.getElementById('lotr-debug-btn').addEventListener('click', () => {
+        if (!gameRunning && !canvas) return;
+        const W = canvas.width, H = canvas.height;
+        mobs = [];
+        boss = null;
+        bossHasSpawned = false;
+        currentLevel = 5;
+        mobHpMult    = Math.pow(1.2, 4);
+        bossStatMult = Math.pow(1.25, 4);
+        upgradesFrozen = true;
+        bossSpawnTimer = BOSS_SPAWN_MS;
+        spawnBoss(W, H);
+        boss.hp = 20;
+        boss.displayHp = 20;
+        boss.maxHp = 20;
     });
 
     return { open, showMenu, showGame, showGameOver, addOrb };

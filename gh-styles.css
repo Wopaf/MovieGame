@@ -404,6 +404,7 @@ kbd {
 #combo-display {
     display: flex; flex-direction: column; align-items: center;
     transition: opacity 0.2s;
+    margin-top: 60px;
 }
 #combo-display.combo-hidden { opacity: 0; }
 #combo-number { font-size: 28px; font-weight: 900; color: #ff6600; line-height: 1; }

@@ -19,7 +19,7 @@
         <div class="lotr-vignette"></div>
 
         <div class="lotr-splash-inner">
-            <h1 class="lotr-title">Gandalf<br>Survivor</h1>
+            <img src="medias-lotr/lotr-logo.png" alt="Gandalf Survivor" class="lotr-menu-logo">
             <p class="lotr-press-start" id="lotr-press-start">▶ &nbsp;TOUCHER POUR COMMENCER&nbsp; ◀</p>
         </div>
     </div>
@@ -31,19 +31,8 @@
         <div class="lotr-vignette"></div>
 
         <div class="lotr-menu-inner" id="lotr-menu-inner">
-            <h1 class="lotr-title lotr-title--sm">Gandalf<br>Survivor</h1>
+            <img src="medias-lotr/lotr-logo.png" alt="Gandalf Survivor" class="lotr-menu-logo">
             <div class="lotr-divider"><span class="lotr-divider-gem">◆</span></div>
-
-            <div class="lotr-scores">
-                <div class="lotr-score-box">
-                    <span class="lotr-score-label">⚔ MEILLEUR</span>
-                    <span id="lotr-best" class="lotr-score-val">—</span>
-                </div>
-                <div class="lotr-score-box lotr-score-target">
-                    <span class="lotr-score-label">🏆 OBJECTIF</span>
-                    <span id="lotr-target" class="lotr-score-val">0</span>
-                </div>
-            </div>
 
             <div class="lotr-menu-btns">
                 <button class="lotr-btn lotr-btn--play" id="lotr-play-btn">
@@ -135,6 +124,9 @@
 
         </div>
 
+        <!-- Debug button -->
+        <button id="lotr-debug-btn" class="lotr-debug-btn">LVL5</button>
+
         <!-- Stats button -->
         <button id="lotr-stats-btn" class="lotr-stats-btn">
             <img src="medias-lotr/book.png" alt="Stats" class="lotr-stats-icon">
@@ -201,6 +193,7 @@
         <div id="lotr-stats-panel" class="lotr-stats-panel hidden">
             <div class="lotr-stats-inner"></div>
         </div>
+
     </div>
 
     <!-- ══ GAME OVER (placeholder) ══ -->
@@ -231,6 +224,27 @@
                 <button class="lotr-btn lotr-btn--play" id="lotr-retry-btn">↺ &nbsp;REJOUER</button>
                 <button class="lotr-btn lotr-btn--quit" id="lotr-menu-back-btn">☰ &nbsp;MENU</button>
             </div>
+        </div>
+    </div>
+
+    <!-- ══ DIALOGUE MANWË ══ -->
+    <div id="lotr-dialogue" class="lotr-dialogue-overlay hidden">
+        <img src="medias-lotr/manwe.png" alt="Manwë" class="lotr-dialogue-portrait">
+        <div class="lotr-dialogue-box">
+            <div class="lotr-dialogue-text-wrap">
+                <span class="lotr-dialogue-name">Manwë</span>
+                <p class="lotr-dialogue-text" id="lotr-dialogue-text"></p>
+            </div>
+            <button class="lotr-dialogue-next" id="lotr-dialogue-next">SUIVANT ▶</button>
+        </div>
+    </div>
+
+    <!-- ══ VICTOIRE FINALE ══ -->
+    <div id="lotr-victory" class="lotr-victory-overlay hidden">
+        <div class="lotr-victory-inner">
+            <div class="lotr-victory-title">⚔ DÉFI VALIDÉ ⚔</div>
+            <div class="lotr-victory-sub">Le Seigneur des Anneaux — 1978</div>
+            <button class="lotr-btn lotr-btn--quit lotr-victory-quit" id="lotr-victory-quit">✕ &nbsp;QUITTER</button>
         </div>
     </div>
 
