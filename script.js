@@ -513,7 +513,7 @@ const ACHIEVEMENTS = [
 
 
     { title: "Kaamelott 2 part.1", img: "52.png", password: "6tW", rebus: "medias/r39.png",
-    question: "", answer: "",
+    question: "Dans une scène, Lancelot dessine un cercle dans la terre, avec quoi dessine-t-il ce cercle ?", answer: "le doigt",
     realisateur: "Alexandre Astier", description: "Le roi Arthur revient d'exil pour reprendre Kaamelott des mains de Lancelot. Il rassemble ses chevaliers pour une reconquère contre Arthur ! Après la destruction de Kaamelott, son refus obstiné de tuer Lancelot précipite le Royaume de Logres à sa perte. Il réunit ses Chevaliers, novices téméraires et vétérans désabusés, autour de la Nouvelle Table Ronde et les envoie prouver leur valeur aux quatre coins du Monde, des Marais Orcaniens aux terres glacées du DRAGON_END_PLACEHOLDER",
     genres: ["Aventure", "Fantastique"],
     imdb: "https://www.imdb.com/title/tt9844322/", rating: "7.2", verrouille: true },
