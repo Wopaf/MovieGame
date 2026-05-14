@@ -4,6 +4,7 @@
 
 const LOTR_INDEX   = 38;
 const TARGET_SCORE = 5000;
+const MOB_MAX_COUNT = 25;
 
 const LOTR_GAME = (() => {
 
@@ -141,6 +142,9 @@ const LOTR_GAME = (() => {
     // 1. On lance l'intro
     introMusic.play().catch(e => console.log("Audio bloqué"));
 
+    let orbGradCache = null;
+    let bossOrbGradCache = null;
+
     // 2. On programme le changement après 5 secondes (5000 ms)
     setTimeout(() => {
         // Optionnel : Fondu enchaîné rapide
@@ -192,6 +196,21 @@ const LOTR_GAME = (() => {
         const s = healSound.cloneNode();
         s.volume = 0.3; // Un peu plus bas car il y en aura beaucoup
         s.play().catch(() => {}); // Le catch évite les erreurs de navigateur
+    }
+
+
+    const GRID_CELL = 100;
+
+    function buildSpatialGrid(mobs) {
+        const grid = {};
+        for (const mob of mobs) {
+            const cx = Math.floor(mob.x / GRID_CELL);
+            const cy = Math.floor(mob.y / GRID_CELL);
+            const key = cx + ',' + cy;
+            if (!grid[key]) grid[key] = [];
+            grid[key].push(mob);
+        }
+        return grid;
     }
 
     function spawnWaveRays() {
@@ -542,6 +561,7 @@ const LOTR_GAME = (() => {
     function spawnMob(W, H) {
         const { x, y } = spawnAtEdge(W, H);
         const hp = Math.round(MOB_MAX_HP * mobHpMult);
+        if (mobs.length >= MOB_MAX_COUNT) return;
         mobs.push({ x, y, vx: 0, vy: 0, animTimer: 0, frame: 0, flashUntil: 0, orbHitUntil: 0,
             hp, displayHp: hp, maxHp: hp,
             speed: MOB_SPEED, hRatio: MOB_H_RATIO, isTroll: false });
@@ -796,13 +816,9 @@ const LOTR_GAME = (() => {
             ctx.fillStyle = glow;
             ctx.fill();
 
-            const grad = ctx.createRadialGradient(ox - BOSS_ORB_RADIUS * 0.3, oy - BOSS_ORB_RADIUS * 0.3, 1, ox, oy, BOSS_ORB_RADIUS);
-            grad.addColorStop(0,   '#ffffff');
-            grad.addColorStop(0.4, '#ffaa44');
-            grad.addColorStop(1,   '#cc3300');
             ctx.beginPath();
-            ctx.arc(ox, oy, BOSS_ORB_RADIUS, 0, Math.PI * 2);
-            ctx.fillStyle = grad;
+            ctx.arc(ox, oy, ORB_RADIUS, 0, Math.PI * 2);
+            ctx.fillStyle = '#ff3535';
             ctx.fill();
         }
     }
@@ -915,13 +931,9 @@ const LOTR_GAME = (() => {
             ctx.fill();
 
             // Orbe central
-            const grad = ctx.createRadialGradient(ox - ORB_RADIUS * 0.3, oy - ORB_RADIUS * 0.3, 1, ox, oy, ORB_RADIUS);
-            grad.addColorStop(0,   '#ffffff');
-            grad.addColorStop(0.4, '#d4aaff');
-            grad.addColorStop(1,   '#7733cc');
             ctx.beginPath();
             ctx.arc(ox, oy, ORB_RADIUS, 0, Math.PI * 2);
-            ctx.fillStyle = grad;
+            ctx.fillStyle = '#88aff4';
             ctx.fill();
         }
     }
@@ -1201,12 +1213,15 @@ const LOTR_GAME = (() => {
 
     function updateMobs(dt, charH) {
         const now = performance.now();
-
         const H = canvas.height;
+
+        const spatialGrid = buildSpatialGrid(mobs); // ← ajoute cette ligne ici
 
         const charRef = imgIdle.naturalWidth ? imgIdle : imgWalk1;
         const charAR  = charRef.naturalHeight ? charRef.naturalWidth / charRef.naturalHeight : 1;
         const charW   = charH * charAR;
+
+        let _sepFrame = 0;
 
         for (const mob of mobs) {
             // Dimensions du mob
@@ -1239,18 +1254,26 @@ const LOTR_GAME = (() => {
                 mob.x += (dx / dist) * mob.speed * dt / 1000;
                 mob.y += (dy / dist) * mob.speed * dt / 1000;
 
-                // Séparation mob-mob
-                for (const other of mobs) {
-                    if (other === mob) continue;
-                    const sx = mob.x - other.x;
-                    const sy = mob.y - other.y;
-                    const sd = Math.sqrt(sx * sx + sy * sy) || 0.01;
-                    if (sd < sepRadius) {
-                        const push = (sepRadius - sd) / 2;
-                        mob.x   += (sx / sd) * push;
-                        mob.y   += (sy / sd) * push;
-                        other.x -= (sx / sd) * push;
-                        other.y -= (sy / sd) * push;
+               // Séparation mob-mob (grille spatiale)
+                const cx = Math.floor(mob.x / GRID_CELL);
+                const cy = Math.floor(mob.y / GRID_CELL);
+                for (let nx = cx - 1; nx <= cx + 1; nx++) {
+                    for (let ny = cy - 1; ny <= cy + 1; ny++) {
+                        const neighbors = spatialGrid[nx + ',' + ny];
+                        if (!neighbors) continue;
+                        for (const other of neighbors) {
+                            if (other === mob) continue;
+                            const sx = mob.x - other.x;
+                            const sy = mob.y - other.y;
+                            const sd = Math.sqrt(sx * sx + sy * sy) || 0.01;
+                            if (sd < sepRadius) {
+                                const push = (sepRadius - sd) / 2;
+                                mob.x   += (sx / sd) * push;
+                                mob.y   += (sy / sd) * push;
+                                other.x -= (sx / sd) * push;
+                                other.y -= (sy / sd) * push;
+                            }
+                        }
                     }
                 }
             }
