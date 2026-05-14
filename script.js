@@ -193,14 +193,14 @@ const MILESTONES = [
     { label: "Initié",               objectif: "Valider 1 Défi",  count: 1,  keys: 1,                    icon: 2 },
     { label: "Accro aux popcorns",   objectif: "Valider 3 Défis",  count: 3,  jokers: 1,                 icon: 3 },
     { label: "Amateur éclairé",      objectif: "Valider 10 Défis", count: 10, keys: 1,                   icon: 4 },
-    { label: "Cinéphile du dimanche",objectif: "Valider 20 Défis", count: 20, keys: 2,                   icon: 5 },
-    { label: "Passionné",            objectif: "Valider 24 Défis", count: 23, keys: 3, secretFilm: 36,   icon: 6 },
-    { label: "Critique en herbe",    objectif: "Valider 27 Défis", count: 26, keys: 3, jokers: 1,        icon: 7 },
+    { label: "Cinéphile du dimanche",objectif: "Valider 20 Défis", count: 20, keys: 3,                   icon: 5 },
+    { label: "Passionné",            objectif: "Valider 23 Défis", count: 23, keys: 3, secretFilm: 36,   icon: 6 },
+    { label: "Critique en herbe",    objectif: "Valider 26 Défis", count: 26, keys: 3, jokers: 1,        icon: 7 },
     { label: "Fin Connaisseur",      objectif: "Valider 30 Défis", count: 30, keys: 3,                   icon: 8 },
-    { label: "Cinéphile",            objectif: "Valider 33 Défis", count: 33, keys: 3, secretFilm: 37,   icon: 9 },
+    { label: "Cinéphile",            objectif: "Valider 33 Défis", count: 33, keys: 2, secretFilm: 37,   icon: 9 },
     { label: "Déglingo",             objectif: "Valider 36 Défis", count: 36, jokers: 1,                 icon: 10 },
-    { label: "Collectionneur",       objectif: "Valider 39 Défis", count: 39, secretFilm: 38,            icon: 11 },
-    { label: "???",                  objectif: "Valider 40 Défis", count: 40, rewards: ["?"],            icon: 12 },
+    { label: "Collectionneur",       objectif: "Valider 38 Défis", count: 38, secretFilm: 38,            icon: 11 },
+    { label: "???",                  objectif: "Valider 39 Défis", count: 39, rewards: ["?"],            icon: 12 },
 ];
 
 // ============================================================
