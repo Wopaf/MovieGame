@@ -375,7 +375,7 @@ const ACHIEVEMENTS = [
 
 
 
-    { title: "Harry Potter", sousTitre: "à l'école des sorciers", img: "30.png", password: "9pZ", rebus: "medias/r30.png",
+    { title: "Harry Potter", sousTitre: "à l'école des sorciers", img: "59.png", password: "9pZ", rebus: "medias/r30.png",
     question: "Qu'utilise Harry pour détruire le diadème de Rowena Serdaigle ?", answer: "Un crochet du basilic",
     realisateur: "Chris Columbus", description: "Ayant été gardé dans l'ignorance de son passé, Harry Potter rejoint la prestigieuse école de sorcellerie de Poudlard. Avec l'aide de Ron et Hermione, ils découvrent que le château renferme un terrible pouvoir prêt à être libéré.",
     genres: ["Aventure", "Fantastique"], imdb: "https://www.imdb.com/fr/title/tt0241527/", rating: "7.7", verrouille: false },
