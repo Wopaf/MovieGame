@@ -140,9 +140,7 @@ body {
     z-index: 999;
     position: fixed;
     bottom: 0px;
-    left: 50%;
-    translate: -50% 0;
-    width: 94%;
+    width: fit-content;
     max-width: var(--max-width-mobile);
     transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     background: rgba(23, 23, 25, 0.8);
@@ -150,8 +148,8 @@ body {
     -webkit-backdrop-filter: blur(28px);
     border-top: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 50px;
-    padding: 4px 0px 4px 0px;
-    margin: 6px 0px;
+    padding: 4px 10px 4px 10px;
+    margin: 6px 2px;
     display: flex;
     justify-content: center;
     gap: 16px;

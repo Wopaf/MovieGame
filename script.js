@@ -449,7 +449,7 @@ const ACHIEVEMENTS = [
 
 
     { title: "Mommy", img: "56.png", password: "1xQ", rebus: "medias/r32.png",
-    question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
+    question: "Quel est le prénom de la voisine de Diane et Steve ?", answer: "Kyla",
     realisateur: "Xavier Dolan", description: "Une veuve mono-parentale hérite de la garde de son fils, un adolescent TDAH impulsif et violent. Au coeur de leurs emportements et difficultés, ils tentent de joindre les deux bouts, notamment grâce à l’aide inattendue de l’énigmatique voisine d’en face, Kyla. Tous les trois, ils retrouvent une forme d’équilibre et, bientôt, d’espoir.",
     genres: ["Drame"],
     imdb: "https://www.imdb.com/fr/title/tt3612616/", rating: "8.0", verrouille: true },
@@ -481,7 +481,7 @@ const ACHIEVEMENTS = [
 
 
     { title: "Looper", img: "36.png", password: "1zL", rebus: "medias/r35.png",
-    question: "Quel est le surnom du futur chef de la pègre qui envoie les victimes dans le passé ?", answer: "Le Maître des Pluies",
+    question: "Comment s'appelle le mystérieux chef criminel du futur, responsable de la fermeture massive de toutes les boucles ?", answer: "Maître des Pluies",
     realisateur: "Rian Johnson", description: "En 2044, Joe est un Looper : il élimine des victimes envoyées du futur par un syndicat du crime. Sa vie bascule quand sa prochaine cible est sa propre version vieillie.",
     genres: ["Action", "Science-fiction"],
     imdb: "https://www.imdb.com/title/tt1276104/", rating: "7.4", verrouille: true },
@@ -489,7 +489,7 @@ const ACHIEVEMENTS = [
 
 
     { title: "El Camino", img: "57.png", password: "1xQ", rebus: "medias/r36.png",
-    question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
+    question: "Quel est le nom du magasin d'aspirateurs qui sert de couverture à Ed Galbraith pour faire disparaître les gens ?", answer: "Best Quality Vacuum",
     realisateur: "Vince Gilligan", description: "Après avoir été libéré par Walter White du repaire du gang de Jack où il était séquestré, Jesse Pinkman doit se réconcilier avec son passé pour pouvoir prétendre à un avenir plus radieux, alors qu'il se trouve traqué par les forces de l'ordre.",
     genres: ["Action", "Drame"],
     imdb: "https://www.imdb.com/fr/title/tt9243946/", rating: "7.3", verrouille: true },
@@ -497,7 +497,7 @@ const ACHIEVEMENTS = [
 
 
     { title: "L'amour Ouf", img: "20.png", password: "6lD", rebus: "medias/r37.png",
-    question: "Sur quelle chanson de The Cure les deux protagonistes dansent-ils dans la cour d'école ?", answer: "A Forest",
+    question: "Quels sont les prénoms des deux protagonistes, dont on suit l'histoire d'amour sur plusieurs décennies ?", answer: "Jackie et Clotaire",
     realisateur: "Gilles Lellouche", description: "Clotaire et Jackie se rencontrent adolescents dans les années 80. Leur amour passionnel résistera aux années, à la violence et à des chemins de vie radicalement différents.",
     genres: ["Drame", "Romance"],
     imdb: "https://www.imdb.com/title/tt27490099/", rating: "7.0", verrouille: true },
@@ -505,7 +505,7 @@ const ACHIEVEMENTS = [
 
 
     { title: "Stargate", img: "11.png", password: "2tX", rebus: "medias/r38.png",
-    question: "Comment s'appelle le minéral instable utilisé pour faire fonctionner la porte ?", answer: "Naquadah",
+    question: "Quel est le métier du personnage principal, Daniel Jackson, qui lui permet de déchiffrer les symboles de la Porte ?", answer: "égyptologue",
     realisateur: "Roland Emmerich", description: "Une équipe de militaires et un archéologue franchissent une porte stellaire menant à une autre planète.",
     genres: ["Science-fiction", "Aventure"],
     imdb: "https://www.imdb.com/title/tt0111282/", rating: "7.1", verrouille: true },
@@ -521,14 +521,14 @@ const ACHIEVEMENTS = [
 
 
     { title: "Incassable", img: "34.png", password: "3vH", rebus: "medias/r40.png",
-    question: "Quel surnom Elijah Price ?", answer: "Mr. Glass",
+    question: "Quel est le surnom d'Elijah Price ?", answer: "Mr. Glass",
     realisateur: "Night Shyamalan", description: "David Dunn, unique survivant indemne d'un accident de train ayant tué 131 personnes, est contacté par Elijah Price, un homme mystérieux qui lui révèle une vérité bouleversante.",
     genres: ["Fantastique", "Thriller"], imdb: "https://www.imdb.com/title/tt0217869/", rating: "7.3", verrouille: true },
 
 
 
     { title: "10 Cloverfield Lane", img: "10.png", password: "9jN", rebus: "medias/r41.png",
-    question: "À quel jeu de société Howard, Emmett et Michelle jouent-ils dans le bunker ?", answer: "Le jeu de la vie",
+    question: "Quel est le nom du propriétaire du bunker, interprété par John Goodman ?", answer: "Howard",
     realisateur: "Dan Trachtenberg", description: "Une femme se réveille dans un bunker après un accident, son hôte affirmant que l'extérieur est contaminé.",
     genres: ["Thriller", "Science-fiction"],
     imdb: "https://www.imdb.com/title/tt1179933/", rating: "7.2", verrouille: true },
@@ -536,7 +536,7 @@ const ACHIEVEMENTS = [
 
 
     { title: "Le Guide du Voyageur galactique", img: "16.png", password: "5wK", rebus: "medias/r42.png",
-    question: "En quoi le moteur à improbabilité infinie transforme-t-il les deux missiles nucléaires ?", answer: "Un pétunia et une baleine",
+    question: "Lorsque le vaisseau utilise son propulseur à Improbabilité Infinie, un pot de pétunia et un animal apparaissent soudainement, qui finissent tous deux par s'écraser au sol. Quel est cet animal ?", answer: "cachalot",
     realisateur: "Garth Jennings", description: "Arthur Dent échappe de justesse à la démolition de la Terre pour une autoroute galactique. Il parcourt l'univers avec son ami Ford Prefect, un extraterrestre guide intergalactique.",
     genres: ["Science-fiction", "Comédie"],
     imdb: "https://www.imdb.com/title/tt0371724/", rating: "6.7", verrouille: true },
@@ -544,7 +544,7 @@ const ACHIEVEMENTS = [
 
 
     { title: "Scary Movie 3", img: "12.png", password: "1pB", rebus: "medias/r43.png",
-    question: "Comment s'appelle la petite fille terrifiante qui sort du puits (parodie du Cercle) ?", answer: "Tabitha",
+    question: "Au début du film, George dit qu'il a fait un rêve, quel était ce rêve ?", answer: "Qu'il avait fait un rêve",
     realisateur: "David Zucker", description: "Une parodie déjantée des films d'horreur et de science-fiction les plus célèbres des années 2000.",
     genres: ["Comédie", "Absurde"],
     imdb: "https://www.imdb.com/title/tt0306047/", rating: "6.1", verrouille: true },
@@ -560,7 +560,7 @@ const ACHIEVEMENTS = [
 
 
     { title: "Undercover Brother", img: "58.png", password: "1xQ", rebus: "medias/r44.png",
-    question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
+    question: "Quel aliment Undercover Brother refuse-t-il catégoriquement de manger (car il considère que c'est un outil d'oppression de « L'Homme ») jusqu'à ce qu'il y soit forcé ?", answer: "mayonnaise",
     realisateur: "Malcolm D. Lee", description: "Afin d'arrêter la terrible mission perpétrée par un chef d'entreprise déterminé à réduire la population mondiale en une masse de zombies, Anton Jackson endosse une identité secrète et change d'apparence. L'homme parvient à s'infiltrer au coeur de l'entreprise et obtient le soutien d'une organisation composée uniquement d'Afro-Américains, mais c'est l'aide de la belle Sistah Girl qui garantit le succès de son difficile projet.",
     genres: ["Comédie"],
     imdb: "https://www.imdb.com/fr/title/tt0279493/", rating: "5.9", secret: true },
@@ -568,7 +568,7 @@ const ACHIEVEMENTS = [
 
 
     { title: "Stéphane", img: "53.png", password: "4vC", rebus: "medias/r45.png",
-    question: "", answer: "",
+    question: "Quel est le nom de la chaîne YouTube (fictive) que Stéphane gère dans le film et qui est spécialisée dans les tests de produits technologiques ?", answer: "Stéphane Tech",
     realisateur: "Timothée Hochet", description: "Un jeune vidéaste au talent douteux fait la rencontre de Stéphane, un ancien cascadeur brut de décoffrage, qui sous couvert d'une grande sympathie se montre de plus en plus étrange. Ils s’engagent alors dans un projet périlleux : réaliser à eux seuls un grand film de guerre.",
     genres: ["Comédie", "Drame"],
     imdb: "https://www.imdb.com/fr/title/tt22180542/", rating: "6.4", secret: true },
