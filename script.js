@@ -440,7 +440,7 @@ const ACHIEVEMENTS = [
     
 
 
-    { title: "Transcendance", img: "21.png", password: "1xQ", rebus: "medias/r24.png",
+    { title: "Transcendance", img: "21.png", password: "1xQ", rebus: "medias/r31.png",
     question: "Comment s’appelle le projet d’intelligence artificielle créé par Will Caster avant sa transcendance ?", answer: "PINN",
     realisateur: "Wally Pfister", description: "Will Caster, brillant chercheur en IA, se retrouve mourant après un attentat. Sa conscience est téléchargée dans un ordinateur, créant une entité omnisciente et omnipotente.",
     genres: ["Science-fiction", "Thriller"],
@@ -448,7 +448,7 @@ const ACHIEVEMENTS = [
 
 
 
-    { title: "Mommy", img: "56.png", password: "1xQ", rebus: "medias/r24.png",
+    { title: "Mommy", img: "56.png", password: "1xQ", rebus: "medias/r32.png",
     question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
     realisateur: "Xavier Dolan", description: "Une veuve mono-parentale hérite de la garde de son fils, un adolescent TDAH impulsif et violent. Au coeur de leurs emportements et difficultés, ils tentent de joindre les deux bouts, notamment grâce à l’aide inattendue de l’énigmatique voisine d’en face, Kyla. Tous les trois, ils retrouvent une forme d’équilibre et, bientôt, d’espoir.",
     genres: ["Drame"],
@@ -456,7 +456,7 @@ const ACHIEVEMENTS = [
 
 
 
-    { title: "Jumper", img: "22.png", password: "4uG", rebus: "medias/r25.png",
+    { title: "Jumper", img: "22.png", password: "4uG", rebus: "medias/r33.png",
     question: "Quel est le nom de l’organisation qui traque les “Jumpers” ?", answer: "les Paladins",
     realisateur: "Doug Liman", description: "David Rice peut se téléporter instantanément n'importe où. Cette liberté absolue prend fin quand les Paladins, une organisation secrète qui traque les Jumpers, se lance à ses trousses.",
     genres: ["Fantastique", "Action"],
@@ -464,7 +464,7 @@ const ACHIEVEMENTS = [
 
 
 
-    { title: "Chappie", img: "27.png", password: "6tW", rebus: "medias/r26.png",
+    { title: "Chappie", img: "27.png", password: "6tW", rebus: "medias/r34.png",
     question: "Quel est le nom de la société qui développe les robots policiers ?", answer: "Tetravaal",
     realisateur: "Neill Blomkamp", description: "À Johannesburg, Chappie est le premier robot à posséder une vraie conscience. Volé par des gangsters, il apprend la dureté du monde tout en cherchant à comprendre ce qu'il est.",
     genres: ["Science-fiction", "Action"],
@@ -480,7 +480,7 @@ const ACHIEVEMENTS = [
 
 
 
-    { title: "Looper", img: "36.png", password: "1zL", rebus: "medias/r34.png",
+    { title: "Looper", img: "36.png", password: "1zL", rebus: "medias/r35.png",
     question: "Quel est le surnom du futur chef de la pègre qui envoie les victimes dans le passé ?", answer: "Le Maître des Pluies",
     realisateur: "Rian Johnson", description: "En 2044, Joe est un Looper : il élimine des victimes envoyées du futur par un syndicat du crime. Sa vie bascule quand sa prochaine cible est sa propre version vieillie.",
     genres: ["Action", "Science-fiction"],
@@ -488,7 +488,7 @@ const ACHIEVEMENTS = [
 
 
 
-    { title: "El Camino", img: "57.png", password: "1xQ", rebus: "medias/r28.png",
+    { title: "El Camino", img: "57.png", password: "1xQ", rebus: "medias/r36.png",
     question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
     realisateur: "Vince Gilligan", description: "Après avoir été libéré par Walter White du repaire du gang de Jack où il était séquestré, Jesse Pinkman doit se réconcilier avec son passé pour pouvoir prétendre à un avenir plus radieux, alors qu'il se trouve traqué par les forces de l'ordre.",
     genres: ["Action", "Drame"],
@@ -504,7 +504,7 @@ const ACHIEVEMENTS = [
 
 
 
-    { title: "Stargate", img: "11.png", password: "2tX", rebus: "medias/r41.png",
+    { title: "Stargate", img: "11.png", password: "2tX", rebus: "medias/r38.png",
     question: "Comment s'appelle le minéral instable utilisé pour faire fonctionner la porte ?", answer: "Naquadah",
     realisateur: "Roland Emmerich", description: "Une équipe de militaires et un archéologue franchissent une porte stellaire menant à une autre planète.",
     genres: ["Science-fiction", "Aventure"],
@@ -520,14 +520,14 @@ const ACHIEVEMENTS = [
 
 
 
-    { title: "Incassable", img: "34.png", password: "3vH", rebus: "medias/r22.png",
+    { title: "Incassable", img: "34.png", password: "3vH", rebus: "medias/r40.png",
     question: "Quel surnom Elijah Price ?", answer: "Mr. Glass",
     realisateur: "Night Shyamalan", description: "David Dunn, unique survivant indemne d'un accident de train ayant tué 131 personnes, est contacté par Elijah Price, un homme mystérieux qui lui révèle une vérité bouleversante.",
     genres: ["Fantastique", "Thriller"], imdb: "https://www.imdb.com/title/tt0217869/", rating: "7.3", verrouille: true },
 
 
 
-    { title: "10 Cloverfield Lane", img: "10.png", password: "9jN", rebus: "medias/r40.png",
+    { title: "10 Cloverfield Lane", img: "10.png", password: "9jN", rebus: "medias/r41.png",
     question: "À quel jeu de société Howard, Emmett et Michelle jouent-ils dans le bunker ?", answer: "Le jeu de la vie",
     realisateur: "Dan Trachtenberg", description: "Une femme se réveille dans un bunker après un accident, son hôte affirmant que l'extérieur est contaminé.",
     genres: ["Thriller", "Science-fiction"],
@@ -535,7 +535,7 @@ const ACHIEVEMENTS = [
 
 
 
-    { title: "Le Guide du Voyageur galactique", img: "16.png", password: "5wK", rebus: "medias/r38.png",
+    { title: "Le Guide du Voyageur galactique", img: "16.png", password: "5wK", rebus: "medias/r42.png",
     question: "En quoi le moteur à improbabilité infinie transforme-t-il les deux missiles nucléaires ?", answer: "Un pétunia et une baleine",
     realisateur: "Garth Jennings", description: "Arthur Dent échappe de justesse à la démolition de la Terre pour une autoroute galactique. Il parcourt l'univers avec son ami Ford Prefect, un extraterrestre guide intergalactique.",
     genres: ["Science-fiction", "Comédie"],
@@ -543,7 +543,7 @@ const ACHIEVEMENTS = [
 
 
 
-    { title: "Scary Movie 3", img: "12.png", password: "1pB", rebus: "medias/r42.png",
+    { title: "Scary Movie 3", img: "12.png", password: "1pB", rebus: "medias/r43.png",
     question: "Comment s'appelle la petite fille terrifiante qui sort du puits (parodie du Cercle) ?", answer: "Tabitha",
     realisateur: "David Zucker", description: "Une parodie déjantée des films d'horreur et de science-fiction les plus célèbres des années 2000.",
     genres: ["Comédie", "Absurde"],
@@ -559,7 +559,7 @@ const ACHIEVEMENTS = [
 
 
 
-    { title: "Undercover Brother", img: "58.png", password: "1xQ", rebus: "medias/r29.png",
+    { title: "Undercover Brother", img: "58.png", password: "1xQ", rebus: "medias/r44.png",
     question: "Dans quelle petite ville isolée Will Caster fait-il construire son immense centre de données souterrain ?", answer: "Brightwood",
     realisateur: "Malcolm D. Lee", description: "Afin d'arrêter la terrible mission perpétrée par un chef d'entreprise déterminé à réduire la population mondiale en une masse de zombies, Anton Jackson endosse une identité secrète et change d'apparence. L'homme parvient à s'infiltrer au coeur de l'entreprise et obtient le soutien d'une organisation composée uniquement d'Afro-Américains, mais c'est l'aide de la belle Sistah Girl qui garantit le succès de son difficile projet.",
     genres: ["Comédie"],
@@ -567,7 +567,7 @@ const ACHIEVEMENTS = [
 
 
 
-    { title: "Stéphane", img: "53.png", password: "4vC", rebus: "medias/r43.png",
+    { title: "Stéphane", img: "53.png", password: "4vC", rebus: "medias/r45.png",
     question: "", answer: "",
     realisateur: "Timothée Hochet", description: "Un jeune vidéaste au talent douteux fait la rencontre de Stéphane, un ancien cascadeur brut de décoffrage, qui sous couvert d'une grande sympathie se montre de plus en plus étrange. Ils s’engagent alors dans un projet périlleux : réaliser à eux seuls un grand film de guerre.",
     genres: ["Comédie", "Drame"],
